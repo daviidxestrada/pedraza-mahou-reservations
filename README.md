@@ -49,6 +49,8 @@ En el admin de WordPress, entra en `Ajustes > Reservas Pedraza Mahou` y configur
 - Propietario y repositorio de GitHub para actualizaciones.
 - Token GitHub opcional si el repositorio es privado.
 
+Los enlaces legales vienen precargados con las URLs oficiales del Gran Castillo de Pedraza y puedes cambiarlos desde ajustes si más adelante hiciera falta.
+
 La contraseña del panel privado se guarda con `password_hash()` usando bcrypt. El campo de contraseña nunca muestra el valor actual y solo cambia si se rellena una nueva contraseña.
 
 ## Actualizaciones desde GitHub
@@ -66,7 +68,7 @@ Para publicar una nueva versión:
 2. Actualiza `Stable tag` y el changelog en `readme.txt`.
 3. Regenera el ZIP del plugin.
 4. Haz commit y push a GitHub.
-5. Crea una release con tag semántico superior a la versión instalada, por ejemplo `v1.0.4`, adjuntando el asset `pedraza-mahou-reservations.zip`.
+5. Crea una release con tag semántico superior a la versión instalada, por ejemplo `v1.0.6`, adjuntando el asset `pedraza-mahou-reservations.zip`.
 6. WordPress detectará la nueva versión desde `Escritorio > Actualizaciones` o desde la pantalla de plugins. PUC ignora releases marcadas como pre-release.
 
 Si el repositorio es privado, configura un token con permiso de lectura del repositorio. Puedes hacerlo de dos formas:

@@ -26,9 +26,9 @@ final class PMR_Admin_Settings
             'internal_email' => get_option('admin_email'),
             'from_name' => get_bloginfo('name') ?: 'Gran Castillo de Pedraza',
             'from_email' => get_option('admin_email'),
-            'privacy_url' => '',
-            'cookies_url' => '',
-            'legal_url' => '',
+            'privacy_url' => 'https://grancastillodepedraza.com/politica-de-privacidad/',
+            'cookies_url' => 'https://grancastillodepedraza.com/politica-de-cookies-ue/',
+            'legal_url' => 'https://grancastillodepedraza.com/?page_id=137',
             'customer_subject' => 'Solicitud de reserva de cesta picnic recibida',
             'internal_subject' => 'Nueva reserva de cesta picnic Mahou',
             'refresh_interval' => 30,
@@ -40,9 +40,17 @@ final class PMR_Admin_Settings
 
     public static function get_settings(): array
     {
+        $defaults = self::defaults();
         $settings = get_option(self::OPTION_NAME, []);
+        $settings = wp_parse_args(is_array($settings) ? $settings : [], $defaults);
 
-        return wp_parse_args(is_array($settings) ? $settings : [], self::defaults());
+        foreach (['privacy_url', 'cookies_url', 'legal_url'] as $legal_url_key) {
+            if (empty($settings[$legal_url_key])) {
+                $settings[$legal_url_key] = $defaults[$legal_url_key];
+            }
+        }
+
+        return $settings;
     }
 
     public static function add_settings_page(): void

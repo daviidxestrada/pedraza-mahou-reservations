@@ -4,7 +4,7 @@ Tags: reservations, bookings, elementor, picnic, mahou
 Requires at least: 6.0
 Tested up to: 6.6
 Requires PHP: 8.0
-Stable tag: v1.0.5
+Stable tag: v1.0.6
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -40,6 +40,11 @@ Panel privado:
 No. La reserva se realiza sin pago online y el importe se abona presencialmente en taquilla.
 
 == Changelog ==
+
+= 1.0.6 =
+* Añade enlaces legales oficiales como valores por defecto y fallback.
+* Corrige el wrapping del texto destacado en el bloque de pago.
+* Cambia el icono de recogida por una mano en SVG inline.
 
 = 1.0.5 =
 * Ajusta el encuadre visual de la imagen para integrarla mejor en la columna izquierda sin recortes.

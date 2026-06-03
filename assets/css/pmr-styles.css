@@ -172,6 +172,12 @@
     line-height: 1.45;
 }
 
+.pmr-feature-list li > span {
+    display: block;
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
 .pmr-feature-list strong,
 .pmr-pickup-card strong {
     color: var(--pmr-blue);
