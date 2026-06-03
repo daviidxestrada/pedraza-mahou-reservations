@@ -70,7 +70,7 @@ final class PMR_Update_Checker
             'name' => 'Pedraza Mahou Reservations',
             'slug' => PMR_PLUGIN_SLUG,
             'version' => $release['version'],
-            'author' => '<a href="https://grancastillodepedraza.com/">Wonderland Group</a>',
+            'author' => 'Cloudari',
             'homepage' => $release['html_url'],
             'requires_php' => '8.0',
             'download_link' => self::package_marker($release['tag']),

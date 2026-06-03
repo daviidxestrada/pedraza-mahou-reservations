@@ -3,8 +3,8 @@
  * Plugin Name: Pedraza Mahou Reservations
  * Plugin URI: https://grancastillodepedraza.com/
  * Description: Gestiona reservas de cestas picnic Mahou mediante shortcodes para WordPress y Elementor.
- * Version: 1.0.1
- * Author: Wonderland Group
+ * Version: 1.0.2
+ * Author: Cloudari
  * Text Domain: pedraza-mahou-reservations
  * Requires PHP: 8.0
  */
@@ -13,7 +13,7 @@ if (! defined('ABSPATH')) {
     exit;
 }
 
-define('PMR_VERSION', '1.0.1');
+define('PMR_VERSION', '1.0.2');
 define('PMR_DB_VERSION', '1.0.0');
 define('PMR_PLUGIN_FILE', __FILE__);
 define('PMR_PLUGIN_DIR', plugin_dir_path(__FILE__));
