@@ -1,19 +1,390 @@
 .pmr-reservations,
 .pmr-admin,
 .pmr-login {
-    --pmr-red: #c4161c;
-    --pmr-red-dark: #9f1015;
-    --pmr-ink: #262422;
-    --pmr-muted: #68615a;
-    --pmr-line: #ded8cf;
-    --pmr-soft: #f8f5ef;
+    --pmr-red: #e32322;
+    --pmr-red-dark: #bd1717;
+    --pmr-blue: #002c3e;
+    --pmr-teal: #0087a3;
+    --pmr-gold: #fbd652;
+    --pmr-ink: #333333;
+    --pmr-muted: #69717a;
+    --pmr-line: #eceff3;
+    --pmr-soft: #faf8f5;
     --pmr-white: #ffffff;
     --pmr-green: #1f7a4d;
     --pmr-yellow: #a66b00;
     --pmr-danger: #a52828;
     color: var(--pmr-ink);
+    font-family: "Montserrat", Arial, Helvetica, sans-serif;
     font-size: 16px;
     line-height: 1.5;
+}
+
+.pmr-reservations *,
+.pmr-reservations *::before,
+.pmr-reservations *::after,
+.pmr-admin *,
+.pmr-admin *::before,
+.pmr-admin *::after,
+.pmr-login *,
+.pmr-login *::before,
+.pmr-login *::after {
+    box-sizing: border-box;
+}
+
+.pmr-reservations h1,
+.pmr-reservations h2,
+.pmr-reservations h3,
+.pmr-reservations h4,
+.pmr-admin h2,
+.pmr-login h2 {
+    font-family: "League Spartan", Arial, Helvetica, sans-serif;
+}
+
+.pmr-reservation-page {
+    position: relative;
+    width: 100vw;
+    margin-left: calc(50% - 50vw);
+    overflow: hidden;
+    background: var(--pmr-soft);
+    padding: 56px 0 72px;
+}
+
+.pmr-page-pattern {
+    position: absolute;
+    inset: 0;
+    opacity: 0.035;
+    background-image: radial-gradient(#000000 1px, transparent 1px);
+    background-size: 16px 16px;
+    pointer-events: none;
+}
+
+.pmr-page-inner {
+    position: relative;
+    z-index: 1;
+    width: min(1200px, calc(100% - 32px));
+    margin: 0 auto;
+}
+
+.pmr-page-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    gap: 56px;
+    align-items: start;
+}
+
+.pmr-page-copy {
+    padding-top: 16px;
+}
+
+.pmr-page-copy h1 {
+    margin: 0 0 12px;
+    color: var(--pmr-blue);
+    font-size: 58px;
+    font-weight: 800;
+    line-height: 0.96;
+}
+
+.pmr-page-subtitle {
+    margin: 0 0 30px;
+    color: var(--pmr-red);
+    font-family: "League Spartan", Arial, Helvetica, sans-serif;
+    font-size: 26px;
+    font-style: italic;
+    line-height: 1.1;
+}
+
+.pmr-page-intro {
+    margin-bottom: 34px;
+}
+
+.pmr-page-intro p {
+    margin: 0 0 16px;
+    color: #4d5661;
+    line-height: 1.75;
+}
+
+.pmr-info-card,
+.pmr-pickup-card {
+    margin-bottom: 24px;
+    padding: 24px;
+    border: 1px solid var(--pmr-line);
+    border-radius: 12px;
+    background: var(--pmr-white);
+    box-shadow: 0 8px 24px rgba(0, 44, 62, 0.04);
+}
+
+.pmr-info-card h3,
+.pmr-pickup-card h3 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0 0 16px;
+    color: var(--pmr-blue);
+    font-size: 21px;
+    font-weight: 800;
+    line-height: 1.2;
+}
+
+.pmr-card-icon {
+    position: relative;
+    width: 20px;
+    height: 20px;
+    flex: 0 0 20px;
+    border-radius: 6px;
+}
+
+.pmr-card-icon::before,
+.pmr-card-icon::after {
+    content: "";
+    position: absolute;
+    inset: 5px;
+    border: 2px solid currentColor;
+    border-radius: 4px;
+}
+
+.pmr-card-icon::after {
+    inset: 3px 6px auto;
+    height: 5px;
+    border-bottom: 0;
+    border-radius: 6px 6px 0 0;
+}
+
+.pmr-card-icon--red {
+    color: var(--pmr-red);
+}
+
+.pmr-card-icon--blue {
+    color: var(--pmr-teal);
+}
+
+.pmr-feature-list,
+.pmr-steps {
+    display: grid;
+    gap: 12px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.pmr-feature-list li,
+.pmr-steps li {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    color: #4d5661;
+    font-size: 14px;
+    line-height: 1.45;
+}
+
+.pmr-feature-list strong,
+.pmr-pickup-card strong {
+    color: var(--pmr-blue);
+}
+
+.pmr-check {
+    position: relative;
+    width: 20px;
+    height: 20px;
+    margin-top: 1px;
+    flex: 0 0 20px;
+    border-radius: 50%;
+    border: 2px solid rgba(0, 135, 163, 0.25);
+}
+
+.pmr-check::after {
+    content: "";
+    position: absolute;
+    left: 5px;
+    top: 3px;
+    width: 6px;
+    height: 10px;
+    border: solid var(--pmr-teal);
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+.pmr-price-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    margin-bottom: 24px;
+    padding: 24px;
+    border-radius: 12px;
+    background: var(--pmr-blue);
+    color: var(--pmr-white);
+    box-shadow: 0 8px 24px rgba(0, 44, 62, 0.12);
+}
+
+.pmr-price-icon {
+    position: relative;
+    width: 40px;
+    height: 40px;
+    flex: 0 0 40px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.pmr-price-icon::before {
+    content: "";
+    position: absolute;
+    left: 12px;
+    top: 10px;
+    width: 17px;
+    height: 20px;
+    border: 2px solid var(--pmr-gold);
+    border-radius: 4px 4px 8px 8px;
+    transform: rotate(-12deg);
+}
+
+.pmr-price-icon::after {
+    content: "";
+    position: absolute;
+    left: 18px;
+    top: 15px;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--pmr-gold);
+}
+
+.pmr-price-card div:not(.pmr-price-icon) {
+    flex: 1 1 auto;
+}
+
+.pmr-price-card span {
+    display: block;
+    color: rgba(255, 255, 255, 0.62);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.pmr-price-card strong {
+    display: block;
+    color: var(--pmr-gold);
+    font-family: "League Spartan", Arial, Helvetica, sans-serif;
+    font-size: 34px;
+    line-height: 1;
+}
+
+.pmr-price-card p {
+    margin: 0;
+    color: rgba(255, 255, 255, 0.55);
+    font-size: 12px;
+    text-align: right;
+}
+
+.pmr-steps li span {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    margin-top: -2px;
+    flex: 0 0 24px;
+    border-radius: 50%;
+    background: var(--pmr-blue);
+    color: var(--pmr-white);
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.pmr-pickup-card {
+    border-color: rgba(0, 135, 163, 0.2);
+    background: rgba(0, 135, 163, 0.08);
+}
+
+.pmr-pickup-card p {
+    margin: 0;
+    color: #4d5661;
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+.pmr-page-image {
+    display: block;
+    margin: 0;
+    overflow: hidden;
+    border: 4px solid var(--pmr-white);
+    border-radius: 12px;
+    box-shadow: 0 18px 36px rgba(0, 44, 62, 0.14);
+    aspect-ratio: 16 / 9;
+}
+
+.pmr-page-image img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.pmr-form-column {
+    position: relative;
+}
+
+.pmr-form-panel {
+    overflow: hidden;
+    border: 1px solid var(--pmr-line);
+    border-radius: 18px;
+    background: var(--pmr-white);
+    box-shadow: 0 24px 54px rgba(0, 44, 62, 0.12);
+}
+
+.pmr-form-panel__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    padding: 30px 32px 18px;
+    border-bottom: 1px solid #f2f3f5;
+}
+
+.pmr-form-panel__header h2 {
+    margin: 0;
+    color: var(--pmr-blue);
+    font-size: 30px;
+    font-weight: 800;
+    line-height: 1.1;
+}
+
+.pmr-form-panel__header p {
+    margin: 6px 0 0;
+    color: #8a929b;
+    font-size: 14px;
+}
+
+.pmr-calendar-badge {
+    position: relative;
+    width: 48px;
+    height: 48px;
+    flex: 0 0 48px;
+    border-radius: 50%;
+    background: #f7f8fa;
+}
+
+.pmr-calendar-badge::before {
+    content: "";
+    position: absolute;
+    left: 14px;
+    top: 13px;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #a1a8b0;
+    border-radius: 5px;
+}
+
+.pmr-calendar-badge::after {
+    content: "";
+    position: absolute;
+    left: 17px;
+    top: 20px;
+    width: 14px;
+    height: 2px;
+    background: #a1a8b0;
+    box-shadow: 0 5px 0 #a1a8b0;
 }
 
 .pmr-card,
@@ -62,6 +433,97 @@
     background: var(--pmr-red);
     color: var(--pmr-white) !important;
     font-weight: 700;
+}
+
+.pmr-reservations .pmr-form {
+    padding: 24px;
+}
+
+.pmr-reservations .pmr-section {
+    padding: 0 0 24px;
+}
+
+.pmr-reservations .pmr-section + .pmr-section {
+    padding-top: 24px;
+    border-top: 1px solid #f0f2f5;
+}
+
+.pmr-reservations .pmr-section h3 {
+    color: var(--pmr-blue);
+    font-size: 23px;
+}
+
+.pmr-reservations .pmr-field label {
+    color: #263340;
+    font-size: 14px;
+}
+
+.pmr-reservations .pmr-field input,
+.pmr-reservations .pmr-field textarea,
+.pmr-reservations .pmr-field select {
+    min-height: 48px;
+    border-color: #dfe5ea;
+    border-radius: 10px;
+    background: #ffffff;
+    color: #263340;
+}
+
+.pmr-reservations .pmr-field textarea {
+    min-height: 104px;
+}
+
+.pmr-reservations .pmr-field input:focus,
+.pmr-reservations .pmr-field textarea:focus,
+.pmr-reservations .pmr-field select:focus {
+    border-color: var(--pmr-teal);
+    outline-color: rgba(0, 135, 163, 0.16);
+}
+
+.pmr-reservations .pmr-quantity__button {
+    border-radius: 10px;
+    background: var(--pmr-blue);
+}
+
+.pmr-reservations .pmr-submit {
+    width: 100%;
+    min-height: 52px;
+    border-radius: 10px;
+    background: var(--pmr-gold);
+    color: #121212;
+}
+
+.pmr-reservations .pmr-submit:hover,
+.pmr-reservations .pmr-submit:focus {
+    background: #edc83f;
+    color: #121212;
+}
+
+.pmr-reservations .pmr-actions {
+    padding: 24px 0 0;
+    border-top: 1px solid #f0f2f5;
+    background: transparent;
+}
+
+.pmr-reservations .pmr-checkbox {
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.pmr-reservations .pmr-legal-text {
+    border-color: #edf0f3;
+    border-radius: 10px;
+    background: #fafbfc;
+}
+
+.pmr-reservations .pmr-legal-text h4 {
+    color: var(--pmr-blue);
+    font-size: 18px;
+}
+
+.pmr-reservations .pmr-legal-text p {
+    color: #626b74;
+    font-size: 13px;
+    line-height: 1.6;
 }
 
 .pmr-section + .pmr-section {
@@ -462,7 +924,83 @@
     color: var(--pmr-muted);
 }
 
+@media (max-width: 1024px) {
+    .pmr-reservation-page {
+        padding: 44px 0 56px;
+    }
+
+    .pmr-page-grid {
+        grid-template-columns: 1fr;
+        gap: 34px;
+    }
+
+    .pmr-page-copy {
+        padding-top: 0;
+    }
+
+    .pmr-page-copy h1 {
+        font-size: 46px;
+    }
+}
+
 @media (max-width: 760px) {
+    .pmr-reservation-page {
+        padding: 32px 0 42px;
+    }
+
+    .pmr-page-inner {
+        width: min(100% - 24px, 1200px);
+    }
+
+    .pmr-page-copy h1 {
+        font-size: 38px;
+    }
+
+    .pmr-page-subtitle {
+        margin-bottom: 24px;
+        font-size: 22px;
+    }
+
+    .pmr-info-card,
+    .pmr-pickup-card,
+    .pmr-price-card {
+        padding: 20px;
+    }
+
+    .pmr-price-card {
+        align-items: flex-start;
+        flex-wrap: wrap;
+    }
+
+    .pmr-price-card p {
+        width: 100%;
+        text-align: left;
+    }
+
+    .pmr-page-image {
+        display: none;
+    }
+
+    .pmr-form-panel {
+        border-radius: 14px;
+    }
+
+    .pmr-form-panel__header {
+        padding: 22px 20px 16px;
+    }
+
+    .pmr-form-panel__header h2 {
+        font-size: 25px;
+    }
+
+    .pmr-calendar-badge {
+        display: none;
+    }
+
+    .pmr-reservations .pmr-form {
+        padding: 20px;
+    }
+
     .pmr-header,
     .pmr-section,
     .pmr-actions,

@@ -20,6 +20,13 @@ final class PMR_Assets
         }
 
         wp_register_style(
+            'pmr-fonts',
+            'https://fonts.googleapis.com/css2?family=League+Spartan:wght@300;400;500;600;700;800&family=Montserrat:wght@300;400;500;600;700&display=swap',
+            [],
+            null
+        );
+
+        wp_register_style(
             'pmr-styles',
             PMR_PLUGIN_URL . 'assets/css/pmr-styles.css',
             [],
@@ -58,6 +65,7 @@ final class PMR_Assets
     {
         self::register_assets();
 
+        wp_enqueue_style('pmr-fonts');
         wp_enqueue_style('pmr-styles');
         wp_enqueue_script('pmr-scripts');
     }

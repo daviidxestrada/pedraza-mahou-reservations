@@ -25,103 +25,169 @@ final class PMR_Shortcodes
 
         ob_start();
         ?>
-        <div class="pmr-reservations" data-pmr-public>
-            <div class="pmr-card">
-                <header class="pmr-header">
-                    <h2><?php echo esc_html__('Reserva tu cesta picnic', 'pedraza-mahou-reservations'); ?></h2>
-                    <p><?php echo esc_html__('Disfruta de la experiencia completa en el Gran Castillo de Pedraza reservando tu cesta picnic para acompañar tu visita o concierto.', 'pedraza-mahou-reservations'); ?></p>
-                    <p class="pmr-price"><?php echo esc_html__('Precio: 15 € IVA incluido por cesta.', 'pedraza-mahou-reservations'); ?></p>
-                    <p><?php echo esc_html__('La reserva se realiza sin pago online. El importe se abonará el día de la recogida en taquilla, mediante efectivo o tarjeta.', 'pedraza-mahou-reservations'); ?></p>
-                    <p><?php echo esc_html__('Las reservas están sujetas a disponibilidad.', 'pedraza-mahou-reservations'); ?></p>
-                </header>
+        <section class="pmr-reservations pmr-reservation-page" data-pmr-public>
+            <div class="pmr-page-pattern" aria-hidden="true"></div>
+            <div class="pmr-page-inner">
+                <div class="pmr-page-grid">
+                    <aside class="pmr-page-copy">
+                        <h1><?php echo esc_html__('Reserva tu cesta', 'pedraza-mahou-reservations'); ?></h1>
+                        <p class="pmr-page-subtitle"><?php echo esc_html__('El castillo también se saborea', 'pedraza-mahou-reservations'); ?></p>
 
-                <form class="pmr-form" data-pmr-public-form novalidate>
-                    <input type="hidden" name="nonce" value="<?php echo esc_attr(wp_create_nonce('pmr_public_reservation')); ?>">
-                    <div class="pmr-honeypot" aria-hidden="true">
-                        <label for="<?php echo esc_attr($uid); ?>-website"><?php echo esc_html__('Web', 'pedraza-mahou-reservations'); ?></label>
-                        <input type="text" id="<?php echo esc_attr($uid); ?>-website" name="pmr_website" tabindex="-1" autocomplete="off">
-                    </div>
+                        <div class="pmr-page-intro">
+                            <p><?php echo esc_html__('Completa tu visita al Gran Castillo de Pedraza con una experiencia gastronómica única. Prepara tu pausa perfecta entre murallas cargadas de historia y unas vistas inigualables.', 'pedraza-mahou-reservations'); ?></p>
+                            <p><?php echo esc_html__('Al reservar tu cesta, te garantizas tener todo listo a tu llegada. Solo tendrás que recogerla, elegir tu rincón favorito y disfrutar del momento.', 'pedraza-mahou-reservations'); ?></p>
+                        </div>
 
-                    <section class="pmr-section">
-                        <h3><?php echo esc_html__('Bloque 1 · Reserva', 'pedraza-mahou-reservations'); ?></h3>
-                        <div class="pmr-grid">
-                            <div class="pmr-field">
-                                <label for="<?php echo esc_attr($uid); ?>-pickup-date"><?php echo esc_html__('Fecha de recogida', 'pedraza-mahou-reservations'); ?> <span aria-hidden="true">*</span></label>
-                                <input type="date" id="<?php echo esc_attr($uid); ?>-pickup-date" name="pickup_date" min="<?php echo esc_attr($today); ?>" required>
+                        <div class="pmr-info-card">
+                            <h3><span class="pmr-card-icon pmr-card-icon--red" aria-hidden="true"></span><?php echo esc_html__('¿Qué incluye La Cesta del Castillo?', 'pedraza-mahou-reservations'); ?></h3>
+                            <ul class="pmr-feature-list">
+                                <li><span class="pmr-check" aria-hidden="true"></span><?php echo esc_html__('2 Cervezas Mahou bien frías (o alternativa sin alcohol)', 'pedraza-mahou-reservations'); ?></li>
+                                <li><span class="pmr-check" aria-hidden="true"></span><?php echo esc_html__('Selección de ibéricos de la tierra y queso curado', 'pedraza-mahou-reservations'); ?></li>
+                                <li><span class="pmr-check" aria-hidden="true"></span><?php echo esc_html__('Hogaza de pan rústico artesano y picos crujientes', 'pedraza-mahou-reservations'); ?></li>
+                                <li><span class="pmr-check" aria-hidden="true"></span><?php echo esc_html__('Cesta de mimbre tradicional y menaje necesario', 'pedraza-mahou-reservations'); ?></li>
+                            </ul>
+                        </div>
+
+                        <div class="pmr-price-card">
+                            <div class="pmr-price-icon" aria-hidden="true"></div>
+                            <div>
+                                <span><?php echo esc_html__('Precio por cesta', 'pedraza-mahou-reservations'); ?></span>
+                                <strong><?php echo esc_html__('15 €', 'pedraza-mahou-reservations'); ?></strong>
                             </div>
-                            <div class="pmr-field">
-                                <label for="<?php echo esc_attr($uid); ?>-basket-count"><?php echo esc_html__('Número de cestas', 'pedraza-mahou-reservations'); ?> <span aria-hidden="true">*</span></label>
-                                <div class="pmr-quantity" data-pmr-quantity>
-                                    <button type="button" class="pmr-quantity__button" data-pmr-quantity-minus aria-label="<?php echo esc_attr__('Restar cesta', 'pedraza-mahou-reservations'); ?>">-</button>
-                                    <input type="number" id="<?php echo esc_attr($uid); ?>-basket-count" name="basket_count" min="1" max="50" value="1" required>
-                                    <button type="button" class="pmr-quantity__button" data-pmr-quantity-plus aria-label="<?php echo esc_attr__('Añadir cesta', 'pedraza-mahou-reservations'); ?>">+</button>
+                            <p><?php echo esc_html__('IVA incluido', 'pedraza-mahou-reservations'); ?></p>
+                        </div>
+
+                        <div class="pmr-info-card">
+                            <h3><span class="pmr-card-icon pmr-card-icon--red" aria-hidden="true"></span><?php echo esc_html__('Pago', 'pedraza-mahou-reservations'); ?></h3>
+                            <ul class="pmr-feature-list">
+                                <li><span class="pmr-check" aria-hidden="true"></span><?php echo wp_kses_post(__('La reserva se realiza <strong>sin pago online</strong>.', 'pedraza-mahou-reservations')); ?></li>
+                                <li><span class="pmr-check" aria-hidden="true"></span><?php echo wp_kses_post(__('El importe se abonará el día de la recogida en taquilla, mediante <strong>efectivo o tarjeta</strong>.', 'pedraza-mahou-reservations')); ?></li>
+                                <li><span class="pmr-check" aria-hidden="true"></span><?php echo esc_html__('Pago presencial en taquilla del castillo.', 'pedraza-mahou-reservations'); ?></li>
+                            </ul>
+                        </div>
+
+                        <div class="pmr-info-card">
+                            <h3><span class="pmr-card-icon pmr-card-icon--red" aria-hidden="true"></span><?php echo esc_html__('Cómo funciona', 'pedraza-mahou-reservations'); ?></h3>
+                            <ol class="pmr-steps">
+                                <li><span>1</span><?php echo esc_html__('Selecciona la fecha de recogida.', 'pedraza-mahou-reservations'); ?></li>
+                                <li><span>2</span><?php echo esc_html__('Indica el número de cestas.', 'pedraza-mahou-reservations'); ?></li>
+                                <li><span>3</span><?php echo esc_html__('Rellena tus datos de contacto.', 'pedraza-mahou-reservations'); ?></li>
+                                <li><span>4</span><?php echo esc_html__('Recibe una referencia automática de reserva.', 'pedraza-mahou-reservations'); ?></li>
+                                <li><span>5</span><?php echo esc_html__('Presenta tu referencia y tu nombre para retirar tu cesta.', 'pedraza-mahou-reservations'); ?></li>
+                                <li><span>6</span><?php echo esc_html__('Abona el importe presencialmente en taquilla.', 'pedraza-mahou-reservations'); ?></li>
+                            </ol>
+                        </div>
+
+                        <div class="pmr-pickup-card">
+                            <h3><span class="pmr-card-icon pmr-card-icon--blue" aria-hidden="true"></span><?php echo esc_html__('Recogida', 'pedraza-mahou-reservations'); ?></h3>
+                            <p><?php echo wp_kses_post(__('La cesta se retirará el día seleccionado en la <strong>taquilla del Gran Castillo de Pedraza</strong>.', 'pedraza-mahou-reservations')); ?></p>
+                        </div>
+
+                        <figure class="pmr-page-image">
+                            <img src="https://images.unsplash.com/photo-1528495612343-9ca9f4a4de28?q=80&w=1200&auto=format&fit=crop" alt="<?php echo esc_attr__('Cesta de picnic', 'pedraza-mahou-reservations'); ?>" loading="lazy">
+                        </figure>
+                    </aside>
+
+                    <div class="pmr-form-column">
+                        <div class="pmr-form-panel">
+                            <header class="pmr-form-panel__header">
+                                <div>
+                                    <h2><?php echo esc_html__('Completa tu reserva', 'pedraza-mahou-reservations'); ?></h2>
+                                    <p><?php echo esc_html__('Selecciona fecha y detalles de tu cesta', 'pedraza-mahou-reservations'); ?></p>
                                 </div>
-                            </div>
-                        </div>
-                        <div class="pmr-field">
-                            <label for="<?php echo esc_attr($uid); ?>-observations"><?php echo esc_html__('Observaciones', 'pedraza-mahou-reservations'); ?></label>
-                            <textarea id="<?php echo esc_attr($uid); ?>-observations" name="observations" rows="4" maxlength="2000" placeholder="<?php echo esc_attr__('Alergias, indicaciones o comentarios adicionales.', 'pedraza-mahou-reservations'); ?>"></textarea>
-                        </div>
-                    </section>
+                                <span class="pmr-calendar-badge" aria-hidden="true"></span>
+                            </header>
 
-                    <section class="pmr-section">
-                        <h3><?php echo esc_html__('Bloque 2 · Datos de contacto', 'pedraza-mahou-reservations'); ?></h3>
-                        <div class="pmr-grid">
-                            <div class="pmr-field">
-                                <label for="<?php echo esc_attr($uid); ?>-full-name"><?php echo esc_html__('Nombre y apellidos', 'pedraza-mahou-reservations'); ?> <span aria-hidden="true">*</span></label>
-                                <input type="text" id="<?php echo esc_attr($uid); ?>-full-name" name="full_name" maxlength="190" autocomplete="name" required>
-                            </div>
-                            <div class="pmr-field">
-                                <label for="<?php echo esc_attr($uid); ?>-email"><?php echo esc_html__('Correo electrónico', 'pedraza-mahou-reservations'); ?> <span aria-hidden="true">*</span></label>
-                                <input type="email" id="<?php echo esc_attr($uid); ?>-email" name="email" maxlength="190" autocomplete="email" required>
-                            </div>
-                            <div class="pmr-field">
-                                <label for="<?php echo esc_attr($uid); ?>-phone"><?php echo esc_html__('Teléfono de contacto', 'pedraza-mahou-reservations'); ?> <span aria-hidden="true">*</span></label>
-                                <input type="tel" id="<?php echo esc_attr($uid); ?>-phone" name="phone" maxlength="25" autocomplete="tel" required>
-                            </div>
+                            <form class="pmr-form" data-pmr-public-form novalidate>
+                                <input type="hidden" name="nonce" value="<?php echo esc_attr(wp_create_nonce('pmr_public_reservation')); ?>">
+                                <div class="pmr-honeypot" aria-hidden="true">
+                                    <label for="<?php echo esc_attr($uid); ?>-website"><?php echo esc_html__('Web', 'pedraza-mahou-reservations'); ?></label>
+                                    <input type="text" id="<?php echo esc_attr($uid); ?>-website" name="pmr_website" tabindex="-1" autocomplete="off">
+                                </div>
+
+                                <section class="pmr-section">
+                                    <h3><?php echo esc_html__('Reserva', 'pedraza-mahou-reservations'); ?></h3>
+                                    <div class="pmr-grid">
+                                        <div class="pmr-field">
+                                            <label for="<?php echo esc_attr($uid); ?>-pickup-date"><?php echo esc_html__('Fecha de recogida', 'pedraza-mahou-reservations'); ?> <span aria-hidden="true">*</span></label>
+                                            <input type="date" id="<?php echo esc_attr($uid); ?>-pickup-date" name="pickup_date" min="<?php echo esc_attr($today); ?>" required>
+                                        </div>
+                                        <div class="pmr-field">
+                                            <label for="<?php echo esc_attr($uid); ?>-basket-count"><?php echo esc_html__('Número de cestas', 'pedraza-mahou-reservations'); ?> <span aria-hidden="true">*</span></label>
+                                            <div class="pmr-quantity" data-pmr-quantity>
+                                                <button type="button" class="pmr-quantity__button" data-pmr-quantity-minus aria-label="<?php echo esc_attr__('Restar cesta', 'pedraza-mahou-reservations'); ?>">-</button>
+                                                <input type="number" id="<?php echo esc_attr($uid); ?>-basket-count" name="basket_count" min="1" max="50" value="1" required>
+                                                <button type="button" class="pmr-quantity__button" data-pmr-quantity-plus aria-label="<?php echo esc_attr__('Añadir cesta', 'pedraza-mahou-reservations'); ?>">+</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="pmr-field">
+                                        <label for="<?php echo esc_attr($uid); ?>-observations"><?php echo esc_html__('Observaciones', 'pedraza-mahou-reservations'); ?></label>
+                                        <textarea id="<?php echo esc_attr($uid); ?>-observations" name="observations" rows="4" maxlength="2000" placeholder="<?php echo esc_attr__('Alergias, indicaciones o comentarios adicionales.', 'pedraza-mahou-reservations'); ?>"></textarea>
+                                    </div>
+                                </section>
+
+                                <section class="pmr-section">
+                                    <h3><?php echo esc_html__('Datos de contacto', 'pedraza-mahou-reservations'); ?></h3>
+                                    <div class="pmr-grid">
+                                        <div class="pmr-field">
+                                            <label for="<?php echo esc_attr($uid); ?>-full-name"><?php echo esc_html__('Nombre y apellidos', 'pedraza-mahou-reservations'); ?> <span aria-hidden="true">*</span></label>
+                                            <input type="text" id="<?php echo esc_attr($uid); ?>-full-name" name="full_name" maxlength="190" autocomplete="name" required>
+                                        </div>
+                                        <div class="pmr-field">
+                                            <label for="<?php echo esc_attr($uid); ?>-email"><?php echo esc_html__('Correo electrónico', 'pedraza-mahou-reservations'); ?> <span aria-hidden="true">*</span></label>
+                                            <input type="email" id="<?php echo esc_attr($uid); ?>-email" name="email" maxlength="190" autocomplete="email" required>
+                                        </div>
+                                        <div class="pmr-field">
+                                            <label for="<?php echo esc_attr($uid); ?>-phone"><?php echo esc_html__('Teléfono de contacto', 'pedraza-mahou-reservations'); ?> <span aria-hidden="true">*</span></label>
+                                            <input type="tel" id="<?php echo esc_attr($uid); ?>-phone" name="phone" maxlength="25" autocomplete="tel" required>
+                                        </div>
+                                    </div>
+                                </section>
+
+                                <section class="pmr-section pmr-legal-section">
+                                    <h3><?php echo esc_html__('Protección de datos y consentimientos', 'pedraza-mahou-reservations'); ?></h3>
+                                    <label class="pmr-checkbox">
+                                        <input type="checkbox" name="rgpd_consent" value="1" required>
+                                        <span><?php echo wp_kses_post(sprintf(__('He leído y acepto la %s y el tratamiento de mis datos para la gestión de esta reserva.', 'pedraza-mahou-reservations'), $privacy_link)); ?></span>
+                                    </label>
+                                    <label class="pmr-checkbox">
+                                        <input type="checkbox" name="marketing_consent" value="1">
+                                        <span><?php echo esc_html__('Deseo recibir información sobre la programación, actividades y eventos del Gran Castillo de Pedraza y de otros espacios culturales y proyectos gestionados por Wonderland Group.', 'pedraza-mahou-reservations'); ?></span>
+                                    </label>
+
+                                    <div class="pmr-legal-text">
+                                        <h4><?php echo esc_html__('Información básica sobre protección de datos', 'pedraza-mahou-reservations'); ?></h4>
+                                        <p><strong><?php echo esc_html__('Responsable del tratamiento:', 'pedraza-mahou-reservations'); ?></strong> <?php echo esc_html__('Wonderland Group / entidad gestora del Gran Castillo de Pedraza.', 'pedraza-mahou-reservations'); ?></p>
+                                        <p><strong><?php echo esc_html__('Finalidad:', 'pedraza-mahou-reservations'); ?></strong> <?php echo esc_html__('Gestionar la solicitud de reserva de cesta picnic y, en caso de autorización expresa, enviar información comercial sobre programación cultural, espectáculos y actividades relacionadas.', 'pedraza-mahou-reservations'); ?></p>
+                                        <p><strong><?php echo esc_html__('Legitimación:', 'pedraza-mahou-reservations'); ?></strong> <?php echo esc_html__('Consentimiento del interesado y ejecución de la solicitud de reserva.', 'pedraza-mahou-reservations'); ?></p>
+                                        <p><strong><?php echo esc_html__('Destinatarios:', 'pedraza-mahou-reservations'); ?></strong> <?php echo esc_html__('No se cederán datos a terceros salvo obligación legal.', 'pedraza-mahou-reservations'); ?></p>
+                                        <p><strong><?php echo esc_html__('Derechos:', 'pedraza-mahou-reservations'); ?></strong> <?php echo esc_html__('Puedes acceder, rectificar y suprimir tus datos, así como ejercer otros derechos en materia de protección de datos mediante comunicación al correo electrónico indicado en la Política de Privacidad.', 'pedraza-mahou-reservations'); ?></p>
+                                        <p><strong><?php echo esc_html__('Información adicional:', 'pedraza-mahou-reservations'); ?></strong> <?php echo wp_kses_post(sprintf(__('Puedes consultar la información completa sobre protección de datos en nuestra %s.', 'pedraza-mahou-reservations'), $privacy_link)); ?></p>
+                                    </div>
+
+                                    <div class="pmr-legal-text">
+                                        <h4><?php echo esc_html__('Condiciones de reserva', 'pedraza-mahou-reservations'); ?></h4>
+                                        <p><?php echo esc_html__('La presente solicitud constituye únicamente una reserva previa de cesta picnic y no implica pago online ni confirmación automática de disponibilidad.', 'pedraza-mahou-reservations'); ?></p>
+                                        <p><?php echo esc_html__('El importe de la cesta será abonado presencialmente en taquilla el día de la recogida.', 'pedraza-mahou-reservations'); ?></p>
+                                        <p><?php echo esc_html__('Las reservas estarán sujetas a disponibilidad y podrán ser verificadas mediante el número de referencia generado y el nombre indicado en el formulario.', 'pedraza-mahou-reservations'); ?></p>
+                                        <p><?php echo esc_html__('La organización se reserva el derecho de cancelar o modificar reservas por causas organizativas o de disponibilidad, informando previamente al usuario a través de los datos de contacto facilitados.', 'pedraza-mahou-reservations'); ?></p>
+                                        <p><strong><?php echo esc_html__('Precio por cesta: 15 € IVA incluido.', 'pedraza-mahou-reservations'); ?></strong></p>
+                                        <p class="pmr-legal-links"><?php echo wp_kses_post($privacy_link); ?> · <?php echo wp_kses_post($cookies_link); ?> · <?php echo wp_kses_post($legal_link); ?></p>
+                                    </div>
+                                </section>
+
+                                <div class="pmr-actions">
+                                    <button type="submit" class="pmr-submit"><?php echo esc_html__('Enviar reserva', 'pedraza-mahou-reservations'); ?></button>
+                                </div>
+
+                                <div class="pmr-message" data-pmr-message role="status" aria-live="polite"></div>
+                            </form>
                         </div>
-                    </section>
-
-                    <section class="pmr-section pmr-legal-section">
-                        <h3><?php echo esc_html__('Bloque 3 · Protección de datos y consentimientos', 'pedraza-mahou-reservations'); ?></h3>
-                        <label class="pmr-checkbox">
-                            <input type="checkbox" name="rgpd_consent" value="1" required>
-                            <span><?php echo wp_kses_post(sprintf(__('He leído y acepto la %s y el tratamiento de mis datos para la gestión de esta reserva.', 'pedraza-mahou-reservations'), $privacy_link)); ?></span>
-                        </label>
-                        <label class="pmr-checkbox">
-                            <input type="checkbox" name="marketing_consent" value="1">
-                            <span><?php echo esc_html__('Deseo recibir información sobre la programación, actividades y eventos del Gran Castillo de Pedraza y de otros espacios culturales y proyectos gestionados por Wonderland Group.', 'pedraza-mahou-reservations'); ?></span>
-                        </label>
-
-                        <div class="pmr-legal-text">
-                            <h4><?php echo esc_html__('Información básica sobre protección de datos', 'pedraza-mahou-reservations'); ?></h4>
-                            <p><strong><?php echo esc_html__('Responsable del tratamiento:', 'pedraza-mahou-reservations'); ?></strong> <?php echo esc_html__('Wonderland Group / entidad gestora del Gran Castillo de Pedraza.', 'pedraza-mahou-reservations'); ?></p>
-                            <p><strong><?php echo esc_html__('Finalidad:', 'pedraza-mahou-reservations'); ?></strong> <?php echo esc_html__('Gestionar la solicitud de reserva de cesta picnic y, en caso de autorización expresa, enviar información comercial sobre programación cultural, espectáculos y actividades relacionadas.', 'pedraza-mahou-reservations'); ?></p>
-                            <p><strong><?php echo esc_html__('Legitimación:', 'pedraza-mahou-reservations'); ?></strong> <?php echo esc_html__('Consentimiento del interesado y ejecución de la solicitud de reserva.', 'pedraza-mahou-reservations'); ?></p>
-                            <p><strong><?php echo esc_html__('Destinatarios:', 'pedraza-mahou-reservations'); ?></strong> <?php echo esc_html__('No se cederán datos a terceros salvo obligación legal.', 'pedraza-mahou-reservations'); ?></p>
-                            <p><strong><?php echo esc_html__('Derechos:', 'pedraza-mahou-reservations'); ?></strong> <?php echo esc_html__('Puedes acceder, rectificar y suprimir tus datos, así como ejercer otros derechos en materia de protección de datos mediante comunicación al correo electrónico indicado en la Política de Privacidad.', 'pedraza-mahou-reservations'); ?></p>
-                            <p><strong><?php echo esc_html__('Información adicional:', 'pedraza-mahou-reservations'); ?></strong> <?php echo wp_kses_post(sprintf(__('Puedes consultar la información completa sobre protección de datos en nuestra %s.', 'pedraza-mahou-reservations'), $privacy_link)); ?></p>
-                        </div>
-
-                        <div class="pmr-legal-text">
-                            <h4><?php echo esc_html__('Condiciones de reserva', 'pedraza-mahou-reservations'); ?></h4>
-                            <p><?php echo esc_html__('La presente solicitud constituye únicamente una reserva previa de cesta picnic y no implica pago online ni confirmación automática de disponibilidad.', 'pedraza-mahou-reservations'); ?></p>
-                            <p><?php echo esc_html__('El importe de la cesta será abonado presencialmente en taquilla el día de la recogida.', 'pedraza-mahou-reservations'); ?></p>
-                            <p><?php echo esc_html__('Las reservas estarán sujetas a disponibilidad y podrán ser verificadas mediante el número de referencia generado y el nombre indicado en el formulario.', 'pedraza-mahou-reservations'); ?></p>
-                            <p><?php echo esc_html__('La organización se reserva el derecho de cancelar o modificar reservas por causas organizativas o de disponibilidad, informando previamente al usuario a través de los datos de contacto facilitados.', 'pedraza-mahou-reservations'); ?></p>
-                            <p><strong><?php echo esc_html__('Precio por cesta: 15 € IVA incluido.', 'pedraza-mahou-reservations'); ?></strong></p>
-                            <p class="pmr-legal-links"><?php echo wp_kses_post($privacy_link); ?> · <?php echo wp_kses_post($cookies_link); ?> · <?php echo wp_kses_post($legal_link); ?></p>
-                        </div>
-                    </section>
-
-                    <div class="pmr-actions">
-                        <button type="submit" class="pmr-submit"><?php echo esc_html__('Enviar reserva', 'pedraza-mahou-reservations'); ?></button>
                     </div>
-
-                    <div class="pmr-message" data-pmr-message role="status" aria-live="polite"></div>
-                </form>
+                </div>
             </div>
-        </div>
+        </section>
         <?php
 
         return (string) ob_get_clean();
