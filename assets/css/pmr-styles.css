@@ -41,6 +41,18 @@
     font-family: "League Spartan", Arial, Helvetica, sans-serif;
 }
 
+.pmr-reservations a {
+    color: var(--pmr-teal) !important;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+
+.pmr-reservations a:hover,
+.pmr-reservations a:focus,
+.pmr-reservations a:focus-visible {
+    color: var(--pmr-blue) !important;
+}
+
 .pmr-reservation-page {
     position: relative;
     width: 100vw;
