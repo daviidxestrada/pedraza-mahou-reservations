@@ -1,0 +1,556 @@
+.pmr-reservations,
+.pmr-admin,
+.pmr-login {
+    --pmr-red: #c4161c;
+    --pmr-red-dark: #9f1015;
+    --pmr-ink: #262422;
+    --pmr-muted: #68615a;
+    --pmr-line: #ded8cf;
+    --pmr-soft: #f8f5ef;
+    --pmr-white: #ffffff;
+    --pmr-green: #1f7a4d;
+    --pmr-yellow: #a66b00;
+    --pmr-danger: #a52828;
+    color: var(--pmr-ink);
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+.pmr-card,
+.pmr-login__box {
+    width: 100%;
+    border: 1px solid var(--pmr-line);
+    border-radius: 8px;
+    background: var(--pmr-white);
+    box-shadow: 0 16px 40px rgba(38, 36, 34, 0.08);
+    overflow: hidden;
+}
+
+.pmr-header,
+.pmr-section,
+.pmr-actions {
+    padding: 24px;
+}
+
+.pmr-header {
+    background: linear-gradient(135deg, #ffffff 0%, #f8f5ef 100%);
+    border-bottom: 1px solid var(--pmr-line);
+}
+
+.pmr-header h2,
+.pmr-admin h2,
+.pmr-login h2 {
+    margin: 0 0 10px;
+    color: var(--pmr-ink);
+    font-size: 34px;
+    line-height: 1.15;
+    font-weight: 800;
+}
+
+.pmr-header p,
+.pmr-admin p,
+.pmr-login p {
+    margin: 0 0 10px;
+    color: var(--pmr-muted);
+}
+
+.pmr-price {
+    display: inline-flex;
+    margin-top: 6px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    background: var(--pmr-red);
+    color: var(--pmr-white) !important;
+    font-weight: 700;
+}
+
+.pmr-section + .pmr-section {
+    border-top: 1px solid var(--pmr-line);
+}
+
+.pmr-section h3,
+.pmr-legal-text h4 {
+    margin: 0 0 16px;
+    color: var(--pmr-ink);
+    font-size: 20px;
+    line-height: 1.25;
+    font-weight: 800;
+}
+
+.pmr-legal-text h4 {
+    font-size: 17px;
+}
+
+.pmr-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+}
+
+.pmr-grid .pmr-field:last-child:nth-child(odd) {
+    grid-column: span 2;
+}
+
+.pmr-field {
+    margin-bottom: 18px;
+}
+
+.pmr-field:last-child {
+    margin-bottom: 0;
+}
+
+.pmr-field label {
+    display: block;
+    margin-bottom: 7px;
+    color: var(--pmr-ink);
+    font-weight: 700;
+}
+
+.pmr-field input,
+.pmr-field textarea,
+.pmr-field select,
+.pmr-login input,
+.pmr-admin input,
+.pmr-admin select {
+    width: 100%;
+    min-height: 46px;
+    border: 1px solid var(--pmr-line);
+    border-radius: 8px;
+    background: var(--pmr-white);
+    color: var(--pmr-ink);
+    padding: 10px 12px;
+    font: inherit;
+    box-shadow: none;
+}
+
+.pmr-field textarea {
+    min-height: 116px;
+    resize: vertical;
+}
+
+.pmr-field input:focus,
+.pmr-field textarea:focus,
+.pmr-field select:focus,
+.pmr-login input:focus,
+.pmr-admin input:focus,
+.pmr-admin select:focus {
+    border-color: var(--pmr-red);
+    outline: 2px solid rgba(196, 22, 28, 0.15);
+    outline-offset: 1px;
+}
+
+.pmr-quantity {
+    display: grid;
+    grid-template-columns: 46px minmax(72px, 1fr) 46px;
+    gap: 8px;
+}
+
+.pmr-quantity input {
+    text-align: center;
+}
+
+.pmr-quantity__button,
+.pmr-submit,
+.pmr-secondary-button,
+.pmr-admin-action {
+    min-height: 44px;
+    border: 0;
+    border-radius: 8px;
+    cursor: pointer;
+    font: inherit;
+    font-weight: 800;
+    transition: background-color 160ms ease, color 160ms ease, border-color 160ms ease, transform 160ms ease;
+}
+
+.pmr-quantity__button {
+    background: var(--pmr-ink);
+    color: var(--pmr-white);
+    font-size: 20px;
+}
+
+.pmr-submit {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-width: 160px;
+    padding: 12px 18px;
+    background: var(--pmr-red);
+    color: var(--pmr-white);
+}
+
+.pmr-submit:hover,
+.pmr-submit:focus {
+    background: var(--pmr-red-dark);
+}
+
+.pmr-secondary-button,
+.pmr-admin-action {
+    padding: 10px 14px;
+    border: 1px solid var(--pmr-line);
+    background: var(--pmr-white);
+    color: var(--pmr-ink);
+}
+
+.pmr-secondary-button:hover,
+.pmr-secondary-button:focus,
+.pmr-admin-action:hover,
+.pmr-admin-action:focus {
+    border-color: var(--pmr-red);
+    color: var(--pmr-red);
+}
+
+.pmr-admin-action--danger {
+    border-color: rgba(165, 40, 40, 0.35);
+    color: var(--pmr-danger);
+}
+
+.pmr-submit:disabled,
+.pmr-admin-action:disabled {
+    cursor: wait;
+    opacity: 0.65;
+}
+
+.pmr-checkbox {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin: 0 0 14px;
+    color: var(--pmr-ink);
+}
+
+.pmr-checkbox input {
+    width: 18px;
+    height: 18px;
+    margin-top: 3px;
+    accent-color: var(--pmr-red);
+    flex: 0 0 auto;
+}
+
+.pmr-legal-text {
+    margin-top: 18px;
+    padding: 18px;
+    border: 1px solid var(--pmr-line);
+    border-radius: 8px;
+    background: var(--pmr-soft);
+}
+
+.pmr-legal-text p {
+    margin: 0 0 10px;
+    color: var(--pmr-muted);
+}
+
+.pmr-legal-text p:last-child {
+    margin-bottom: 0;
+}
+
+.pmr-reservations a,
+.pmr-admin a,
+.pmr-login a {
+    color: var(--pmr-red);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+
+.pmr-actions {
+    border-top: 1px solid var(--pmr-line);
+    background: var(--pmr-soft);
+}
+
+.pmr-message,
+.pmr-admin-message {
+    display: none;
+    margin-top: 16px;
+    padding: 12px 14px;
+    border-radius: 8px;
+    border: 1px solid var(--pmr-line);
+    background: var(--pmr-white);
+    color: var(--pmr-ink);
+}
+
+.pmr-message:not(:empty),
+.pmr-admin-message:not(:empty) {
+    display: block;
+}
+
+.pmr-message--success {
+    border-color: rgba(31, 122, 77, 0.35);
+    background: #effaf4;
+    color: var(--pmr-green);
+}
+
+.pmr-message--error {
+    border-color: rgba(165, 40, 40, 0.35);
+    background: #fff2f2;
+    color: var(--pmr-danger);
+}
+
+.pmr-message--warning {
+    border-color: rgba(166, 107, 0, 0.35);
+    background: #fff8e8;
+    color: var(--pmr-yellow);
+}
+
+.pmr-honeypot {
+    position: absolute;
+    left: -10000px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+}
+
+.pmr-login {
+    max-width: 520px;
+}
+
+.pmr-login__box {
+    padding: 24px;
+}
+
+.pmr-login-form {
+    margin-top: 18px;
+}
+
+.pmr-admin {
+    width: 100%;
+}
+
+.pmr-admin__top,
+.pmr-admin-filters,
+.pmr-admin-summary {
+    display: flex;
+    gap: 16px;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 18px;
+}
+
+.pmr-admin__top {
+    align-items: center;
+}
+
+.pmr-admin-filters {
+    padding: 18px;
+    border: 1px solid var(--pmr-line);
+    border-radius: 8px;
+    background: var(--pmr-soft);
+    flex-wrap: wrap;
+}
+
+.pmr-admin-filters .pmr-field {
+    min-width: min(260px, 100%);
+    margin-bottom: 0;
+    flex: 1 1 220px;
+}
+
+.pmr-admin-filters__actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.pmr-admin-summary {
+    justify-content: flex-start;
+    align-items: stretch;
+}
+
+.pmr-admin-summary__item {
+    min-width: 150px;
+    padding: 14px 16px;
+    border: 1px solid var(--pmr-line);
+    border-radius: 8px;
+    background: var(--pmr-white);
+}
+
+.pmr-admin-summary__item span {
+    display: block;
+    color: var(--pmr-muted);
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.pmr-admin-summary__item strong {
+    display: block;
+    color: var(--pmr-ink);
+    font-size: 28px;
+    line-height: 1.1;
+}
+
+.pmr-admin-table.is-loading {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+.pmr-table-wrap {
+    width: 100%;
+    overflow-x: auto;
+    border: 1px solid var(--pmr-line);
+    border-radius: 8px;
+    background: var(--pmr-white);
+}
+
+.pmr-table {
+    width: 100%;
+    min-width: 1120px;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+.pmr-table th,
+.pmr-table td {
+    padding: 12px 10px;
+    border-bottom: 1px solid var(--pmr-line);
+    text-align: left;
+    vertical-align: top;
+}
+
+.pmr-table th {
+    background: var(--pmr-soft);
+    color: var(--pmr-ink);
+    font-size: 12px;
+    text-transform: uppercase;
+    font-weight: 800;
+}
+
+.pmr-table tbody tr:last-child td {
+    border-bottom: 0;
+}
+
+.pmr-status {
+    display: inline-flex;
+    align-items: center;
+    min-height: 28px;
+    padding: 4px 9px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.pmr-status--pending {
+    background: #fff8e8;
+    color: var(--pmr-yellow);
+}
+
+.pmr-status--completed {
+    background: #effaf4;
+    color: var(--pmr-green);
+}
+
+.pmr-status--cancelled {
+    background: #fff2f2;
+    color: var(--pmr-danger);
+}
+
+.pmr-row-actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    min-width: 220px;
+}
+
+.pmr-admin-action {
+    min-height: 34px;
+    padding: 7px 10px;
+    font-size: 12px;
+}
+
+.pmr-empty {
+    padding: 22px;
+    border: 1px solid var(--pmr-line);
+    border-radius: 8px;
+    background: var(--pmr-soft);
+    color: var(--pmr-muted);
+}
+
+@media (max-width: 760px) {
+    .pmr-header,
+    .pmr-section,
+    .pmr-actions,
+    .pmr-login__box {
+        padding: 18px;
+    }
+
+    .pmr-header h2,
+    .pmr-admin h2,
+    .pmr-login h2 {
+        font-size: 26px;
+    }
+
+    .pmr-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .pmr-grid .pmr-field:last-child:nth-child(odd) {
+        grid-column: auto;
+    }
+
+    .pmr-admin__top,
+    .pmr-admin-filters,
+    .pmr-admin-summary {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .pmr-admin-filters__actions {
+        width: 100%;
+    }
+
+    .pmr-admin-filters__actions .pmr-submit,
+    .pmr-admin-filters__actions .pmr-secondary-button,
+    .pmr-admin__top .pmr-secondary-button {
+        width: 100%;
+    }
+
+    .pmr-table-wrap {
+        border: 0;
+        background: transparent;
+        overflow: visible;
+    }
+
+    .pmr-table {
+        min-width: 0;
+        border-collapse: separate;
+        border-spacing: 0 12px;
+    }
+
+    .pmr-table thead {
+        display: none;
+    }
+
+    .pmr-table,
+    .pmr-table tbody,
+    .pmr-table tr,
+    .pmr-table td {
+        display: block;
+        width: 100%;
+    }
+
+    .pmr-table tr {
+        border: 1px solid var(--pmr-line);
+        border-radius: 8px;
+        background: var(--pmr-white);
+        overflow: hidden;
+    }
+
+    .pmr-table td {
+        display: grid;
+        grid-template-columns: minmax(116px, 40%) minmax(0, 1fr);
+        gap: 10px;
+        border-bottom: 1px solid var(--pmr-line);
+        overflow-wrap: anywhere;
+    }
+
+    .pmr-table td::before {
+        content: attr(data-label);
+        color: var(--pmr-muted);
+        font-weight: 800;
+    }
+
+    .pmr-table tr td:last-child {
+        border-bottom: 0;
+    }
+
+    .pmr-row-actions {
+        min-width: 0;
+    }
+}

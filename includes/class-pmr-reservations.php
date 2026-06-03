@@ -1,0 +1,388 @@
+<?php
+
+if (! defined('ABSPATH')) {
+    exit;
+}
+
+final class PMR_Reservations
+{
+    private const PRICE_PER_BASKET = 15;
+    private const MAX_BASKETS = 50;
+    private const PUBLIC_LIMIT = 5;
+    private const PUBLIC_WINDOW = 600;
+
+    public static function init(): void
+    {
+        add_action('wp_ajax_pmr_submit_reservation', [__CLASS__, 'handle_public_submission']);
+        add_action('wp_ajax_nopriv_pmr_submit_reservation', [__CLASS__, 'handle_public_submission']);
+
+        add_action('wp_ajax_pmr_admin_login', [__CLASS__, 'handle_admin_login']);
+        add_action('wp_ajax_nopriv_pmr_admin_login', [__CLASS__, 'handle_admin_login']);
+        add_action('wp_ajax_pmr_admin_logout', [__CLASS__, 'handle_admin_logout']);
+        add_action('wp_ajax_nopriv_pmr_admin_logout', [__CLASS__, 'handle_admin_logout']);
+        add_action('wp_ajax_pmr_admin_list_reservations', [__CLASS__, 'handle_admin_list_reservations']);
+        add_action('wp_ajax_nopriv_pmr_admin_list_reservations', [__CLASS__, 'handle_admin_list_reservations']);
+        add_action('wp_ajax_pmr_admin_update_reservation', [__CLASS__, 'handle_admin_update_reservation']);
+        add_action('wp_ajax_nopriv_pmr_admin_update_reservation', [__CLASS__, 'handle_admin_update_reservation']);
+        add_action('wp_ajax_pmr_admin_delete_reservation', [__CLASS__, 'handle_admin_delete_reservation']);
+        add_action('wp_ajax_nopriv_pmr_admin_delete_reservation', [__CLASS__, 'handle_admin_delete_reservation']);
+    }
+
+    public static function handle_public_submission(): void
+    {
+        if (! self::verify_nonce('pmr_public_reservation')) {
+            wp_send_json_error(['message' => __('La sesión ha caducado. Recarga la página e inténtalo de nuevo.', 'pedraza-mahou-reservations')], 403);
+        }
+
+        $honeypot = isset($_POST['pmr_website']) ? trim((string) wp_unslash($_POST['pmr_website'])) : '';
+
+        if ($honeypot !== '') {
+            wp_send_json_error(['message' => __('No se pudo procesar la reserva.', 'pedraza-mahou-reservations')], 400);
+        }
+
+        $ip_address = PMR_Auth::get_client_ip();
+
+        if (self::is_public_rate_limited($ip_address)) {
+            wp_send_json_error(['message' => __('Has enviado varias solicitudes seguidas. Espera unos minutos antes de intentarlo de nuevo.', 'pedraza-mahou-reservations')], 429);
+        }
+
+        self::record_public_attempt($ip_address);
+
+        $validation = self::validate_public_payload($ip_address);
+
+        if (is_wp_error($validation)) {
+            wp_send_json_error(['message' => $validation->get_error_message(), 'errors' => $validation->get_error_data()], 400);
+        }
+
+        $reservation = PMR_Database::insert_reservation($validation);
+
+        if (is_wp_error($reservation)) {
+            wp_send_json_error(['message' => $reservation->get_error_message()], 500);
+        }
+
+        PMR_Emails::send_customer_email($reservation);
+        PMR_Emails::send_internal_email($reservation);
+
+        wp_send_json_success([
+            'reference' => $reservation['reference'],
+            'message' => sprintf(
+                /* translators: %s reservation reference */
+                __('Solicitud recibida. Tu referencia es %s. La reserva está sujeta a disponibilidad y el pago se realizará presencialmente en taquilla.', 'pedraza-mahou-reservations'),
+                $reservation['reference']
+            ),
+        ]);
+    }
+
+    public static function handle_admin_login(): void
+    {
+        if (! self::verify_nonce('pmr_admin_panel')) {
+            wp_send_json_error(['message' => __('La sesión ha caducado. Recarga la página e inténtalo de nuevo.', 'pedraza-mahou-reservations')], 403);
+        }
+
+        $username = isset($_POST['username']) ? sanitize_user((string) wp_unslash($_POST['username']), true) : '';
+        $password = isset($_POST['password']) ? (string) wp_unslash($_POST['password']) : '';
+        $result = PMR_Auth::authenticate($username, $password);
+
+        if (is_wp_error($result)) {
+            wp_send_json_error(['message' => $result->get_error_message()], 401);
+        }
+
+        wp_send_json_success(['message' => __('Acceso correcto.', 'pedraza-mahou-reservations')]);
+    }
+
+    public static function handle_admin_logout(): void
+    {
+        if (! self::verify_nonce('pmr_admin_panel')) {
+            wp_send_json_error(['message' => __('La sesión ha caducado. Recarga la página e inténtalo de nuevo.', 'pedraza-mahou-reservations')], 403);
+        }
+
+        PMR_Auth::logout();
+
+        wp_send_json_success(['message' => __('Sesión cerrada.', 'pedraza-mahou-reservations')]);
+    }
+
+    public static function handle_admin_list_reservations(): void
+    {
+        self::require_admin_ajax();
+
+        $filters = self::admin_filters_from_request();
+        $reservations = PMR_Database::get_reservations($filters);
+        $totals = PMR_Database::get_totals($filters);
+
+        wp_send_json_success([
+            'html' => self::render_admin_table($reservations, $totals),
+            'totalReservations' => $totals['total_reservations'],
+            'totalBaskets' => $totals['total_baskets'],
+        ]);
+    }
+
+    public static function handle_admin_update_reservation(): void
+    {
+        self::require_admin_ajax();
+
+        $reservation_id = isset($_POST['reservation_id']) ? absint($_POST['reservation_id']) : 0;
+        $status = isset($_POST['status']) ? sanitize_key((string) wp_unslash($_POST['status'])) : '';
+
+        if ($reservation_id < 1 || ! in_array($status, PMR_Database::valid_statuses(), true)) {
+            wp_send_json_error(['message' => __('Acción no válida.', 'pedraza-mahou-reservations')], 400);
+        }
+
+        if (! PMR_Database::update_status($reservation_id, $status)) {
+            wp_send_json_error(['message' => __('No se pudo actualizar la reserva.', 'pedraza-mahou-reservations')], 500);
+        }
+
+        wp_send_json_success(['message' => __('Reserva actualizada.', 'pedraza-mahou-reservations')]);
+    }
+
+    public static function handle_admin_delete_reservation(): void
+    {
+        self::require_admin_ajax();
+
+        $reservation_id = isset($_POST['reservation_id']) ? absint($_POST['reservation_id']) : 0;
+
+        if ($reservation_id < 1) {
+            wp_send_json_error(['message' => __('Reserva no válida.', 'pedraza-mahou-reservations')], 400);
+        }
+
+        if (! PMR_Database::delete_reservation($reservation_id)) {
+            wp_send_json_error(['message' => __('No se pudo eliminar la reserva.', 'pedraza-mahou-reservations')], 500);
+        }
+
+        wp_send_json_success(['message' => __('Reserva eliminada.', 'pedraza-mahou-reservations')]);
+    }
+
+    public static function render_admin_table(array $reservations, array $totals): string
+    {
+        ob_start();
+        ?>
+        <div class="pmr-admin-summary" aria-live="polite">
+            <div class="pmr-admin-summary__item">
+                <span><?php echo esc_html__('Reservas', 'pedraza-mahou-reservations'); ?></span>
+                <strong><?php echo esc_html((string) $totals['total_reservations']); ?></strong>
+            </div>
+            <div class="pmr-admin-summary__item">
+                <span><?php echo esc_html__('Cestas', 'pedraza-mahou-reservations'); ?></span>
+                <strong><?php echo esc_html((string) $totals['total_baskets']); ?></strong>
+            </div>
+        </div>
+
+        <?php if (! $reservations) : ?>
+            <div class="pmr-empty">
+                <?php echo esc_html__('No hay reservas con los filtros seleccionados.', 'pedraza-mahou-reservations'); ?>
+            </div>
+        <?php else : ?>
+            <div class="pmr-table-wrap">
+                <table class="pmr-table">
+                    <thead>
+                        <tr>
+                            <th><?php echo esc_html__('Referencia', 'pedraza-mahou-reservations'); ?></th>
+                            <th><?php echo esc_html__('Recogida', 'pedraza-mahou-reservations'); ?></th>
+                            <th><?php echo esc_html__('Cestas', 'pedraza-mahou-reservations'); ?></th>
+                            <th><?php echo esc_html__('Nombre', 'pedraza-mahou-reservations'); ?></th>
+                            <th><?php echo esc_html__('Teléfono', 'pedraza-mahou-reservations'); ?></th>
+                            <th><?php echo esc_html__('Email', 'pedraza-mahou-reservations'); ?></th>
+                            <th><?php echo esc_html__('Observaciones', 'pedraza-mahou-reservations'); ?></th>
+                            <th><?php echo esc_html__('Estado', 'pedraza-mahou-reservations'); ?></th>
+                            <th><?php echo esc_html__('Comercial', 'pedraza-mahou-reservations'); ?></th>
+                            <th><?php echo esc_html__('Creación', 'pedraza-mahou-reservations'); ?></th>
+                            <th><?php echo esc_html__('Acciones', 'pedraza-mahou-reservations'); ?></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($reservations as $reservation) : ?>
+                            <?php $status = (string) $reservation['status']; ?>
+                            <tr>
+                                <td data-label="<?php echo esc_attr__('Referencia', 'pedraza-mahou-reservations'); ?>"><strong><?php echo esc_html($reservation['reference']); ?></strong></td>
+                                <td data-label="<?php echo esc_attr__('Recogida', 'pedraza-mahou-reservations'); ?>"><?php echo esc_html(self::format_date((string) $reservation['pickup_date'])); ?></td>
+                                <td data-label="<?php echo esc_attr__('Cestas', 'pedraza-mahou-reservations'); ?>"><?php echo esc_html((string) (int) $reservation['basket_count']); ?></td>
+                                <td data-label="<?php echo esc_attr__('Nombre', 'pedraza-mahou-reservations'); ?>"><?php echo esc_html($reservation['full_name']); ?></td>
+                                <td data-label="<?php echo esc_attr__('Teléfono', 'pedraza-mahou-reservations'); ?>"><a href="tel:<?php echo esc_attr(preg_replace('/[^0-9+]/', '', (string) $reservation['phone'])); ?>"><?php echo esc_html($reservation['phone']); ?></a></td>
+                                <td data-label="<?php echo esc_attr__('Email', 'pedraza-mahou-reservations'); ?>"><a href="mailto:<?php echo esc_attr($reservation['email']); ?>"><?php echo esc_html($reservation['email']); ?></a></td>
+                                <td data-label="<?php echo esc_attr__('Observaciones', 'pedraza-mahou-reservations'); ?>"><?php echo $reservation['observations'] !== '' ? nl2br(esc_html($reservation['observations'])) : esc_html('-'); ?></td>
+                                <td data-label="<?php echo esc_attr__('Estado', 'pedraza-mahou-reservations'); ?>"><span class="pmr-status pmr-status--<?php echo esc_attr($status); ?>"><?php echo esc_html(self::status_label($status)); ?></span></td>
+                                <td data-label="<?php echo esc_attr__('Comercial', 'pedraza-mahou-reservations'); ?>"><?php echo ! empty($reservation['marketing_consent']) ? esc_html__('Sí', 'pedraza-mahou-reservations') : esc_html__('No', 'pedraza-mahou-reservations'); ?></td>
+                                <td data-label="<?php echo esc_attr__('Creación', 'pedraza-mahou-reservations'); ?>"><?php echo esc_html(self::format_datetime((string) $reservation['created_at'])); ?></td>
+                                <td data-label="<?php echo esc_attr__('Acciones', 'pedraza-mahou-reservations'); ?>">
+                                    <div class="pmr-row-actions">
+                                        <?php if ($status !== 'completed') : ?>
+                                            <button type="button" class="pmr-admin-action" data-pmr-action="status" data-status="completed" data-id="<?php echo esc_attr((string) $reservation['id']); ?>"><?php echo esc_html__('Completar', 'pedraza-mahou-reservations'); ?></button>
+                                        <?php endif; ?>
+                                        <?php if ($status !== 'cancelled') : ?>
+                                            <button type="button" class="pmr-admin-action" data-pmr-action="status" data-status="cancelled" data-id="<?php echo esc_attr((string) $reservation['id']); ?>"><?php echo esc_html__('Cancelar', 'pedraza-mahou-reservations'); ?></button>
+                                        <?php endif; ?>
+                                        <?php if ($status !== 'pending') : ?>
+                                            <button type="button" class="pmr-admin-action" data-pmr-action="status" data-status="pending" data-id="<?php echo esc_attr((string) $reservation['id']); ?>"><?php echo esc_html__('Pendiente', 'pedraza-mahou-reservations'); ?></button>
+                                        <?php endif; ?>
+                                        <button type="button" class="pmr-admin-action pmr-admin-action--danger" data-pmr-action="delete" data-id="<?php echo esc_attr((string) $reservation['id']); ?>"><?php echo esc_html__('Eliminar', 'pedraza-mahou-reservations'); ?></button>
+                                    </div>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+        <?php endif; ?>
+        <?php
+
+        return (string) ob_get_clean();
+    }
+
+    public static function status_label(string $status): string
+    {
+        $labels = [
+            'pending' => __('Pendiente', 'pedraza-mahou-reservations'),
+            'completed' => __('Completada', 'pedraza-mahou-reservations'),
+            'cancelled' => __('Cancelada', 'pedraza-mahou-reservations'),
+        ];
+
+        return $labels[$status] ?? $status;
+    }
+
+    private static function validate_public_payload(string $ip_address)
+    {
+        $errors = [];
+
+        $pickup_date = isset($_POST['pickup_date']) ? sanitize_text_field((string) wp_unslash($_POST['pickup_date'])) : '';
+        $basket_count = isset($_POST['basket_count']) ? absint($_POST['basket_count']) : 0;
+        $observations = isset($_POST['observations']) ? sanitize_textarea_field((string) wp_unslash($_POST['observations'])) : '';
+        $full_name = isset($_POST['full_name']) ? sanitize_text_field((string) wp_unslash($_POST['full_name'])) : '';
+        $email = isset($_POST['email']) ? sanitize_email((string) wp_unslash($_POST['email'])) : '';
+        $phone = isset($_POST['phone']) ? sanitize_text_field((string) wp_unslash($_POST['phone'])) : '';
+        $rgpd_consent = ! empty($_POST['rgpd_consent']);
+        $marketing_consent = ! empty($_POST['marketing_consent']);
+
+        if (! PMR_Database::is_valid_date($pickup_date)) {
+            $errors['pickup_date'] = __('Selecciona una fecha de recogida válida.', 'pedraza-mahou-reservations');
+        } elseif ($pickup_date < current_time('Y-m-d')) {
+            $errors['pickup_date'] = __('La fecha de recogida no puede ser anterior a hoy.', 'pedraza-mahou-reservations');
+        }
+
+        if ($basket_count < 1 || $basket_count > self::MAX_BASKETS) {
+            $errors['basket_count'] = sprintf(
+                /* translators: %d maximum basket count */
+                __('El número de cestas debe estar entre 1 y %d.', 'pedraza-mahou-reservations'),
+                self::MAX_BASKETS
+            );
+        }
+
+        if ($full_name === '' || strlen($full_name) < 2 || strlen($full_name) > 190) {
+            $errors['full_name'] = __('Introduce tu nombre y apellidos.', 'pedraza-mahou-reservations');
+        }
+
+        if (! is_email($email)) {
+            $errors['email'] = __('Introduce un correo electrónico válido.', 'pedraza-mahou-reservations');
+        }
+
+        if (! preg_match('/^[0-9+\s().-]{6,25}$/', $phone)) {
+            $errors['phone'] = __('Introduce un teléfono de contacto válido.', 'pedraza-mahou-reservations');
+        }
+
+        if (! $rgpd_consent) {
+            $errors['rgpd_consent'] = __('Debes aceptar la Política de Privacidad y el tratamiento de tus datos.', 'pedraza-mahou-reservations');
+        }
+
+        if (strlen($observations) > 2000) {
+            $observations = substr($observations, 0, 2000);
+        }
+
+        if ($errors) {
+            return new WP_Error(
+                'pmr_validation_failed',
+                __('Revisa los campos marcados antes de enviar la reserva.', 'pedraza-mahou-reservations'),
+                $errors
+            );
+        }
+
+        return [
+            'pickup_date' => $pickup_date,
+            'basket_count' => $basket_count,
+            'observations' => $observations,
+            'full_name' => $full_name,
+            'email' => $email,
+            'phone' => $phone,
+            'rgpd_consent' => 1,
+            'marketing_consent' => $marketing_consent ? 1 : 0,
+            'ip_address' => $ip_address,
+        ];
+    }
+
+    private static function require_admin_ajax(): void
+    {
+        if (! self::verify_nonce('pmr_admin_panel')) {
+            wp_send_json_error(['message' => __('La sesión ha caducado. Recarga la página e inténtalo de nuevo.', 'pedraza-mahou-reservations')], 403);
+        }
+
+        if (! PMR_Auth::is_authenticated()) {
+            wp_send_json_error(['message' => __('Acceso no autorizado.', 'pedraza-mahou-reservations')], 401);
+        }
+    }
+
+    private static function verify_nonce(string $action): bool
+    {
+        $nonce = isset($_POST['nonce']) ? sanitize_text_field((string) wp_unslash($_POST['nonce'])) : '';
+
+        return (bool) wp_verify_nonce($nonce, $action);
+    }
+
+    private static function admin_filters_from_request(): array
+    {
+        $filters = [];
+        $pickup_date = isset($_POST['pickup_date']) ? sanitize_text_field((string) wp_unslash($_POST['pickup_date'])) : '';
+        $status = isset($_POST['status']) ? sanitize_key((string) wp_unslash($_POST['status'])) : '';
+
+        if ($pickup_date !== '' && PMR_Database::is_valid_date($pickup_date)) {
+            $filters['pickup_date'] = $pickup_date;
+        }
+
+        if ($status !== '' && in_array($status, PMR_Database::valid_statuses(), true)) {
+            $filters['status'] = $status;
+        }
+
+        return $filters;
+    }
+
+    private static function is_public_rate_limited(string $ip_address): bool
+    {
+        $attempts = get_transient(self::public_rate_key($ip_address));
+
+        return is_array($attempts)
+            && isset($attempts['count'])
+            && (int) $attempts['count'] >= self::PUBLIC_LIMIT;
+    }
+
+    private static function record_public_attempt(string $ip_address): void
+    {
+        $key = self::public_rate_key($ip_address);
+        $attempts = get_transient($key);
+        $count = is_array($attempts) && isset($attempts['count']) ? (int) $attempts['count'] : 0;
+
+        set_transient($key, ['count' => $count + 1], self::PUBLIC_WINDOW);
+    }
+
+    private static function public_rate_key(string $ip_address): string
+    {
+        return 'pmr_public_' . md5($ip_address ?: 'unknown');
+    }
+
+    private static function format_date(string $date): string
+    {
+        $timestamp = strtotime($date);
+
+        if (! $timestamp) {
+            return $date;
+        }
+
+        return date_i18n(get_option('date_format'), $timestamp);
+    }
+
+    private static function format_datetime(string $datetime): string
+    {
+        $timestamp = strtotime($datetime);
+
+        if (! $timestamp) {
+            return $datetime;
+        }
+
+        return date_i18n(get_option('date_format') . ' H:i', $timestamp);
+    }
+}
