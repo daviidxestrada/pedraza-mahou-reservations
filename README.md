@@ -53,7 +53,7 @@ La contraseña del panel privado se guarda con `password_hash()` usando bcrypt. 
 
 ## Actualizaciones desde GitHub
 
-El plugin incluye un update checker propio basado en GitHub Releases.
+El plugin usa `YahnisElsts/plugin-update-checker` instalado por Composer y empaquetado dentro de `vendor/`. No hace falta instalar nada adicional en WordPress.
 
 Configuración por defecto:
 
@@ -63,9 +63,11 @@ Configuración por defecto:
 Para publicar una nueva versión:
 
 1. Actualiza la cabecera `Version` del plugin y la constante `PMR_VERSION` en `pedraza-mahou-reservations.php`.
-2. Haz commit y push a GitHub.
-3. Crea una release con tag semántico superior a la versión instalada, por ejemplo `v1.0.1`.
-4. WordPress detectará la nueva versión desde `Escritorio > Actualizaciones` o desde la pantalla de plugins.
+2. Actualiza `Stable tag` y el changelog en `readme.txt`.
+3. Regenera el ZIP del plugin.
+4. Haz commit y push a GitHub.
+5. Crea una release con tag semántico superior a la versión instalada, por ejemplo `v1.0.4`, adjuntando el asset `pedraza-mahou-reservations.zip`.
+6. WordPress detectará la nueva versión desde `Escritorio > Actualizaciones` o desde la pantalla de plugins. PUC ignora releases marcadas como pre-release.
 
 Si el repositorio es privado, configura un token con permiso de lectura del repositorio. Puedes hacerlo de dos formas:
 
@@ -164,6 +166,9 @@ Estados disponibles:
 ```txt
 pedraza-mahou-reservations/
 ├── pedraza-mahou-reservations.php
+├── composer.json
+├── composer.lock
+├── readme.txt
 ├── includes/
 │   ├── class-pmr-activator.php
 │   ├── class-pmr-database.php
