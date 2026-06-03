@@ -38,18 +38,22 @@ final class PMR_Shortcodes
                             <p><?php echo esc_html__('Al reservar tu cesta, te garantizas tener todo listo a tu llegada. Solo tendrás que recogerla, elegir tu rincón favorito y disfrutar del momento.', 'pedraza-mahou-reservations'); ?></p>
                         </div>
 
+                        <figure class="pmr-page-image">
+                            <img src="https://grancastillodepedraza.com/wp-content/uploads/2026/05/Cesta.jpg" width="1200" height="900" alt="<?php echo esc_attr__('Cesta de picnic Mahou', 'pedraza-mahou-reservations'); ?>" loading="eager">
+                        </figure>
+
                         <div class="pmr-info-card">
-                            <h3><span class="pmr-card-icon pmr-card-icon--red" aria-hidden="true"></span><?php echo esc_html__('¿Qué incluye La Cesta del Castillo?', 'pedraza-mahou-reservations'); ?></h3>
+                            <h3><?php echo self::svg_icon('shopping-basket', 'pmr-icon pmr-icon--red'); ?><?php echo esc_html__('¿Qué incluye La Cesta del Castillo?', 'pedraza-mahou-reservations'); ?></h3>
                             <ul class="pmr-feature-list">
-                                <li><span class="pmr-check" aria-hidden="true"></span><?php echo esc_html__('2 Cervezas Mahou bien frías (o alternativa sin alcohol)', 'pedraza-mahou-reservations'); ?></li>
-                                <li><span class="pmr-check" aria-hidden="true"></span><?php echo esc_html__('Selección de ibéricos de la tierra y queso curado', 'pedraza-mahou-reservations'); ?></li>
-                                <li><span class="pmr-check" aria-hidden="true"></span><?php echo esc_html__('Hogaza de pan rústico artesano y picos crujientes', 'pedraza-mahou-reservations'); ?></li>
-                                <li><span class="pmr-check" aria-hidden="true"></span><?php echo esc_html__('Cesta de mimbre tradicional y menaje necesario', 'pedraza-mahou-reservations'); ?></li>
+                                <li><?php echo self::svg_icon('check', 'pmr-icon pmr-icon--check'); ?><?php echo esc_html__('2 Cervezas Mahou bien frías (o alternativa sin alcohol)', 'pedraza-mahou-reservations'); ?></li>
+                                <li><?php echo self::svg_icon('check', 'pmr-icon pmr-icon--check'); ?><?php echo esc_html__('Selección de ibéricos de la tierra y queso curado', 'pedraza-mahou-reservations'); ?></li>
+                                <li><?php echo self::svg_icon('check', 'pmr-icon pmr-icon--check'); ?><?php echo esc_html__('Hogaza de pan rústico artesano y picos crujientes', 'pedraza-mahou-reservations'); ?></li>
+                                <li><?php echo self::svg_icon('check', 'pmr-icon pmr-icon--check'); ?><?php echo esc_html__('Cesta de mimbre tradicional y menaje necesario', 'pedraza-mahou-reservations'); ?></li>
                             </ul>
                         </div>
 
                         <div class="pmr-price-card">
-                            <div class="pmr-price-icon" aria-hidden="true"></div>
+                            <span class="pmr-price-icon" aria-hidden="true"><?php echo self::svg_icon('tag', 'pmr-icon pmr-icon--gold'); ?></span>
                             <div>
                                 <span><?php echo esc_html__('Precio por cesta', 'pedraza-mahou-reservations'); ?></span>
                                 <strong><?php echo esc_html__('15 €', 'pedraza-mahou-reservations'); ?></strong>
@@ -58,16 +62,16 @@ final class PMR_Shortcodes
                         </div>
 
                         <div class="pmr-info-card">
-                            <h3><span class="pmr-card-icon pmr-card-icon--red" aria-hidden="true"></span><?php echo esc_html__('Pago', 'pedraza-mahou-reservations'); ?></h3>
+                            <h3><?php echo self::svg_icon('credit-card', 'pmr-icon pmr-icon--red'); ?><?php echo esc_html__('Pago', 'pedraza-mahou-reservations'); ?></h3>
                             <ul class="pmr-feature-list">
-                                <li><span class="pmr-check" aria-hidden="true"></span><?php echo wp_kses_post(__('La reserva se realiza <strong>sin pago online</strong>.', 'pedraza-mahou-reservations')); ?></li>
-                                <li><span class="pmr-check" aria-hidden="true"></span><?php echo wp_kses_post(__('El importe se abonará el día de la recogida en taquilla, mediante <strong>efectivo o tarjeta</strong>.', 'pedraza-mahou-reservations')); ?></li>
-                                <li><span class="pmr-check" aria-hidden="true"></span><?php echo esc_html__('Pago presencial en taquilla del castillo.', 'pedraza-mahou-reservations'); ?></li>
+                                <li><?php echo self::svg_icon('check-circle-2', 'pmr-icon pmr-icon--check'); ?><?php echo wp_kses_post(__('La reserva se realiza <strong>sin pago online</strong>.', 'pedraza-mahou-reservations')); ?></li>
+                                <li><?php echo self::svg_icon('check-circle-2', 'pmr-icon pmr-icon--check'); ?><?php echo wp_kses_post(__('El importe se abonará el día de la recogida en taquilla, mediante <strong>efectivo o tarjeta</strong>.', 'pedraza-mahou-reservations')); ?></li>
+                                <li><?php echo self::svg_icon('check-circle-2', 'pmr-icon pmr-icon--check'); ?><?php echo esc_html__('Pago presencial en taquilla del castillo.', 'pedraza-mahou-reservations'); ?></li>
                             </ul>
                         </div>
 
                         <div class="pmr-info-card">
-                            <h3><span class="pmr-card-icon pmr-card-icon--red" aria-hidden="true"></span><?php echo esc_html__('Cómo funciona', 'pedraza-mahou-reservations'); ?></h3>
+                            <h3><?php echo self::svg_icon('list-checks', 'pmr-icon pmr-icon--red'); ?><?php echo esc_html__('Cómo funciona', 'pedraza-mahou-reservations'); ?></h3>
                             <ol class="pmr-steps">
                                 <li><span>1</span><?php echo esc_html__('Selecciona la fecha de recogida.', 'pedraza-mahou-reservations'); ?></li>
                                 <li><span>2</span><?php echo esc_html__('Indica el número de cestas.', 'pedraza-mahou-reservations'); ?></li>
@@ -79,13 +83,9 @@ final class PMR_Shortcodes
                         </div>
 
                         <div class="pmr-pickup-card">
-                            <h3><span class="pmr-card-icon pmr-card-icon--blue" aria-hidden="true"></span><?php echo esc_html__('Recogida', 'pedraza-mahou-reservations'); ?></h3>
+                            <h3><?php echo self::svg_icon('package-check', 'pmr-icon pmr-icon--teal'); ?><?php echo esc_html__('Recogida', 'pedraza-mahou-reservations'); ?></h3>
                             <p><?php echo wp_kses_post(__('La cesta se retirará el día seleccionado en la <strong>taquilla del Gran Castillo de Pedraza</strong>.', 'pedraza-mahou-reservations')); ?></p>
                         </div>
-
-                        <figure class="pmr-page-image">
-                            <img src="https://images.unsplash.com/photo-1528495612343-9ca9f4a4de28?q=80&w=1200&auto=format&fit=crop" alt="<?php echo esc_attr__('Cesta de picnic', 'pedraza-mahou-reservations'); ?>" loading="lazy">
-                        </figure>
                     </aside>
 
                     <div class="pmr-form-column">
@@ -95,7 +95,7 @@ final class PMR_Shortcodes
                                     <h2><?php echo esc_html__('Completa tu reserva', 'pedraza-mahou-reservations'); ?></h2>
                                     <p><?php echo esc_html__('Selecciona fecha y detalles de tu cesta', 'pedraza-mahou-reservations'); ?></p>
                                 </div>
-                                <span class="pmr-calendar-badge" aria-hidden="true"></span>
+                                <span class="pmr-calendar-badge" aria-hidden="true"><?php echo self::svg_icon('calendar-clock', 'pmr-icon'); ?></span>
                             </header>
 
                             <form class="pmr-form" data-pmr-public-form novalidate>
@@ -301,6 +301,30 @@ final class PMR_Shortcodes
             '<a href="%s" target="_blank" rel="noopener noreferrer">%s</a>',
             esc_url($url),
             esc_html($label)
+        );
+    }
+
+    private static function svg_icon(string $name, string $class = 'pmr-icon'): string
+    {
+        $icons = [
+            'calendar-clock' => '<path d="M21 7.5V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h3.5"/><path d="M16 2v4"/><path d="M8 2v4"/><path d="M3 10h18"/><circle cx="16" cy="16" r="6"/><path d="M16 13v3l2 1"/>',
+            'check' => '<path d="m20 6-11 11-5-5"/>',
+            'check-circle-2' => '<circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/>',
+            'credit-card' => '<rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/>',
+            'list-checks' => '<path d="m3 17 2 2 4-4"/><path d="m3 7 2 2 4-4"/><path d="M13 6h8"/><path d="M13 12h8"/><path d="M13 18h8"/>',
+            'package-check' => '<path d="m16 16 2 2 4-4"/><path d="M21 10V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l2-1.14"/><path d="m7.5 4.27 9 5.15"/><path d="M3.29 7 12 12l8.71-5"/><path d="M12 22V12"/>',
+            'shopping-basket' => '<path d="m15 11-1 9"/><path d="m19 11-4-7"/><path d="M2 11h20"/><path d="m3.5 11 1.6 7.4A2 2 0 0 0 7.1 20h9.8a2 2 0 0 0 2-1.6l1.6-7.4"/><path d="M5 11 9 4"/><path d="m9 11 1 9"/>',
+            'tag' => '<path d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z"/><circle cx="7.5" cy="7.5" r=".5" fill="currentColor"/>',
+        ];
+
+        if (! isset($icons[$name])) {
+            return '';
+        }
+
+        return sprintf(
+            '<svg class="%s" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">%s</svg>',
+            esc_attr($class),
+            $icons[$name]
         );
     }
 }
