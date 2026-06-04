@@ -108,9 +108,9 @@ El panel autenticado permite:
 
 - Abrir directamente la vista de reservas del día actual.
 - Ver cuántas cestas quedan por preparar.
-- Ver totales de cestas, reservas y reservas completadas según los filtros activos.
+- Ver el total de reservas y cestas según los filtros activos.
 - Cambiar rápidamente entre hoy, mañana, todas las fechas o una fecha concreta.
-- Filtrar por estado mediante controles rápidos.
+- Filtrar por estado mediante un desplegable sencillo.
 - Buscar por referencia, nombre, teléfono o email.
 - Ver reservas ordenadas por fecha de creación descendente.
 - Actualizar manualmente la tabla.

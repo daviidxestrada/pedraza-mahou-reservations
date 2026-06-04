@@ -4,7 +4,7 @@ Tags: reservations, bookings, elementor, picnic, mahou
 Requires at least: 6.0
 Tested up to: 6.6
 Requires PHP: 8.0
-Stable tag: v1.0.8
+Stable tag: v1.0.9
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -40,6 +40,13 @@ Panel privado:
 No. La reserva se realiza sin pago online y el importe se abona presencialmente en taquilla.
 
 == Changelog ==
+
+= 1.0.9 =
+* Simplifica el gestor para facilitar su uso diario, especialmente desde móvil.
+* Reduce el resumen a cestas por preparar y reservas del filtro.
+* Sustituye el filtro visual de estados por un desplegable sencillo.
+* Corrige posiciones y tamaños de iconos afectados por estilos externos.
+* Aísla botones, hovers y controles frente a estilos de WordPress, Elementor y el tema.
 
 = 1.0.8 =
 * Rediseña el panel privado y su login con el sistema visual de Reserva tu cesta.

@@ -2012,3 +2012,454 @@
         grid-template-columns: 1fr;
     }
 }
+
+/* Keep the private workspace independent from theme and Elementor controls. */
+.pmr-admin-page button,
+.pmr-admin-page input,
+.pmr-admin-page select,
+.pmr-admin-page a {
+    letter-spacing: 0 !important;
+    text-shadow: none !important;
+}
+
+.pmr-admin-page button {
+    margin: 0 !important;
+    font-family: "Montserrat", Arial, Helvetica, sans-serif !important;
+    line-height: 1.2 !important;
+    text-transform: none !important;
+    box-shadow: none !important;
+    transform: none !important;
+    appearance: none !important;
+}
+
+.pmr-admin-page button:hover,
+.pmr-admin-page button:focus,
+.pmr-admin-page button:active {
+    box-shadow: none !important;
+    transform: none !important;
+}
+
+.pmr-admin-login-page button {
+    margin: 0 !important;
+    font-family: "Montserrat", Arial, Helvetica, sans-serif !important;
+    letter-spacing: 0 !important;
+    line-height: 1.2 !important;
+    text-transform: none !important;
+    text-shadow: none !important;
+    box-shadow: none !important;
+    transform: none !important;
+    appearance: none !important;
+}
+
+.pmr-admin-login-page .pmr-icon {
+    position: static !important;
+    inset: auto !important;
+    display: block !important;
+    width: 20px !important;
+    height: 20px !important;
+    flex: 0 0 20px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    fill: none !important;
+    stroke: currentColor !important;
+    transform: none !important;
+}
+
+.pmr-admin-login-page .pmr-login-brand__icon .pmr-icon {
+    width: 27px !important;
+    height: 27px !important;
+    flex-basis: 27px !important;
+}
+
+.pmr-admin-login-page .pmr-submit,
+.pmr-admin-login-page .pmr-submit:hover,
+.pmr-admin-login-page .pmr-submit:focus {
+    border: 0 !important;
+    background: var(--pmr-gold) !important;
+    color: #151515 !important;
+    box-shadow: none !important;
+    transform: none !important;
+}
+
+.pmr-admin-page .pmr-icon,
+.pmr-admin-page .pmr-admin-icon {
+    position: static !important;
+    inset: auto !important;
+    display: block !important;
+    flex-shrink: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: visible !important;
+    vertical-align: middle !important;
+    fill: none !important;
+    stroke: currentColor !important;
+    transform: none !important;
+    pointer-events: none !important;
+    width: 18px !important;
+    height: 18px !important;
+    flex-basis: 18px !important;
+}
+
+.pmr-admin-page .pmr-admin-brand__icon .pmr-icon {
+    width: 17px !important;
+    height: 17px !important;
+    flex-basis: 17px !important;
+}
+
+.pmr-admin-page .pmr-empty > span .pmr-admin-icon {
+    width: 24px !important;
+    height: 24px !important;
+    flex-basis: 24px !important;
+}
+
+.pmr-admin-page .pmr-admin-brand__icon,
+.pmr-admin-page .pmr-admin-summary__icon,
+.pmr-admin-page .pmr-empty > span {
+    line-height: 0 !important;
+}
+
+.pmr-admin-page .pmr-icon-button-text,
+.pmr-admin-page .pmr-admin-action,
+.pmr-admin-page .pmr-admin-filter-label,
+.pmr-admin-page .pmr-contact-link,
+.pmr-admin-page .pmr-basket-count {
+    align-items: center !important;
+}
+
+.pmr-admin-page .pmr-secondary-button {
+    border: 1px solid #dfe5e9 !important;
+    background: #ffffff !important;
+    color: var(--pmr-blue) !important;
+}
+
+.pmr-admin-page .pmr-secondary-button:hover,
+.pmr-admin-page .pmr-secondary-button:focus {
+    border-color: var(--pmr-blue) !important;
+    background: #f4f7f8 !important;
+    color: var(--pmr-blue) !important;
+}
+
+.pmr-admin-page .pmr-submit {
+    border: 1px solid var(--pmr-blue) !important;
+    background: var(--pmr-blue) !important;
+    color: #ffffff !important;
+}
+
+.pmr-admin-page .pmr-submit:hover,
+.pmr-admin-page .pmr-submit:focus {
+    border-color: #00435c !important;
+    background: #00435c !important;
+    color: #ffffff !important;
+}
+
+.pmr-admin-page .pmr-admin-preset {
+    border: 0 !important;
+    background: transparent !important;
+    color: #596771 !important;
+}
+
+.pmr-admin-page .pmr-admin-preset:hover,
+.pmr-admin-page .pmr-admin-preset:focus-visible {
+    background: #f0f4f6 !important;
+    color: var(--pmr-blue) !important;
+}
+
+.pmr-admin-page .pmr-admin-preset.is-active {
+    background: var(--pmr-blue) !important;
+    color: #ffffff !important;
+}
+
+.pmr-admin-page .pmr-admin-action--complete {
+    border: 1px solid var(--pmr-green) !important;
+    background: var(--pmr-green) !important;
+    color: #ffffff !important;
+}
+
+.pmr-admin-page .pmr-admin-action--complete:hover,
+.pmr-admin-page .pmr-admin-action--complete:focus {
+    border-color: #155f3a !important;
+    background: #155f3a !important;
+    color: #ffffff !important;
+}
+
+.pmr-admin-page .pmr-admin-action--cancel {
+    border: 1px solid #eccdcd !important;
+    background: #fff6f6 !important;
+    color: var(--pmr-danger) !important;
+}
+
+.pmr-admin-page .pmr-admin-action--cancel:hover,
+.pmr-admin-page .pmr-admin-action--cancel:focus {
+    border-color: var(--pmr-danger) !important;
+    background: #fff0f0 !important;
+    color: var(--pmr-danger) !important;
+}
+
+.pmr-admin-page .pmr-admin-action--pending {
+    border: 1px solid #eadcae !important;
+    background: #fffaf0 !important;
+    color: #8a6500 !important;
+}
+
+.pmr-admin-page .pmr-admin-action--pending:hover,
+.pmr-admin-page .pmr-admin-action--pending:focus {
+    border-color: #b88b16 !important;
+    background: #fff5d8 !important;
+    color: #765600 !important;
+}
+
+.pmr-admin-page .pmr-admin-action--danger {
+    border: 1px solid #eccdcd !important;
+    background: #ffffff !important;
+    color: var(--pmr-danger) !important;
+}
+
+.pmr-admin-page .pmr-admin-action--danger:hover,
+.pmr-admin-page .pmr-admin-action--danger:focus {
+    border-color: var(--pmr-danger) !important;
+    background: #fff0f0 !important;
+    color: var(--pmr-danger) !important;
+}
+
+.pmr-admin-toolbar {
+    grid-template-columns: minmax(330px, 1.15fr) minmax(210px, 0.7fr) minmax(260px, 1fr) auto;
+}
+
+.pmr-admin-filter-group select {
+    width: 100%;
+    min-height: 44px;
+    border: 1px solid #d8e0e5 !important;
+    border-radius: 8px !important;
+    background-color: #ffffff !important;
+    color: var(--pmr-blue) !important;
+    font: inherit !important;
+    font-size: 13px !important;
+    box-shadow: none !important;
+}
+
+.pmr-admin-filter-group select:hover,
+.pmr-admin-filter-group select:focus {
+    border-color: var(--pmr-teal) !important;
+    outline: 2px solid rgba(0, 135, 163, 0.13) !important;
+    outline-offset: 1px !important;
+    box-shadow: none !important;
+}
+
+.pmr-admin-summary {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    max-width: 720px;
+}
+
+.pmr-admin-summary__item:not(.pmr-admin-summary__item--primary) small {
+    color: #7b8790;
+}
+
+.pmr-reservation-heading {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    justify-content: space-between;
+}
+
+.pmr-status--mobile {
+    display: none;
+}
+
+@media (max-width: 760px) {
+    .pmr-admin-page {
+        font-size: 14px;
+    }
+
+    .pmr-admin-brand {
+        margin-bottom: 12px;
+    }
+
+    .pmr-admin .pmr-admin-hero h1 {
+        font-size: 32px;
+    }
+
+    .pmr-admin .pmr-admin-hero p {
+        margin-top: 5px;
+        font-size: 13px;
+    }
+
+    .pmr-admin-live {
+        min-height: 38px;
+        padding: 7px 9px;
+    }
+
+    .pmr-admin-hero__actions {
+        gap: 8px;
+    }
+
+    .pmr-admin-hero__actions .pmr-secondary-button {
+        min-height: 38px;
+        padding: 8px 10px;
+    }
+
+    .pmr-admin-workspace {
+        margin-top: 16px;
+    }
+
+    .pmr-admin-toolbar {
+        gap: 14px;
+        padding: 14px;
+    }
+
+    .pmr-admin-filter-label {
+        margin-bottom: 6px;
+    }
+
+    .pmr-admin .pmr-admin-date-input input,
+    .pmr-admin-filter-group--search input,
+    .pmr-admin-filter-group select {
+        min-height: 42px;
+    }
+
+    .pmr-admin-toolbar__actions .pmr-submit,
+    .pmr-admin-toolbar__actions .pmr-secondary-button {
+        min-height: 42px;
+    }
+
+    .pmr-admin-table {
+        padding: 14px;
+    }
+
+    .pmr-admin-summary {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        max-width: none;
+        margin-bottom: 18px;
+    }
+
+    .pmr-admin-summary__item {
+        min-height: 90px;
+        padding: 12px;
+    }
+
+    .pmr-admin-summary__item strong {
+        font-size: 28px;
+    }
+
+    .pmr-admin-summary__item small {
+        font-size: 10px;
+        line-height: 1.25;
+    }
+
+    .pmr-admin-results-heading {
+        display: flex;
+        align-items: center;
+        flex-direction: row;
+        margin-bottom: 8px;
+    }
+
+    .pmr-admin .pmr-admin-results-heading h2 {
+        font-size: 22px;
+    }
+
+    .pmr-admin .pmr-table {
+        border-spacing: 0 10px;
+    }
+
+    .pmr-admin .pmr-table tr {
+        padding: 12px;
+    }
+
+    .pmr-admin .pmr-table td {
+        display: block;
+        padding: 8px 0;
+        border: 0;
+    }
+
+    .pmr-admin .pmr-table td::before {
+        display: none;
+    }
+
+    .pmr-admin .pmr-table td + td {
+        border-top: 1px solid #edf0f2;
+    }
+
+    .pmr-admin .pmr-col-reservation {
+        padding-top: 0;
+        padding-bottom: 10px;
+    }
+
+    .pmr-admin .pmr-col-pickup,
+    .pmr-admin .pmr-col-customer {
+        padding: 10px 0;
+    }
+
+    .pmr-admin .pmr-col-status {
+        display: none !important;
+    }
+
+    .pmr-admin .pmr-col-details--empty {
+        display: none !important;
+    }
+
+    .pmr-admin .pmr-marketing-consent,
+    .pmr-admin .pmr-table-meta,
+    .pmr-admin .pmr-contact-link--email {
+        display: none;
+    }
+
+    .pmr-admin .pmr-status--mobile {
+        display: inline-flex;
+    }
+
+    .pmr-admin .pmr-pickup-date,
+    .pmr-admin .pmr-customer-name {
+        font-size: 14px;
+    }
+
+    .pmr-admin .pmr-contact-link {
+        margin-top: 6px;
+        font-size: 13px;
+    }
+
+    .pmr-admin .pmr-observations {
+        max-height: none;
+        font-size: 12px;
+    }
+
+    .pmr-admin .pmr-col-actions {
+        padding-top: 10px;
+    }
+
+    .pmr-admin .pmr-row-actions {
+        display: flex;
+        gap: 6px;
+    }
+
+    .pmr-admin .pmr-admin-action {
+        width: auto;
+        flex: 1 1 auto;
+        justify-content: center;
+    }
+
+    .pmr-admin .pmr-admin-action--icon {
+        display: none;
+    }
+
+    .pmr-admin .pmr-admin-action--danger {
+        display: none;
+    }
+
+    .pmr-admin .pmr-empty {
+        min-height: 150px;
+        padding: 24px 16px;
+    }
+}
+
+@media (max-width: 420px) {
+    .pmr-admin-summary__item {
+        min-height: 76px;
+    }
+
+    .pmr-admin-live {
+        width: auto;
+    }
+
+    .pmr-admin-live span:last-child {
+        font-size: 11px;
+    }
+}
