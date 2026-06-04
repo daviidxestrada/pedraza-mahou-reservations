@@ -110,7 +110,10 @@ final class PMR_Shortcodes
                                     <div class="pmr-grid">
                                         <div class="pmr-field">
                                             <label for="<?php echo esc_attr($uid); ?>-pickup-date"><?php echo esc_html__('Fecha de recogida', 'pedraza-mahou-reservations'); ?> <span aria-hidden="true">*</span></label>
-                                            <input type="date" id="<?php echo esc_attr($uid); ?>-pickup-date" name="pickup_date" min="<?php echo esc_attr($today); ?>" required>
+                                            <div class="pmr-date-control">
+                                                <input type="text" id="<?php echo esc_attr($uid); ?>-pickup-date" name="pickup_date" min="<?php echo esc_attr($today); ?>" placeholder="<?php echo esc_attr__('Selecciona una fecha', 'pedraza-mahou-reservations'); ?>" autocomplete="off" data-pmr-datepicker required>
+                                                <span class="pmr-date-control__icon" aria-hidden="true"><?php echo self::svg_icon('calendar-days', 'pmr-icon'); ?></span>
+                                            </div>
                                         </div>
                                         <div class="pmr-field">
                                             <label for="<?php echo esc_attr($uid); ?>-basket-count"><?php echo esc_html__('Número de cestas', 'pedraza-mahou-reservations'); ?> <span aria-hidden="true">*</span></label>
@@ -330,6 +333,7 @@ final class PMR_Shortcodes
     {
         $icons = [
             'beer-bottle' => '<path d="M10 2h4"/><path d="M11 2v4.5c0 .8-.3 1.5-.9 2.1l-.8.8A4.5 4.5 0 0 0 8 12.6V20a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2v-7.4a4.5 4.5 0 0 0-1.3-3.2l-.8-.8a3 3 0 0 1-.9-2.1V2"/><path d="M8 14h8"/><path d="M8 18h8"/>',
+            'calendar-days' => '<path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/><path d="M8 14h.01"/><path d="M12 14h.01"/><path d="M16 14h.01"/><path d="M8 18h.01"/><path d="M12 18h.01"/>',
             'calendar-clock' => '<path d="M21 7.5V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h3.5"/><path d="M16 2v4"/><path d="M8 2v4"/><path d="M3 10h18"/><circle cx="16" cy="16" r="6"/><path d="M16 13v3l2 1"/>',
             'check' => '<path d="m20 6-11 11-5-5"/>',
             'check-circle-2' => '<circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/>',

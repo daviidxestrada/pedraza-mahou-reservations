@@ -100,6 +100,10 @@ El formulario público permite solicitar una reserva sin pago online. Al enviar 
 
 El pago se realiza presencialmente en taquilla el día de la recogida.
 
+El selector de fecha utiliza Flatpickr `4.6.13`, empaquetado localmente bajo licencia MIT. Muestra un calendario en español adaptado al sistema visual de la web, limita la selección a fechas válidas y mantiene el formato interno compatible con WordPress.
+
+Los emails transaccionales utilizan una plantilla HTML responsive con estilos inline para mantener una presentación consistente en los principales clientes de correo.
+
 ## Panel privado
 
 El shortcode `[pedraza_mahou_reservations_admin]` muestra un login propio independiente del login estándar de WordPress.

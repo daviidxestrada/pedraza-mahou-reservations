@@ -29,14 +29,37 @@ final class PMR_Assets
         wp_register_style(
             'pmr-styles',
             PMR_PLUGIN_URL . 'assets/css/pmr-styles.css',
-            [],
+            ['pmr-flatpickr'],
             PMR_VERSION
+        );
+
+        wp_register_style(
+            'pmr-flatpickr',
+            PMR_PLUGIN_URL . 'assets/vendor/flatpickr/flatpickr.min.css',
+            [],
+            '4.6.13'
+        );
+
+        wp_register_script(
+            'pmr-flatpickr',
+            PMR_PLUGIN_URL . 'assets/vendor/flatpickr/flatpickr.min.js',
+            [],
+            '4.6.13',
+            true
+        );
+
+        wp_register_script(
+            'pmr-flatpickr-es',
+            PMR_PLUGIN_URL . 'assets/vendor/flatpickr/l10n/es.js',
+            ['pmr-flatpickr'],
+            '4.6.13',
+            true
         );
 
         wp_register_script(
             'pmr-scripts',
             PMR_PLUGIN_URL . 'assets/js/pmr-scripts.js',
-            [],
+            ['pmr-flatpickr-es'],
             PMR_VERSION,
             true
         );
@@ -55,6 +78,7 @@ final class PMR_Assets
                     'error' => __('Ha ocurrido un error. Inténtalo de nuevo.', 'pedraza-mahou-reservations'),
                     'deleteConfirm' => __('¿Seguro que quieres eliminar esta reserva? Esta acción no se puede deshacer.', 'pedraza-mahou-reservations'),
                     'logoutConfirm' => __('¿Cerrar sesión del panel privado?', 'pedraza-mahou-reservations'),
+                    'pickupDate' => __('Fecha de recogida', 'pedraza-mahou-reservations'),
                 ],
             ]
         );

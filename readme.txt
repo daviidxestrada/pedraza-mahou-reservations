@@ -4,7 +4,7 @@ Tags: reservations, bookings, elementor, picnic, mahou
 Requires at least: 6.0
 Tested up to: 6.6
 Requires PHP: 8.0
-Stable tag: v1.0.11
+Stable tag: v1.0.12
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -40,6 +40,11 @@ Panel privado:
 No. La reserva se realiza sin pago online y el importe se abona presencialmente en taquilla.
 
 == Changelog ==
+
+= 1.0.12 =
+* Añade un calendario personalizado en español, responsive y adaptado al sistema visual del castillo.
+* Empaqueta Flatpickr localmente para no depender de servicios externos durante la reserva.
+* Rediseña los emails de cliente y equipo con una plantilla responsive y coherente con la web.
 
 = 1.0.11 =
 * Añade una herramienta segura en los ajustes de WordPress para vaciar todas las reservas de prueba.

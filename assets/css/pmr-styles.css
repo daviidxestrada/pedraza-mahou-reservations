@@ -443,6 +443,190 @@
     outline-color: rgba(0, 135, 163, 0.16);
 }
 
+.pmr-date-control {
+    position: relative;
+}
+
+.pmr-reservations .pmr-date-control .pmr-datepicker-display {
+    padding-right: 48px !important;
+    background: #ffffff !important;
+    cursor: pointer !important;
+    opacity: 1 !important;
+}
+
+.pmr-date-control__icon {
+    position: absolute;
+    top: 50%;
+    right: 14px;
+    z-index: 2;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    color: var(--pmr-teal);
+    pointer-events: none;
+    transform: translateY(-50%);
+}
+
+.pmr-date-control__icon .pmr-icon {
+    width: 20px;
+    height: 20px;
+}
+
+.pmr-flatpickr-calendar.flatpickr-calendar {
+    width: 330px !important;
+    max-width: calc(100vw - 24px) !important;
+    overflow: hidden !important;
+    border: 1px solid #dfe5ea !important;
+    border-radius: 8px !important;
+    background: #ffffff !important;
+    box-shadow: 0 18px 46px rgba(0, 44, 62, 0.18) !important;
+    color: #263340 !important;
+    font-family: "Montserrat", Arial, Helvetica, sans-serif !important;
+}
+
+.pmr-flatpickr-calendar.flatpickr-calendar::before,
+.pmr-flatpickr-calendar.flatpickr-calendar::after {
+    display: none !important;
+}
+
+.pmr-flatpickr-calendar .flatpickr-months {
+    min-height: 54px !important;
+    padding: 7px 8px !important;
+    background: #002c3e !important;
+}
+
+.pmr-flatpickr-calendar .flatpickr-months .flatpickr-month {
+    height: 40px !important;
+    background: transparent !important;
+    color: #ffffff !important;
+}
+
+.pmr-flatpickr-calendar .flatpickr-current-month {
+    top: 6px !important;
+    height: 36px !important;
+    padding: 6px 0 0 !important;
+    color: #ffffff !important;
+    font-size: 16px !important;
+    font-weight: 700 !important;
+}
+
+.pmr-flatpickr-calendar .flatpickr-current-month .cur-month,
+.pmr-flatpickr-calendar .flatpickr-current-month input.cur-year {
+    color: #ffffff !important;
+    font-family: "Montserrat", Arial, Helvetica, sans-serif !important;
+    font-size: 16px !important;
+    font-weight: 700 !important;
+}
+
+.pmr-flatpickr-calendar .flatpickr-current-month input.cur-year {
+    min-height: 28px !important;
+    padding: 0 0 0 6px !important;
+    border: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+}
+
+.pmr-flatpickr-calendar .numInputWrapper:hover,
+.pmr-flatpickr-calendar .numInputWrapper span:hover {
+    background: rgba(255, 255, 255, 0.1) !important;
+}
+
+.pmr-flatpickr-calendar .numInputWrapper span::after {
+    border-bottom-color: rgba(255, 255, 255, 0.8) !important;
+    border-top-color: rgba(255, 255, 255, 0.8) !important;
+}
+
+.pmr-flatpickr-calendar .flatpickr-prev-month,
+.pmr-flatpickr-calendar .flatpickr-next-month {
+    top: 7px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 40px !important;
+    height: 40px !important;
+    padding: 0 !important;
+    border: 0 !important;
+    border-radius: 6px !important;
+    background: transparent !important;
+    color: #fbd652 !important;
+    font: 700 30px/1 "Montserrat", Arial, Helvetica, sans-serif !important;
+    transition: background-color 160ms ease !important;
+}
+
+.pmr-flatpickr-calendar .flatpickr-prev-month:hover,
+.pmr-flatpickr-calendar .flatpickr-next-month:hover,
+.pmr-flatpickr-calendar .flatpickr-prev-month:focus,
+.pmr-flatpickr-calendar .flatpickr-next-month:focus {
+    background: rgba(255, 255, 255, 0.1) !important;
+    color: #ffffff !important;
+}
+
+.pmr-flatpickr-calendar .flatpickr-weekdays {
+    height: 38px !important;
+    background: #f3f8f9 !important;
+}
+
+.pmr-flatpickr-calendar span.flatpickr-weekday {
+    background: transparent !important;
+    color: #64727c !important;
+    font-size: 11px !important;
+    font-weight: 800 !important;
+    text-transform: uppercase !important;
+}
+
+.pmr-flatpickr-calendar .flatpickr-days,
+.pmr-flatpickr-calendar .dayContainer {
+    width: 100% !important;
+    min-width: 100% !important;
+    max-width: 100% !important;
+}
+
+.pmr-flatpickr-calendar .dayContainer {
+    padding: 8px !important;
+}
+
+.pmr-flatpickr-calendar .flatpickr-day {
+    max-width: 14.2857% !important;
+    height: 40px !important;
+    border: 0 !important;
+    border-radius: 6px !important;
+    color: #263340 !important;
+    font-size: 13px !important;
+    font-weight: 600 !important;
+    line-height: 40px !important;
+}
+
+.pmr-flatpickr-calendar .flatpickr-day:hover,
+.pmr-flatpickr-calendar .flatpickr-day:focus {
+    border-color: transparent !important;
+    background: #e5f4f6 !important;
+    color: #002c3e !important;
+}
+
+.pmr-flatpickr-calendar .flatpickr-day.today {
+    box-shadow: inset 0 0 0 2px #0087a3 !important;
+    color: #002c3e !important;
+}
+
+.pmr-flatpickr-calendar .flatpickr-day.selected,
+.pmr-flatpickr-calendar .flatpickr-day.selected:hover,
+.pmr-flatpickr-calendar .flatpickr-day.selected:focus {
+    background: #fbd652 !important;
+    box-shadow: none !important;
+    color: #002c3e !important;
+    font-weight: 800 !important;
+}
+
+.pmr-flatpickr-calendar .flatpickr-day.prevMonthDay,
+.pmr-flatpickr-calendar .flatpickr-day.nextMonthDay,
+.pmr-flatpickr-calendar .flatpickr-day.flatpickr-disabled,
+.pmr-flatpickr-calendar .flatpickr-day.flatpickr-disabled:hover {
+    background: transparent !important;
+    color: #b8c0c6 !important;
+}
+
 .pmr-reservations .pmr-quantity__button {
     border-radius: 10px;
     background: var(--pmr-blue);

@@ -99,12 +99,51 @@
         });
     }
 
+    function initDatepickers(scope) {
+        if (typeof window.flatpickr !== 'function') {
+            return;
+        }
+
+        scope.querySelectorAll('[data-pmr-datepicker]').forEach(function (input) {
+            if (input._flatpickr) {
+                return;
+            }
+
+            window.flatpickr(input, {
+                allowInput: false,
+                altInput: true,
+                altInputClass: 'pmr-datepicker-display',
+                altFormat: 'j \\de F \\de Y',
+                dateFormat: 'Y-m-d',
+                disableMobile: true,
+                locale: window.flatpickr.l10ns && window.flatpickr.l10ns.es ? window.flatpickr.l10ns.es : 'es',
+                minDate: input.getAttribute('min') || 'today',
+                monthSelectorType: 'static',
+                nextArrow: '<span aria-hidden="true">›</span>',
+                prevArrow: '<span aria-hidden="true">‹</span>',
+                onReady: function (selectedDates, dateStr, instance) {
+                    var originalId = input.getAttribute('id');
+
+                    instance.calendarContainer.classList.add('pmr-flatpickr-calendar');
+
+                    if (instance.altInput) {
+                        input.removeAttribute('id');
+                        instance.altInput.id = originalId;
+                        instance.altInput.required = true;
+                        instance.altInput.setAttribute('aria-label', text('pickupDate', 'Fecha de recogida'));
+                    }
+                }
+            });
+        });
+    }
+
     function initPublicForms() {
         document.querySelectorAll('[data-pmr-public-form]').forEach(function (form) {
             var message = form.querySelector('[data-pmr-message]');
             var submit = form.querySelector('button[type="submit"]');
 
             initQuantities(form);
+            initDatepickers(form);
 
             form.addEventListener('submit', function (event) {
                 event.preventDefault();
@@ -127,6 +166,11 @@
                 request(formData)
                     .then(function (data) {
                         form.reset();
+                        form.querySelectorAll('[data-pmr-datepicker]').forEach(function (input) {
+                            if (input._flatpickr) {
+                                input._flatpickr.clear();
+                            }
+                        });
                         form.querySelectorAll('[data-pmr-quantity] input[type="number"]').forEach(function (input) {
                             input.value = input.getAttribute('min') || '1';
                         });
