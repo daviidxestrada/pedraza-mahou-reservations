@@ -9,6 +9,12 @@
         return i18n[key] || fallback;
     }
 
+    function lucideChevron(direction) {
+        var path = direction === 'left' ? 'm15 18-6-6 6-6' : 'm9 18 6-6-6-6';
+
+        return '<svg class="pmr-flatpickr-chevron pmr-lucide-icon lucide lucide-chevron-' + direction + '" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="' + path + '"></path></svg>';
+    }
+
     function setMessage(element, message, type) {
         if (!element) {
             return;
@@ -119,8 +125,8 @@
                 locale: window.flatpickr.l10ns && window.flatpickr.l10ns.es ? window.flatpickr.l10ns.es : 'es',
                 minDate: input.getAttribute('min') || 'today',
                 monthSelectorType: 'static',
-                nextArrow: '<span aria-hidden="true">›</span>',
-                prevArrow: '<span aria-hidden="true">‹</span>',
+                nextArrow: lucideChevron('right'),
+                prevArrow: lucideChevron('left'),
                 onReady: function (selectedDates, dateStr, instance) {
                     var originalId = input.getAttribute('id');
 

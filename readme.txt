@@ -4,7 +4,7 @@ Tags: reservations, bookings, elementor, picnic, mahou
 Requires at least: 6.0
 Tested up to: 6.6
 Requires PHP: 8.0
-Stable tag: v1.0.13
+Stable tag: v1.0.14
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -40,6 +40,11 @@ Panel privado:
 No. La reserva se realiza sin pago online y el importe se abona presencialmente en taquilla.
 
 == Changelog ==
+
+= 1.0.14 =
+* Centra y aísla el icono Lucide del selector de fecha frente a estilos de Elementor y del tema.
+* Añade clases Lucide explícitas a los iconos SVG y utiliza chevrons Lucide en el calendario.
+* Refuerza los estilos únicos de iconos públicos con reglas específicas.
 
 = 1.0.13 =
 * Corrige el botón para vaciar reservas, que aparecía desactivado aunque hubiera reservas guardadas.

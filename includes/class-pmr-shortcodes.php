@@ -112,7 +112,7 @@ final class PMR_Shortcodes
                                             <label for="<?php echo esc_attr($uid); ?>-pickup-date"><?php echo esc_html__('Fecha de recogida', 'pedraza-mahou-reservations'); ?> <span aria-hidden="true">*</span></label>
                                             <div class="pmr-date-control">
                                                 <input type="text" id="<?php echo esc_attr($uid); ?>-pickup-date" name="pickup_date" min="<?php echo esc_attr($today); ?>" placeholder="<?php echo esc_attr__('Selecciona una fecha', 'pedraza-mahou-reservations'); ?>" autocomplete="off" data-pmr-datepicker required>
-                                                <span class="pmr-date-control__icon" aria-hidden="true"><?php echo self::svg_icon('calendar-days', 'pmr-icon'); ?></span>
+                                                <span class="pmr-date-control__icon" aria-hidden="true"><?php echo self::svg_icon('calendar-days', 'pmr-icon pmr-date-control__lucide'); ?></span>
                                             </div>
                                         </div>
                                         <div class="pmr-field">
@@ -356,7 +356,7 @@ final class PMR_Shortcodes
 
         return sprintf(
             '<svg class="%s" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">%s</svg>',
-            esc_attr($class),
+            esc_attr(trim($class . ' pmr-lucide-icon lucide lucide-' . $name)),
             $icons[$name]
         );
     }
