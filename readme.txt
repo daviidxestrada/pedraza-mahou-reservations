@@ -2,9 +2,9 @@
 Contributors: cloudari
 Tags: reservations, bookings, elementor, picnic, mahou
 Requires at least: 6.0
-Tested up to: 6.6
+Tested up to: 7.0
 Requires PHP: 8.0
-Stable tag: v1.0.14
+Stable tag: v1.0.15
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -40,6 +40,14 @@ Panel privado:
 No. La reserva se realiza sin pago online y el importe se abona presencialmente en taquilla.
 
 == Changelog ==
+
+= 1.0.15 =
+* Añade selector internacional de teléfono con países, banderas, prefijos y validación E.164.
+* Marca visualmente todos los campos obligatorios con el rojo del sistema de diseño.
+* Mejora las tarjetas del gestor en móvil y muestra siempre teléfono, email y observaciones.
+* Añade iconos Lucide a los datos y acciones del gestor, aislados frente a Elementor y el tema.
+* Cambia "Total orientativo" por "Total a pagar" y elimina el consentimiento comercial del email operativo.
+* Intenta cargar League Spartan y Montserrat en clientes de correo compatibles, conservando fuentes de respaldo.
 
 = 1.0.14 =
 * Centra y aísla el icono Lucide del selector de fecha frente a estilos de Elementor y del tema.

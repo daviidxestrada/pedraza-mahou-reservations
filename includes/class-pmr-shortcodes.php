@@ -109,14 +109,14 @@ final class PMR_Shortcodes
                                     <h3><?php echo esc_html__('Reserva', 'pedraza-mahou-reservations'); ?></h3>
                                     <div class="pmr-grid">
                                         <div class="pmr-field">
-                                            <label for="<?php echo esc_attr($uid); ?>-pickup-date"><?php echo esc_html__('Fecha de recogida', 'pedraza-mahou-reservations'); ?> <span aria-hidden="true">*</span></label>
+                                            <label for="<?php echo esc_attr($uid); ?>-pickup-date"><?php echo esc_html__('Fecha de recogida', 'pedraza-mahou-reservations'); ?> <span class="pmr-required-marker" aria-hidden="true">*</span></label>
                                             <div class="pmr-date-control">
                                                 <input type="text" id="<?php echo esc_attr($uid); ?>-pickup-date" name="pickup_date" min="<?php echo esc_attr($today); ?>" placeholder="<?php echo esc_attr__('Selecciona una fecha', 'pedraza-mahou-reservations'); ?>" autocomplete="off" data-pmr-datepicker required>
                                                 <span class="pmr-date-control__icon" aria-hidden="true"><?php echo self::svg_icon('calendar-days', 'pmr-icon pmr-date-control__lucide'); ?></span>
                                             </div>
                                         </div>
                                         <div class="pmr-field">
-                                            <label for="<?php echo esc_attr($uid); ?>-basket-count"><?php echo esc_html__('Número de cestas', 'pedraza-mahou-reservations'); ?> <span aria-hidden="true">*</span></label>
+                                            <label for="<?php echo esc_attr($uid); ?>-basket-count"><?php echo esc_html__('Número de cestas', 'pedraza-mahou-reservations'); ?> <span class="pmr-required-marker" aria-hidden="true">*</span></label>
                                             <div class="pmr-quantity" data-pmr-quantity>
                                                 <button type="button" class="pmr-quantity__button" data-pmr-quantity-minus aria-label="<?php echo esc_attr__('Restar cesta', 'pedraza-mahou-reservations'); ?>">-</button>
                                                 <input type="number" id="<?php echo esc_attr($uid); ?>-basket-count" name="basket_count" min="1" max="50" value="1" required>
@@ -134,16 +134,19 @@ final class PMR_Shortcodes
                                     <h3><?php echo esc_html__('Datos de contacto', 'pedraza-mahou-reservations'); ?></h3>
                                     <div class="pmr-grid">
                                         <div class="pmr-field">
-                                            <label for="<?php echo esc_attr($uid); ?>-full-name"><?php echo esc_html__('Nombre y apellidos', 'pedraza-mahou-reservations'); ?> <span aria-hidden="true">*</span></label>
+                                            <label for="<?php echo esc_attr($uid); ?>-full-name"><?php echo esc_html__('Nombre y apellidos', 'pedraza-mahou-reservations'); ?> <span class="pmr-required-marker" aria-hidden="true">*</span></label>
                                             <input type="text" id="<?php echo esc_attr($uid); ?>-full-name" name="full_name" maxlength="190" autocomplete="name" required>
                                         </div>
                                         <div class="pmr-field">
-                                            <label for="<?php echo esc_attr($uid); ?>-email"><?php echo esc_html__('Correo electrónico', 'pedraza-mahou-reservations'); ?> <span aria-hidden="true">*</span></label>
+                                            <label for="<?php echo esc_attr($uid); ?>-email"><?php echo esc_html__('Correo electrónico', 'pedraza-mahou-reservations'); ?> <span class="pmr-required-marker" aria-hidden="true">*</span></label>
                                             <input type="email" id="<?php echo esc_attr($uid); ?>-email" name="email" maxlength="190" autocomplete="email" required>
                                         </div>
                                         <div class="pmr-field">
-                                            <label for="<?php echo esc_attr($uid); ?>-phone"><?php echo esc_html__('Teléfono de contacto', 'pedraza-mahou-reservations'); ?> <span aria-hidden="true">*</span></label>
-                                            <input type="tel" id="<?php echo esc_attr($uid); ?>-phone" name="phone" maxlength="25" autocomplete="tel" required>
+                                            <label for="<?php echo esc_attr($uid); ?>-phone"><?php echo esc_html__('Teléfono de contacto', 'pedraza-mahou-reservations'); ?> <span class="pmr-required-marker" aria-hidden="true">*</span></label>
+                                            <div class="pmr-phone-control">
+                                                <input type="tel" id="<?php echo esc_attr($uid); ?>-phone" name="phone_display" maxlength="30" autocomplete="tel" data-pmr-phone required>
+                                                <input type="hidden" name="phone" data-pmr-phone-value>
+                                            </div>
                                         </div>
                                     </div>
                                 </section>
@@ -152,7 +155,7 @@ final class PMR_Shortcodes
                                     <h3><?php echo esc_html__('Protección de datos y consentimientos', 'pedraza-mahou-reservations'); ?></h3>
                                     <label class="pmr-checkbox">
                                         <input type="checkbox" name="rgpd_consent" value="1" required>
-                                        <span><?php echo wp_kses_post(sprintf(__('He leído y acepto la %s y el tratamiento de mis datos para la gestión de esta reserva.', 'pedraza-mahou-reservations'), $privacy_link)); ?></span>
+                                        <span><?php echo wp_kses_post(sprintf(__('He leído y acepto la %s y el tratamiento de mis datos para la gestión de esta reserva.', 'pedraza-mahou-reservations'), $privacy_link)); ?> <span class="pmr-required-marker" aria-hidden="true">*</span></span>
                                     </label>
                                     <label class="pmr-checkbox">
                                         <input type="checkbox" name="marketing_consent" value="1">

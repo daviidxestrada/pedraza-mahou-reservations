@@ -143,6 +143,63 @@
         });
     }
 
+    function initPhoneInputs(scope) {
+        if (typeof window.intlTelInput !== 'function') {
+            return;
+        }
+
+        scope.querySelectorAll('[data-pmr-phone]').forEach(function (input) {
+            if (input._pmrPhone) {
+                return;
+            }
+
+            input._pmrPhone = window.intlTelInput(input, {
+                initialCountry: 'es',
+                separateDialCode: true,
+                strictMode: true,
+                countryNameLocale: 'es',
+                countrySelectorMode: 'DROPDOWN',
+                uiTranslations: {
+                    selectedCountryAriaLabel: text('phoneCountry', 'País del teléfono') + ': ${countryName} (${dialCode})',
+                    countryListAriaLabel: text('phoneCountry', 'País del teléfono'),
+                    searchPlaceholder: text('phoneSearch', 'Buscar país'),
+                    searchEmptyState: text('phoneNoResults', 'No se encontraron países')
+                }
+            });
+
+            input.addEventListener('input', function () {
+                input.setCustomValidity('');
+            });
+
+            input.addEventListener('countrychange', function () {
+                input.setCustomValidity('');
+            });
+        });
+    }
+
+    function syncPhoneInputs(form, validate) {
+        var valid = true;
+
+        form.querySelectorAll('[data-pmr-phone]').forEach(function (input) {
+            var instance = input._pmrPhone;
+            var hidden = form.querySelector('[data-pmr-phone-value]');
+            var hasValue = input.value.trim() !== '';
+
+            input.setCustomValidity('');
+
+            if (instance && hasValue && validate && !instance.isValidNumber()) {
+                input.setCustomValidity(text('invalidPhone', 'Introduce un teléfono válido para el país seleccionado.'));
+                valid = false;
+            }
+
+            if (hidden) {
+                hidden.value = instance && hasValue ? instance.getNumber() : input.value.trim();
+            }
+        });
+
+        return valid;
+    }
+
     function initPublicForms() {
         document.querySelectorAll('[data-pmr-public-form]').forEach(function (form) {
             var message = form.querySelector('[data-pmr-message]');
@@ -150,9 +207,12 @@
 
             initQuantities(form);
             initDatepickers(form);
+            initPhoneInputs(form);
 
             form.addEventListener('submit', function (event) {
                 event.preventDefault();
+
+                syncPhoneInputs(form, true);
 
                 if (typeof form.reportValidity === 'function' && !form.reportValidity()) {
                     return;
@@ -175,6 +235,12 @@
                         form.querySelectorAll('[data-pmr-datepicker]').forEach(function (input) {
                             if (input._flatpickr) {
                                 input._flatpickr.clear();
+                            }
+                        });
+                        form.querySelectorAll('[data-pmr-phone]').forEach(function (input) {
+                            if (input._pmrPhone) {
+                                input._pmrPhone.setCountry('es');
+                                input._pmrPhone.setNumber('');
                             }
                         });
                         form.querySelectorAll('[data-pmr-quantity] input[type="number"]').forEach(function (input) {

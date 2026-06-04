@@ -29,8 +29,15 @@ final class PMR_Assets
         wp_register_style(
             'pmr-styles',
             PMR_PLUGIN_URL . 'assets/css/pmr-styles.css',
-            ['pmr-flatpickr'],
+            ['pmr-flatpickr', 'pmr-intl-tel-input'],
             PMR_VERSION
+        );
+
+        wp_register_style(
+            'pmr-intl-tel-input',
+            PMR_PLUGIN_URL . 'assets/vendor/intl-tel-input/css/intlTelInput.min.css',
+            [],
+            '29.0.3'
         );
 
         wp_register_style(
@@ -59,8 +66,16 @@ final class PMR_Assets
         wp_register_script(
             'pmr-scripts',
             PMR_PLUGIN_URL . 'assets/js/pmr-scripts.js',
-            ['pmr-flatpickr-es'],
+            ['pmr-flatpickr-es', 'pmr-intl-tel-input'],
             PMR_VERSION,
+            true
+        );
+
+        wp_register_script(
+            'pmr-intl-tel-input',
+            PMR_PLUGIN_URL . 'assets/vendor/intl-tel-input/js/intlTelInputWithUtils.min.js',
+            [],
+            '29.0.3',
             true
         );
 
@@ -79,6 +94,10 @@ final class PMR_Assets
                     'deleteConfirm' => __('¿Seguro que quieres eliminar esta reserva? Esta acción no se puede deshacer.', 'pedraza-mahou-reservations'),
                     'logoutConfirm' => __('¿Cerrar sesión del panel privado?', 'pedraza-mahou-reservations'),
                     'pickupDate' => __('Fecha de recogida', 'pedraza-mahou-reservations'),
+                    'invalidPhone' => __('Introduce un teléfono válido para el país seleccionado.', 'pedraza-mahou-reservations'),
+                    'phoneCountry' => __('País del teléfono', 'pedraza-mahou-reservations'),
+                    'phoneSearch' => __('Buscar país', 'pedraza-mahou-reservations'),
+                    'phoneNoResults' => __('No se encontraron países', 'pedraza-mahou-reservations'),
                 ],
             ]
         );

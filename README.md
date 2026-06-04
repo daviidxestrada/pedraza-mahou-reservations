@@ -91,6 +91,7 @@ Si no usas constantes, puedes guardar estos valores desde `Ajustes > Reservas Pe
 El formulario público permite solicitar una reserva sin pago online. Al enviar una solicitud:
 
 - Se valida nonce, honeypot, fecha, email, teléfono, número de cestas y consentimiento RGPD obligatorio.
+- El teléfono se selecciona con país, bandera y prefijo, se valida según el país y se guarda en formato internacional E.164.
 - Se aplica rate limit básico por IP.
 - Se genera una referencia correlativa con prefijo `A`, comenzando en `A101`.
 - Se guarda la reserva en tabla personalizada.
@@ -102,9 +103,11 @@ El pago se realiza presencialmente en taquilla el día de la recogida.
 
 El selector de fecha utiliza Flatpickr `4.6.13`, empaquetado localmente bajo licencia MIT. Muestra un calendario en español adaptado al sistema visual de la web, limita la selección a fechas válidas y mantiene el formato interno compatible con WordPress.
 
+El selector internacional de teléfono utiliza `intl-tel-input` `29.0.3`, empaquetado localmente bajo licencia MIT. No necesita servicios externos para mostrar países, banderas o validar el número.
+
 Los iconos se renderizan como SVG inline basados en Lucide, con clases y estilos aislados para evitar interferencias del tema o de Elementor.
 
-Los emails transaccionales utilizan una plantilla HTML responsive con estilos inline para mantener una presentación consistente en los principales clientes de correo.
+Los emails transaccionales utilizan una plantilla HTML responsive con estilos inline para mantener una presentación consistente en los principales clientes de correo. Se solicita League Spartan y Montserrat mediante Google Fonts, pero algunos clientes como Gmail u Outlook pueden bloquear fuentes externas; en esos casos se utilizan automáticamente Arial y Helvetica.
 
 ## Panel privado
 
@@ -116,6 +119,7 @@ El panel autenticado permite:
 - Ver las reservas entregadas en una sección `Completadas` separada.
 - Ver el total de reservas y cestas pendientes.
 - Buscar por referencia, nombre, teléfono o email.
+- Consultar desde móvil tarjetas claras con fecha, cestas, teléfono, email, observaciones y acción principal.
 - Ver las pendientes ordenadas por fecha de recogida más cercana.
 - Marcar una reserva como completada para moverla automáticamente a `Completadas`.
 - Devolver una reserva completada a `Por preparar`.
