@@ -144,7 +144,7 @@ final class PMR_Shortcodes
                                         <div class="pmr-field">
                                             <label for="<?php echo esc_attr($uid); ?>-phone"><?php echo esc_html__('Teléfono de contacto', 'pedraza-mahou-reservations'); ?> <span class="pmr-required-marker" aria-hidden="true">*</span></label>
                                             <div class="pmr-phone-control">
-                                                <input type="tel" id="<?php echo esc_attr($uid); ?>-phone" name="phone_display" maxlength="30" autocomplete="tel" data-pmr-phone required>
+                                                <input type="tel" id="<?php echo esc_attr($uid); ?>-phone" name="phone_display" maxlength="30" placeholder="<?php echo esc_attr__('Tu teléfono', 'pedraza-mahou-reservations'); ?>" autocomplete="tel" data-pmr-phone required>
                                                 <input type="hidden" name="phone" data-pmr-phone-value>
                                             </div>
                                         </div>
