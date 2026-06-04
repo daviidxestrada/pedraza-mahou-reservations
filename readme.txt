@@ -4,7 +4,7 @@ Tags: reservations, bookings, elementor, picnic, mahou
 Requires at least: 6.0
 Tested up to: 7.0
 Requires PHP: 8.0
-Stable tag: v1.0.15
+Stable tag: v1.0.16
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -40,6 +40,9 @@ Panel privado:
 No. La reserva se realiza sin pago online y el importe se abona presencialmente en taquilla.
 
 == Changelog ==
+
+= 1.0.16 =
+* Actualiza el contenido incluido en la cesta: cervezas Mahou, aceitunas, patatas fritas y mini fuet.
 
 = 1.0.15 =
 * Añade selector internacional de teléfono con países, banderas, prefijos y validación E.164.
