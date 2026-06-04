@@ -118,6 +118,17 @@ El panel autenticado permite:
 
 La sesión privada se mantiene mediante cookie firmada con HMAC, `HttpOnly`, `SameSite=Lax` y `Secure` cuando la web usa HTTPS.
 
+## Limpieza de reservas de prueba
+
+Desde `Ajustes > Reservas Pedraza Mahou > Herramientas de pruebas`, un administrador de WordPress puede vaciar todas las reservas guardadas.
+
+La operación:
+
+- Elimina reservas pendientes, completadas y canceladas.
+- Conserva todos los ajustes, credenciales y enlaces del plugin.
+- Está protegida con permisos de administrador, nonce y confirmación.
+- Hace que la siguiente reserva vuelva a utilizar la referencia `A101`.
+
 ## Seguridad
 
 El plugin aplica:

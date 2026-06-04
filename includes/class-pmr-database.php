@@ -210,6 +210,22 @@ final class PMR_Database
         return $deleted !== false;
     }
 
+    public static function clear_reservations(): bool
+    {
+        global $wpdb;
+
+        $table_name = self::table_name();
+        $deleted = $wpdb->query("DELETE FROM {$table_name}");
+
+        if ($deleted === false) {
+            return false;
+        }
+
+        $wpdb->query("ALTER TABLE {$table_name} AUTO_INCREMENT = 1");
+
+        return true;
+    }
+
     private static function build_filters_sql(array $filters): array
     {
         global $wpdb;

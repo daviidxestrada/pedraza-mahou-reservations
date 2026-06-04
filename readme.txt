@@ -4,7 +4,7 @@ Tags: reservations, bookings, elementor, picnic, mahou
 Requires at least: 6.0
 Tested up to: 6.6
 Requires PHP: 8.0
-Stable tag: v1.0.10
+Stable tag: v1.0.11
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -40,6 +40,11 @@ Panel privado:
 No. La reserva se realiza sin pago online y el importe se abona presencialmente en taquilla.
 
 == Changelog ==
+
+= 1.0.11 =
+* Añade una herramienta segura en los ajustes de WordPress para vaciar todas las reservas de prueba.
+* Protege la limpieza con permisos de administrador, nonce y confirmación.
+* Reinicia las referencias para que la siguiente reserva después de limpiar sea A101.
 
 = 1.0.10 =
 * Sustituye filtros de fecha y estado por dos listas automáticas: Por preparar y Completadas.

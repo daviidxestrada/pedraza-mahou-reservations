@@ -16,6 +16,7 @@ final class PMR_Admin_Settings
 
         add_action('admin_menu', [__CLASS__, 'add_settings_page']);
         add_action('admin_init', [__CLASS__, 'register_settings']);
+        add_action('admin_post_pmr_clear_reservations', [__CLASS__, 'handle_clear_reservations']);
     }
 
     public static function defaults(): array
@@ -129,6 +130,31 @@ final class PMR_Admin_Settings
         return preg_replace('/[^A-Za-z0-9._-]/', '', $repo) ?: '';
     }
 
+    public static function handle_clear_reservations(): void
+    {
+        if (! current_user_can('manage_options')) {
+            wp_die(esc_html__('No tienes permisos para realizar esta acción.', 'pedraza-mahou-reservations'));
+        }
+
+        check_admin_referer('pmr_clear_reservations');
+
+        $totals = PMR_Database::get_totals([]);
+        $reservation_count = (int) ($totals['total_reservations'] ?? 0);
+        $cleared = PMR_Database::clear_reservations();
+
+        $redirect_url = add_query_arg(
+            [
+                'page' => 'pedraza-mahou-reservations',
+                'pmr_clear_result' => $cleared ? 'success' : 'error',
+                'pmr_cleared_count' => $cleared ? $reservation_count : 0,
+            ],
+            admin_url('options-general.php')
+        );
+
+        wp_safe_redirect($redirect_url);
+        exit;
+    }
+
     public static function render_settings_page(): void
     {
         if (! current_user_can('manage_options')) {
@@ -136,9 +162,33 @@ final class PMR_Admin_Settings
         }
 
         $settings = self::get_settings();
+        $totals = PMR_Database::get_totals([]);
+        $reservation_count = (int) ($totals['total_reservations'] ?? 0);
+        $clear_result = isset($_GET['pmr_clear_result']) ? sanitize_key((string) wp_unslash($_GET['pmr_clear_result'])) : '';
+        $cleared_count = isset($_GET['pmr_cleared_count']) ? absint($_GET['pmr_cleared_count']) : 0;
         ?>
         <div class="wrap">
             <h1><?php echo esc_html__('Pedraza Mahou Reservations', 'pedraza-mahou-reservations'); ?></h1>
+
+            <?php if ($clear_result === 'success') : ?>
+                <div class="notice notice-success is-dismissible">
+                    <p>
+                        <?php
+                        echo esc_html(
+                            sprintf(
+                                /* translators: %d number of deleted reservations */
+                                _n('%d reserva eliminada. La siguiente referencia será A101.', '%d reservas eliminadas. La siguiente referencia será A101.', $cleared_count, 'pedraza-mahou-reservations'),
+                                $cleared_count
+                            )
+                        );
+                        ?>
+                    </p>
+                </div>
+            <?php elseif ($clear_result === 'error') : ?>
+                <div class="notice notice-error is-dismissible">
+                    <p><?php echo esc_html__('No se pudieron eliminar las reservas. Revisa los permisos de la base de datos.', 'pedraza-mahou-reservations'); ?></p>
+                </div>
+            <?php endif; ?>
 
             <?php if (empty($settings['private_password_hash'])) : ?>
                 <div class="notice notice-warning">
@@ -253,6 +303,38 @@ final class PMR_Admin_Settings
                 </table>
 
                 <?php submit_button(); ?>
+            </form>
+
+            <hr>
+
+            <h2><?php echo esc_html__('Herramientas de pruebas', 'pedraza-mahou-reservations'); ?></h2>
+            <p>
+                <?php
+                echo esc_html(
+                    sprintf(
+                        /* translators: %d current reservation count */
+                        _n('Actualmente hay %d reserva guardada.', 'Actualmente hay %d reservas guardadas.', $reservation_count, 'pedraza-mahou-reservations'),
+                        $reservation_count
+                    )
+                );
+                ?>
+            </p>
+            <p class="description">
+                <?php echo esc_html__('Vaciar reservas elimina permanentemente todas las reservas pendientes, completadas y canceladas. Conserva todos los ajustes del plugin y reinicia las referencias para que la siguiente reserva sea A101.', 'pedraza-mahou-reservations'); ?>
+            </p>
+
+            <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>" onsubmit="return confirm('<?php echo esc_js(__('¿Seguro que quieres eliminar permanentemente todas las reservas? Esta acción no se puede deshacer.', 'pedraza-mahou-reservations')); ?>');">
+                <input type="hidden" name="action" value="pmr_clear_reservations">
+                <?php wp_nonce_field('pmr_clear_reservations'); ?>
+                <?php
+                submit_button(
+                    __('Vaciar todas las reservas', 'pedraza-mahou-reservations'),
+                    'delete',
+                    'submit',
+                    false,
+                    ['disabled' => $reservation_count < 1]
+                );
+                ?>
             </form>
         </div>
         <?php
