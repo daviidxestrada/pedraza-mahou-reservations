@@ -4,7 +4,7 @@ Tags: reservations, bookings, elementor, picnic, mahou
 Requires at least: 6.0
 Tested up to: 7.0
 Requires PHP: 8.0
-Stable tag: v1.0.19
+Stable tag: v1.0.20
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -40,6 +40,10 @@ Panel privado:
 No. La reserva se realiza sin pago online y el importe se abona presencialmente en taquilla.
 
 == Changelog ==
+
+= 1.0.20 =
+* Corrige el reinicio del selector internacional de teléfono tras enviar una reserva.
+* Evita que un fallo de limpieza visual oculte la confirmación de una reserva ya guardada.
 
 = 1.0.19 =
 * Elimina el indicador visual de última actualización del gestor para simplificar la interfaz.

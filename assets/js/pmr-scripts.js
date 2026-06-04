@@ -200,6 +200,49 @@
         return valid;
     }
 
+    function safelyRunCleanup(callback) {
+        try {
+            callback();
+        } catch (error) {
+            // Cleanup is secondary to the reservation that WordPress already saved.
+        }
+    }
+
+    function resetPublicForm(form) {
+        safelyRunCleanup(function () {
+            form.reset();
+        });
+
+        form.querySelectorAll('[data-pmr-datepicker]').forEach(function (input) {
+            if (input._flatpickr && typeof input._flatpickr.clear === 'function') {
+                safelyRunCleanup(function () {
+                    input._flatpickr.clear();
+                });
+            }
+        });
+
+        form.querySelectorAll('[data-pmr-phone]').forEach(function (input) {
+            if (input._pmrPhone) {
+                safelyRunCleanup(function () {
+                    input._pmrPhone.setNumber('');
+                });
+                safelyRunCleanup(function () {
+                    input._pmrPhone.setSelectedCountry('es');
+                });
+            }
+
+            input.setCustomValidity('');
+        });
+
+        form.querySelectorAll('[data-pmr-phone-value]').forEach(function (input) {
+            input.value = '';
+        });
+
+        form.querySelectorAll('[data-pmr-quantity] input[type="number"]').forEach(function (input) {
+            input.value = input.getAttribute('min') || '1';
+        });
+    }
+
     function initPublicForms() {
         document.querySelectorAll('[data-pmr-public-form]').forEach(function (form) {
             var message = form.querySelector('[data-pmr-message]');
@@ -231,21 +274,7 @@
 
                 request(formData)
                     .then(function (data) {
-                        form.reset();
-                        form.querySelectorAll('[data-pmr-datepicker]').forEach(function (input) {
-                            if (input._flatpickr) {
-                                input._flatpickr.clear();
-                            }
-                        });
-                        form.querySelectorAll('[data-pmr-phone]').forEach(function (input) {
-                            if (input._pmrPhone) {
-                                input._pmrPhone.setCountry('es');
-                                input._pmrPhone.setNumber('');
-                            }
-                        });
-                        form.querySelectorAll('[data-pmr-quantity] input[type="number"]').forEach(function (input) {
-                            input.value = input.getAttribute('min') || '1';
-                        });
+                        resetPublicForm(form);
                         setMessage(message, data.message || 'Reserva recibida correctamente.', 'success');
                     })
                     .catch(function (error) {
