@@ -1244,6 +1244,10 @@
         grid-column: auto;
     }
 
+    .pmr-reservations .pmr-grid--reservation {
+        margin-bottom: 20px !important;
+    }
+
     .pmr-admin__top,
     .pmr-admin-filters,
     .pmr-admin-summary {

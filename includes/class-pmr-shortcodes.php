@@ -107,7 +107,7 @@ final class PMR_Shortcodes
 
                                 <section class="pmr-section">
                                     <h3><?php echo esc_html__('Reserva', 'pedraza-mahou-reservations'); ?></h3>
-                                    <div class="pmr-grid">
+                                    <div class="pmr-grid pmr-grid--reservation">
                                         <div class="pmr-field">
                                             <label for="<?php echo esc_attr($uid); ?>-pickup-date"><?php echo esc_html__('Fecha de recogida', 'pedraza-mahou-reservations'); ?> <span class="pmr-required-marker" aria-hidden="true">*</span></label>
                                             <div class="pmr-date-control">
