@@ -4,7 +4,7 @@ Tags: reservations, bookings, elementor, picnic, mahou
 Requires at least: 6.0
 Tested up to: 7.0
 Requires PHP: 8.0
-Stable tag: v1.0.21
+Stable tag: v1.0.22
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -40,6 +40,10 @@ Panel privado:
 No. La reserva se realiza sin pago online y el importe se abona presencialmente en taquilla.
 
 == Changelog ==
+
+= 1.0.22 =
+* Evita fuentes condensadas en los títulos de email cuando League Spartan no está disponible.
+* Fija un peso y espaciado consistentes para los encabezados transaccionales.
 
 = 1.0.21 =
 * Separa la carga de Google Fonts de los estilos base para evitar que Gmail descarte las fuentes alternativas.
