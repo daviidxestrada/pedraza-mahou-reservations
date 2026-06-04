@@ -166,6 +166,7 @@ final class PMR_Admin_Settings
         $reservation_count = (int) ($totals['total_reservations'] ?? 0);
         $clear_result = isset($_GET['pmr_clear_result']) ? sanitize_key((string) wp_unslash($_GET['pmr_clear_result'])) : '';
         $cleared_count = isset($_GET['pmr_cleared_count']) ? absint($_GET['pmr_cleared_count']) : 0;
+        $clear_button_attributes = $reservation_count < 1 ? ['disabled' => 'disabled'] : [];
         ?>
         <div class="wrap">
             <h1><?php echo esc_html__('Pedraza Mahou Reservations', 'pedraza-mahou-reservations'); ?></h1>
@@ -332,7 +333,7 @@ final class PMR_Admin_Settings
                     'delete',
                     'submit',
                     false,
-                    ['disabled' => $reservation_count < 1]
+                    $clear_button_attributes
                 );
                 ?>
             </form>

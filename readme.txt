@@ -4,7 +4,7 @@ Tags: reservations, bookings, elementor, picnic, mahou
 Requires at least: 6.0
 Tested up to: 6.6
 Requires PHP: 8.0
-Stable tag: v1.0.12
+Stable tag: v1.0.13
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -40,6 +40,9 @@ Panel privado:
 No. La reserva se realiza sin pago online y el importe se abona presencialmente en taquilla.
 
 == Changelog ==
+
+= 1.0.13 =
+* Corrige el botón para vaciar reservas, que aparecía desactivado aunque hubiera reservas guardadas.
 
 = 1.0.12 =
 * Añade un calendario personalizado en español, responsive y adaptado al sistema visual del castillo.
