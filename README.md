@@ -107,7 +107,7 @@ El selector internacional de teléfono utiliza `intl-tel-input` `29.0.3`, empaqu
 
 Los iconos se renderizan como SVG inline basados en Lucide, con clases y estilos aislados para evitar interferencias del tema o de Elementor.
 
-Los emails transaccionales utilizan una plantilla HTML responsive con estilos inline para mantener una presentación consistente en los principales clientes de correo. Se solicita League Spartan y Montserrat mediante Google Fonts, pero algunos clientes como Gmail u Outlook pueden bloquear fuentes externas; en esos casos se utilizan automáticamente Arial y Helvetica.
+Los emails transaccionales utilizan una plantilla HTML responsive con estilos inline para mantener una presentación consistente en los principales clientes de correo. Se solicita League Spartan y Montserrat mediante Google Fonts, pero algunos clientes como Gmail u Outlook bloquean fuentes externas; en esos casos se utilizan automáticamente alternativas locales optimizadas para Apple, Windows y otros sistemas.
 
 ## Panel privado
 
