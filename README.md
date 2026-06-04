@@ -106,19 +106,14 @@ El shortcode `[pedraza_mahou_reservations_admin]` muestra un login propio indepe
 
 El panel autenticado permite:
 
-- Abrir directamente la vista de reservas del día actual.
-- Ver cuántas cestas quedan por preparar.
-- Ver el total de reservas y cestas según los filtros activos.
-- Cambiar rápidamente entre hoy, mañana, todas las fechas o una fecha concreta.
-- Filtrar por estado mediante un desplegable sencillo.
+- Ver todas las reservas pendientes en la sección `Por preparar`.
+- Ver las reservas entregadas en una sección `Completadas` separada.
+- Ver el total de reservas y cestas pendientes.
 - Buscar por referencia, nombre, teléfono o email.
-- Ver reservas ordenadas por fecha de creación descendente.
-- Actualizar manualmente la tabla.
-- Refrescar automáticamente la tabla.
-- Marcar reservas como completadas.
-- Marcar reservas como canceladas.
-- Volver reservas a pendiente.
-- Eliminar reservas con confirmación.
+- Ver las pendientes ordenadas por fecha de recogida más cercana.
+- Marcar una reserva como completada para moverla automáticamente a `Completadas`.
+- Devolver una reserva completada a `Por preparar`.
+- Actualizar manual o automáticamente ambas listas.
 - Cerrar sesión.
 
 La sesión privada se mantiene mediante cookie firmada con HMAC, `HttpOnly`, `SameSite=Lax` y `Secure` cuando la web usa HTTPS.

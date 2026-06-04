@@ -106,13 +106,15 @@ final class PMR_Reservations
         self::require_admin_ajax();
 
         $filters = self::admin_filters_from_request();
-        $reservations = PMR_Database::get_reservations($filters);
-        $totals = PMR_Database::get_totals($filters);
+        $pending_filters = array_merge($filters, ['status' => 'pending']);
+        $completed_filters = array_merge($filters, ['status' => 'completed']);
+        $pending_reservations = PMR_Database::get_reservations($pending_filters);
+        $pending_totals = PMR_Database::get_totals($pending_filters);
+        $completed_reservations = PMR_Database::get_reservations($completed_filters);
+        $completed_totals = PMR_Database::get_totals($completed_filters);
 
         wp_send_json_success([
-            'html' => self::render_admin_table($reservations, $totals),
-            'totalReservations' => $totals['total_reservations'],
-            'totalBaskets' => $totals['total_baskets'],
+            'html' => self::render_admin_lists($pending_reservations, $pending_totals, $completed_reservations, $completed_totals),
         ]);
     }
 
@@ -151,105 +153,109 @@ final class PMR_Reservations
         wp_send_json_success(['message' => __('Reserva eliminada.', 'pedraza-mahou-reservations')]);
     }
 
-    public static function render_admin_table(array $reservations, array $totals): string
+    public static function render_admin_lists(array $pending_reservations, array $pending_totals, array $completed_reservations, array $completed_totals): string
     {
-        $total_reservations = (int) ($totals['total_reservations'] ?? 0);
-        $total_baskets = (int) ($totals['total_baskets'] ?? 0);
-        $pending_reservations = (int) ($totals['pending_reservations'] ?? 0);
-        $pending_baskets = (int) ($totals['pending_baskets'] ?? 0);
+        $pending_count = (int) ($pending_totals['total_reservations'] ?? 0);
+        $pending_baskets = (int) ($pending_totals['total_baskets'] ?? 0);
+        $completed_count = (int) ($completed_totals['total_reservations'] ?? 0);
 
         ob_start();
         ?>
-        <div class="pmr-admin-summary" aria-live="polite">
-            <div class="pmr-admin-summary__item pmr-admin-summary__item--primary">
-                <span class="pmr-admin-summary__icon" aria-hidden="true"><?php echo self::admin_icon('shopping-basket'); ?></span>
+        <section class="pmr-reservation-section pmr-reservation-section--pending">
+            <header class="pmr-reservation-section__header">
                 <div>
-                    <span><?php echo esc_html__('Cestas por preparar', 'pedraza-mahou-reservations'); ?></span>
-                    <strong><?php echo esc_html((string) $pending_baskets); ?></strong>
-                    <small><?php echo esc_html(sprintf(_n('%d reserva pendiente', '%d reservas pendientes', $pending_reservations, 'pedraza-mahou-reservations'), $pending_reservations)); ?></small>
+                    <h2><?php echo esc_html__('Por preparar', 'pedraza-mahou-reservations'); ?></h2>
+                    <p><?php echo esc_html__('Reservas pendientes de preparar y entregar.', 'pedraza-mahou-reservations'); ?></p>
                 </div>
-            </div>
-            <div class="pmr-admin-summary__item">
-                <span class="pmr-admin-summary__icon" aria-hidden="true"><?php echo self::admin_icon('clipboard-list'); ?></span>
+                <div class="pmr-reservation-section__totals">
+                    <strong><?php echo esc_html(sprintf(_n('%d cesta', '%d cestas', $pending_baskets, 'pedraza-mahou-reservations'), $pending_baskets)); ?></strong>
+                    <span><?php echo esc_html(sprintf(_n('%d reserva', '%d reservas', $pending_count, 'pedraza-mahou-reservations'), $pending_count)); ?></span>
+                </div>
+            </header>
+            <?php echo self::render_admin_reservation_table($pending_reservations, 'pending'); ?>
+        </section>
+
+        <section class="pmr-reservation-section pmr-reservation-section--completed">
+            <header class="pmr-reservation-section__header">
                 <div>
-                    <span><?php echo esc_html__('Reservas del filtro', 'pedraza-mahou-reservations'); ?></span>
-                    <strong><?php echo esc_html((string) $total_reservations); ?></strong>
-                    <small><?php echo esc_html(sprintf(_n('%d cesta en total', '%d cestas en total', $total_baskets, 'pedraza-mahou-reservations'), $total_baskets)); ?></small>
+                    <h2><?php echo esc_html__('Completadas', 'pedraza-mahou-reservations'); ?></h2>
+                    <p><?php echo esc_html__('Reservas ya entregadas. Puedes devolverlas a preparación si fuera necesario.', 'pedraza-mahou-reservations'); ?></p>
                 </div>
-            </div>
-        </div>
+                <div class="pmr-reservation-section__totals">
+                    <strong><?php echo esc_html((string) $completed_count); ?></strong>
+                    <span><?php echo esc_html(_n('reserva completada', 'reservas completadas', $completed_count, 'pedraza-mahou-reservations')); ?></span>
+                </div>
+            </header>
+            <?php echo self::render_admin_reservation_table($completed_reservations, 'completed'); ?>
+        </section>
+        <?php
 
-        <div class="pmr-admin-results-heading">
-            <h2><?php echo esc_html__('Reservas', 'pedraza-mahou-reservations'); ?></h2>
-            <span><?php echo esc_html(sprintf(_n('%d reserva', '%d reservas', $total_reservations, 'pedraza-mahou-reservations'), $total_reservations)); ?></span>
-        </div>
+        return (string) ob_get_clean();
+    }
 
-        <?php if (! $reservations) : ?>
-            <div class="pmr-empty">
-                <span aria-hidden="true"><?php echo self::admin_icon('calendar-check'); ?></span>
-                <strong><?php echo esc_html__('No hay reservas con estos filtros', 'pedraza-mahou-reservations'); ?></strong>
-                <p><?php echo esc_html__('Prueba con otra fecha, estado o término de búsqueda.', 'pedraza-mahou-reservations'); ?></p>
-            </div>
-        <?php else : ?>
-            <div class="pmr-table-wrap">
-                <table class="pmr-table">
-                    <thead>
-                        <tr>
-                            <th><?php echo esc_html__('Reserva', 'pedraza-mahou-reservations'); ?></th>
-                            <th><?php echo esc_html__('Recogida y cestas', 'pedraza-mahou-reservations'); ?></th>
-                            <th><?php echo esc_html__('Cliente', 'pedraza-mahou-reservations'); ?></th>
-                            <th><?php echo esc_html__('Detalles', 'pedraza-mahou-reservations'); ?></th>
-                            <th><?php echo esc_html__('Estado', 'pedraza-mahou-reservations'); ?></th>
-                            <th><?php echo esc_html__('Acciones', 'pedraza-mahou-reservations'); ?></th>
+    private static function render_admin_reservation_table(array $reservations, string $section): string
+    {
+        if (! $reservations) {
+            $title = $section === 'pending'
+                ? __('No hay reservas por preparar', 'pedraza-mahou-reservations')
+                : __('Todavía no hay reservas completadas', 'pedraza-mahou-reservations');
+            $description = $section === 'pending'
+                ? __('Las nuevas reservas aparecerán aquí automáticamente.', 'pedraza-mahou-reservations')
+                : __('Las reservas aparecerán aquí cuando se marquen como completadas.', 'pedraza-mahou-reservations');
+
+            return sprintf(
+                '<div class="pmr-empty"><strong>%s</strong><p>%s</p></div>',
+                esc_html($title),
+                esc_html($description)
+            );
+        }
+
+        ob_start();
+        ?>
+        <div class="pmr-table-wrap">
+            <table class="pmr-table">
+                <thead>
+                    <tr>
+                        <th><?php echo esc_html__('Reserva', 'pedraza-mahou-reservations'); ?></th>
+                        <th><?php echo esc_html__('Recogida y cestas', 'pedraza-mahou-reservations'); ?></th>
+                        <th><?php echo esc_html__('Cliente', 'pedraza-mahou-reservations'); ?></th>
+                        <th><?php echo esc_html__('Observaciones', 'pedraza-mahou-reservations'); ?></th>
+                        <th><?php echo esc_html__('Acción', 'pedraza-mahou-reservations'); ?></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($reservations as $reservation) : ?>
+                        <tr class="pmr-reservation-row pmr-reservation-row--<?php echo esc_attr($section); ?>">
+                            <td class="pmr-col-reservation" data-label="<?php echo esc_attr__('Reserva', 'pedraza-mahou-reservations'); ?>">
+                                <strong class="pmr-reservation-reference"><?php echo esc_html($reservation['reference']); ?></strong>
+                                <span class="pmr-table-meta"><?php echo esc_html(sprintf(__('Recibida %s', 'pedraza-mahou-reservations'), self::format_datetime((string) $reservation['created_at']))); ?></span>
+                            </td>
+                            <td class="pmr-col-pickup" data-label="<?php echo esc_attr__('Recogida y cestas', 'pedraza-mahou-reservations'); ?>">
+                                <strong class="pmr-pickup-date"><?php echo esc_html(self::format_date((string) $reservation['pickup_date'])); ?></strong>
+                                <span class="pmr-basket-count"><strong><?php echo esc_html((string) (int) $reservation['basket_count']); ?></strong> <?php echo esc_html(_n('cesta', 'cestas', (int) $reservation['basket_count'], 'pedraza-mahou-reservations')); ?></span>
+                            </td>
+                            <td class="pmr-col-customer" data-label="<?php echo esc_attr__('Cliente', 'pedraza-mahou-reservations'); ?>">
+                                <strong class="pmr-customer-name"><?php echo esc_html($reservation['full_name']); ?></strong>
+                                <a class="pmr-contact-link" href="tel:<?php echo esc_attr(preg_replace('/[^0-9+]/', '', (string) $reservation['phone'])); ?>"><?php echo esc_html($reservation['phone']); ?></a>
+                                <a class="pmr-contact-link pmr-contact-link--email" href="mailto:<?php echo esc_attr($reservation['email']); ?>"><?php echo esc_html($reservation['email']); ?></a>
+                            </td>
+                            <td class="pmr-col-details<?php echo $reservation['observations'] === '' ? ' pmr-col-details--empty' : ''; ?>" data-label="<?php echo esc_attr__('Observaciones', 'pedraza-mahou-reservations'); ?>">
+                                <div class="pmr-observations<?php echo $reservation['observations'] === '' ? ' pmr-observations--empty' : ''; ?>">
+                                    <?php echo $reservation['observations'] !== '' ? nl2br(esc_html($reservation['observations'])) : esc_html__('Sin observaciones', 'pedraza-mahou-reservations'); ?>
+                                </div>
+                            </td>
+                            <td class="pmr-col-actions" data-label="<?php echo esc_attr__('Acción', 'pedraza-mahou-reservations'); ?>">
+                                <?php if ($section === 'pending') : ?>
+                                    <button type="button" class="pmr-admin-action pmr-admin-action--complete" data-pmr-action="status" data-status="completed" data-id="<?php echo esc_attr((string) $reservation['id']); ?>"><?php echo esc_html__('Completar', 'pedraza-mahou-reservations'); ?></button>
+                                <?php else : ?>
+                                    <button type="button" class="pmr-admin-action pmr-admin-action--pending" data-pmr-action="status" data-status="pending" data-id="<?php echo esc_attr((string) $reservation['id']); ?>"><?php echo esc_html__('Volver a preparar', 'pedraza-mahou-reservations'); ?></button>
+                                <?php endif; ?>
+                            </td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach ($reservations as $reservation) : ?>
-                            <?php $status = (string) $reservation['status']; ?>
-                            <tr class="pmr-reservation-row pmr-reservation-row--<?php echo esc_attr($status); ?>">
-                                <td class="pmr-col-reservation" data-label="<?php echo esc_attr__('Reserva', 'pedraza-mahou-reservations'); ?>">
-                                    <div class="pmr-reservation-heading">
-                                        <strong class="pmr-reservation-reference"><?php echo esc_html($reservation['reference']); ?></strong>
-                                        <span class="pmr-status pmr-status--<?php echo esc_attr($status); ?> pmr-status--mobile"><?php echo esc_html(self::status_label($status)); ?></span>
-                                    </div>
-                                    <span class="pmr-table-meta"><?php echo esc_html(sprintf(__('Recibida %s', 'pedraza-mahou-reservations'), self::format_datetime((string) $reservation['created_at']))); ?></span>
-                                </td>
-                                <td class="pmr-col-pickup" data-label="<?php echo esc_attr__('Recogida y cestas', 'pedraza-mahou-reservations'); ?>">
-                                    <strong class="pmr-pickup-date"><?php echo esc_html(self::format_date((string) $reservation['pickup_date'])); ?></strong>
-                                    <span class="pmr-basket-count"><?php echo self::admin_icon('shopping-basket'); ?><strong><?php echo esc_html((string) (int) $reservation['basket_count']); ?></strong> <?php echo esc_html(_n('cesta', 'cestas', (int) $reservation['basket_count'], 'pedraza-mahou-reservations')); ?></span>
-                                </td>
-                                <td class="pmr-col-customer" data-label="<?php echo esc_attr__('Cliente', 'pedraza-mahou-reservations'); ?>">
-                                    <strong class="pmr-customer-name"><?php echo esc_html($reservation['full_name']); ?></strong>
-                                    <a class="pmr-contact-link" href="tel:<?php echo esc_attr(preg_replace('/[^0-9+]/', '', (string) $reservation['phone'])); ?>"><?php echo self::admin_icon('phone'); ?><span><?php echo esc_html($reservation['phone']); ?></span></a>
-                                    <a class="pmr-contact-link pmr-contact-link--email" href="mailto:<?php echo esc_attr($reservation['email']); ?>"><?php echo self::admin_icon('mail'); ?><span><?php echo esc_html($reservation['email']); ?></span></a>
-                                </td>
-                                <td class="pmr-col-details<?php echo $reservation['observations'] === '' ? ' pmr-col-details--empty' : ''; ?>" data-label="<?php echo esc_attr__('Detalles', 'pedraza-mahou-reservations'); ?>">
-                                    <div class="pmr-observations<?php echo $reservation['observations'] === '' ? ' pmr-observations--empty' : ''; ?>">
-                                        <?php echo $reservation['observations'] !== '' ? nl2br(esc_html($reservation['observations'])) : esc_html__('Sin observaciones', 'pedraza-mahou-reservations'); ?>
-                                    </div>
-                                    <span class="pmr-marketing-consent"><?php echo esc_html__('Comercial:', 'pedraza-mahou-reservations'); ?> <strong><?php echo ! empty($reservation['marketing_consent']) ? esc_html__('Sí', 'pedraza-mahou-reservations') : esc_html__('No', 'pedraza-mahou-reservations'); ?></strong></span>
-                                </td>
-                                <td class="pmr-col-status" data-label="<?php echo esc_attr__('Estado', 'pedraza-mahou-reservations'); ?>"><span class="pmr-status pmr-status--<?php echo esc_attr($status); ?>"><?php echo esc_html(self::status_label($status)); ?></span></td>
-                                <td class="pmr-col-actions" data-label="<?php echo esc_attr__('Acciones', 'pedraza-mahou-reservations'); ?>">
-                                    <div class="pmr-row-actions">
-                                        <?php if ($status !== 'completed') : ?>
-                                            <button type="button" class="pmr-admin-action pmr-admin-action--complete" data-pmr-action="status" data-status="completed" data-id="<?php echo esc_attr((string) $reservation['id']); ?>"><?php echo esc_html__('Completar', 'pedraza-mahou-reservations'); ?></button>
-                                        <?php endif; ?>
-                                        <?php if ($status !== 'cancelled') : ?>
-                                            <button type="button" class="pmr-admin-action pmr-admin-action--cancel" data-pmr-action="status" data-status="cancelled" data-id="<?php echo esc_attr((string) $reservation['id']); ?>"><?php echo esc_html__('Cancelar', 'pedraza-mahou-reservations'); ?></button>
-                                        <?php endif; ?>
-                                        <?php if ($status !== 'pending') : ?>
-                                            <button type="button" class="pmr-admin-action pmr-admin-action--pending" data-pmr-action="status" data-status="pending" data-id="<?php echo esc_attr((string) $reservation['id']); ?>"><?php echo esc_html__('Volver a pendiente', 'pedraza-mahou-reservations'); ?></button>
-                                        <?php endif; ?>
-                                        <button type="button" class="pmr-admin-action pmr-admin-action--danger" data-pmr-action="delete" data-id="<?php echo esc_attr((string) $reservation['id']); ?>"><?php echo esc_html__('Eliminar', 'pedraza-mahou-reservations'); ?></button>
-                                    </div>
-                                </td>
-                            </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
-            </div>
-        <?php endif; ?>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
         <?php
 
         return (string) ob_get_clean();
@@ -355,17 +361,7 @@ final class PMR_Reservations
     private static function admin_filters_from_request(): array
     {
         $filters = [];
-        $pickup_date = isset($_POST['pickup_date']) ? sanitize_text_field((string) wp_unslash($_POST['pickup_date'])) : '';
-        $status = isset($_POST['status']) ? sanitize_key((string) wp_unslash($_POST['status'])) : '';
         $search = isset($_POST['search']) ? sanitize_text_field((string) wp_unslash($_POST['search'])) : '';
-
-        if ($pickup_date !== '' && PMR_Database::is_valid_date($pickup_date)) {
-            $filters['pickup_date'] = $pickup_date;
-        }
-
-        if ($status !== '' && in_array($status, PMR_Database::valid_statuses(), true)) {
-            $filters['status'] = $status;
-        }
 
         if ($search !== '') {
             $filters['search'] = substr($search, 0, 100);

@@ -4,7 +4,7 @@ Tags: reservations, bookings, elementor, picnic, mahou
 Requires at least: 6.0
 Tested up to: 6.6
 Requires PHP: 8.0
-Stable tag: v1.0.9
+Stable tag: v1.0.10
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -40,6 +40,12 @@ Panel privado:
 No. La reserva se realiza sin pago online y el importe se abona presencialmente en taquilla.
 
 == Changelog ==
+
+= 1.0.10 =
+* Sustituye filtros de fecha y estado por dos listas automáticas: Por preparar y Completadas.
+* Mueve inmediatamente las reservas entre ambas listas al completar o recuperar.
+* Carga todas las reservas pendientes ordenadas por fecha de recogida.
+* Elimina contadores con iconos y simplifica todavía más la experiencia móvil.
 
 = 1.0.9 =
 * Simplifica el gestor para facilitar su uso diario, especialmente desde móvil.

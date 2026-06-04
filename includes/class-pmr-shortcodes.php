@@ -212,16 +212,14 @@ final class PMR_Shortcodes
             return self::render_login_form($nonce, empty($settings['private_password_hash']));
         }
 
-        $today = current_time('Y-m-d');
-        $today_date = DateTimeImmutable::createFromFormat('!Y-m-d', $today);
-        $tomorrow = $today_date instanceof DateTimeImmutable ? $today_date->modify('+1 day')->format('Y-m-d') : $today;
-        $initial_filters = ['pickup_date' => $today];
-        $reservations = PMR_Database::get_reservations($initial_filters);
-        $totals = PMR_Database::get_totals($initial_filters);
+        $pending_reservations = PMR_Database::get_reservations(['status' => 'pending']);
+        $pending_totals = PMR_Database::get_totals(['status' => 'pending']);
+        $completed_reservations = PMR_Database::get_reservations(['status' => 'completed']);
+        $completed_totals = PMR_Database::get_totals(['status' => 'completed']);
 
         ob_start();
         ?>
-        <section class="pmr-admin pmr-admin-page" data-pmr-admin data-nonce="<?php echo esc_attr($nonce); ?>" data-refresh-interval="<?php echo esc_attr((string) $settings['refresh_interval']); ?>" data-today="<?php echo esc_attr($today); ?>">
+        <section class="pmr-admin pmr-admin-page" data-pmr-admin data-nonce="<?php echo esc_attr($nonce); ?>" data-refresh-interval="<?php echo esc_attr((string) $settings['refresh_interval']); ?>">
             <div class="pmr-page-pattern" aria-hidden="true"></div>
             <div class="pmr-admin-shell">
                 <header class="pmr-admin-hero">
@@ -246,29 +244,6 @@ final class PMR_Shortcodes
 
                 <main class="pmr-admin-workspace">
                     <div class="pmr-admin-toolbar">
-                        <div class="pmr-admin-filter-group pmr-admin-filter-group--date">
-                            <span class="pmr-admin-filter-label"><?php echo esc_html__('Fecha de recogida', 'pedraza-mahou-reservations'); ?></span>
-                            <div class="pmr-admin-presets" role="group" aria-label="<?php echo esc_attr__('Filtrar por fecha de recogida', 'pedraza-mahou-reservations'); ?>">
-                                <button type="button" class="pmr-admin-preset is-active" data-pmr-date-preset="<?php echo esc_attr($today); ?>"><?php echo esc_html__('Hoy', 'pedraza-mahou-reservations'); ?></button>
-                                <button type="button" class="pmr-admin-preset" data-pmr-date-preset="<?php echo esc_attr($tomorrow); ?>"><?php echo esc_html__('Mañana', 'pedraza-mahou-reservations'); ?></button>
-                                <button type="button" class="pmr-admin-preset" data-pmr-date-preset=""><?php echo esc_html__('Todas', 'pedraza-mahou-reservations'); ?></button>
-                            </div>
-                            <label class="pmr-admin-date-input" for="pmr-admin-pickup-date">
-                                <span class="screen-reader-text"><?php echo esc_html__('Elegir otra fecha', 'pedraza-mahou-reservations'); ?></span>
-                                <input type="date" id="pmr-admin-pickup-date" value="<?php echo esc_attr($today); ?>" data-pmr-filter-date>
-                            </label>
-                        </div>
-
-                        <div class="pmr-admin-filter-group">
-                            <label class="pmr-admin-filter-label" for="pmr-admin-status"><?php echo esc_html__('Estado', 'pedraza-mahou-reservations'); ?></label>
-                            <select id="pmr-admin-status" data-pmr-filter-status>
-                                <option value=""><?php echo esc_html__('Todas las reservas', 'pedraza-mahou-reservations'); ?></option>
-                                <option value="pending"><?php echo esc_html__('Solo pendientes', 'pedraza-mahou-reservations'); ?></option>
-                                <option value="completed"><?php echo esc_html__('Solo completadas', 'pedraza-mahou-reservations'); ?></option>
-                                <option value="cancelled"><?php echo esc_html__('Solo canceladas', 'pedraza-mahou-reservations'); ?></option>
-                            </select>
-                        </div>
-
                         <div class="pmr-admin-filter-group pmr-admin-filter-group--search">
                             <label class="pmr-admin-filter-label" for="pmr-admin-search"><?php echo esc_html__('Buscar reserva', 'pedraza-mahou-reservations'); ?></label>
                             <input type="search" id="pmr-admin-search" data-pmr-filter-search placeholder="<?php echo esc_attr__('Referencia, nombre, teléfono o email', 'pedraza-mahou-reservations'); ?>" autocomplete="off">
@@ -282,7 +257,7 @@ final class PMR_Shortcodes
 
                     <div class="pmr-admin-message" data-pmr-admin-message role="status" aria-live="polite"></div>
                     <div class="pmr-admin-table" data-pmr-admin-table>
-                        <?php echo PMR_Reservations::render_admin_table($reservations, $totals); ?>
+                        <?php echo PMR_Reservations::render_admin_lists($pending_reservations, $pending_totals, $completed_reservations, $completed_totals); ?>
                     </div>
                 </main>
             </div>

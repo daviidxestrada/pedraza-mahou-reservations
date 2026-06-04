@@ -189,34 +189,19 @@
         document.querySelectorAll('[data-pmr-admin]').forEach(function (panel) {
             var nonce = panel.getAttribute('data-nonce') || '';
             var refreshInterval = parseInt(panel.getAttribute('data-refresh-interval') || '30', 10);
-            var today = panel.getAttribute('data-today') || '';
             var table = panel.querySelector('[data-pmr-admin-table]');
             var message = panel.querySelector('[data-pmr-admin-message]');
-            var dateFilter = panel.querySelector('[data-pmr-filter-date]');
-            var statusFilter = panel.querySelector('[data-pmr-filter-status]');
             var searchFilter = panel.querySelector('[data-pmr-filter-search]');
             var refreshButton = panel.querySelector('[data-pmr-refresh]');
             var clearButton = panel.querySelector('[data-pmr-clear-filters]');
             var logoutButton = panel.querySelector('[data-pmr-logout]');
             var lastUpdated = panel.querySelector('[data-pmr-last-updated]');
-            var datePresetButtons = panel.querySelectorAll('[data-pmr-date-preset]');
             var searchTimer = null;
 
             function currentFilters() {
                 return {
-                    pickup_date: dateFilter ? dateFilter.value : '',
-                    status: statusFilter ? statusFilter.value : '',
                     search: searchFilter ? searchFilter.value.trim() : ''
                 };
-            }
-
-            function syncPresetStates() {
-                datePresetButtons.forEach(function (button) {
-                    var isActive = button.getAttribute('data-pmr-date-preset') === (dateFilter ? dateFilter.value : '');
-                    button.classList.toggle('is-active', isActive);
-                    button.setAttribute('aria-pressed', isActive ? 'true' : 'false');
-                });
-
             }
 
             function updateLastUpdated() {
@@ -247,8 +232,6 @@
                 return request({
                     action: 'pmr_admin_list_reservations',
                     nonce: nonce,
-                    pickup_date: filters.pickup_date,
-                    status: filters.status,
                     search: filters.search
                 })
                     .then(function (data) {
@@ -289,52 +272,6 @@
                     });
             }
 
-            function deleteReservation(id) {
-                if (!window.confirm(text('deleteConfirm', '¿Seguro que quieres eliminar esta reserva? Esta acción no se puede deshacer.'))) {
-                    return Promise.resolve();
-                }
-
-                setMessage(message, text('loading', 'Cargando reservas...'), 'warning');
-
-                return request({
-                    action: 'pmr_admin_delete_reservation',
-                    nonce: nonce,
-                    reservation_id: id
-                })
-                    .then(function () {
-                        return loadReservations(true);
-                    })
-                    .then(function () {
-                        setMessage(message, '', null);
-                    })
-                    .catch(function (error) {
-                        setMessage(message, error.message, 'error');
-                    });
-            }
-
-            if (dateFilter) {
-                dateFilter.addEventListener('change', function () {
-                    syncPresetStates();
-                    loadReservations(false);
-                });
-            }
-
-            datePresetButtons.forEach(function (button) {
-                button.addEventListener('click', function () {
-                    if (dateFilter) {
-                        dateFilter.value = button.getAttribute('data-pmr-date-preset') || '';
-                    }
-                    syncPresetStates();
-                    loadReservations(false);
-                });
-            });
-
-            if (statusFilter) {
-                statusFilter.addEventListener('change', function () {
-                    loadReservations(false);
-                });
-            }
-
             if (searchFilter) {
                 searchFilter.addEventListener('input', function () {
                     window.clearTimeout(searchTimer);
@@ -352,16 +289,9 @@
 
             if (clearButton) {
                 clearButton.addEventListener('click', function () {
-                    if (dateFilter) {
-                        dateFilter.value = today;
-                    }
-                    if (statusFilter) {
-                        statusFilter.value = '';
-                    }
                     if (searchFilter) {
                         searchFilter.value = '';
                     }
-                    syncPresetStates();
                     loadReservations(false);
                 });
             }
@@ -379,8 +309,6 @@
 
                     if (action === 'status') {
                         updateReservation(id, button.getAttribute('data-status'));
-                    } else if (action === 'delete') {
-                        deleteReservation(id);
                     }
                 });
             }
@@ -399,8 +327,6 @@
                     });
                 });
             }
-
-            syncPresetStates();
 
             if (!Number.isNaN(refreshInterval) && refreshInterval >= 5) {
                 window.setInterval(function () {

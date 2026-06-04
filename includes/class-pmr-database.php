@@ -124,7 +124,15 @@ final class PMR_Database
 
         $table_name = self::table_name();
         [$where_sql, $args] = self::build_filters_sql($filters);
-        $sql = "SELECT * FROM {$table_name} {$where_sql} ORDER BY created_at DESC, id DESC LIMIT 500";
+        $order_sql = 'ORDER BY created_at DESC, id DESC';
+
+        if (($filters['status'] ?? '') === 'pending') {
+            $order_sql = 'ORDER BY pickup_date ASC, created_at ASC, id ASC';
+        } elseif (($filters['status'] ?? '') === 'completed') {
+            $order_sql = 'ORDER BY updated_at DESC, id DESC';
+        }
+
+        $sql = "SELECT * FROM {$table_name} {$where_sql} {$order_sql} LIMIT 500";
 
         if ($args) {
             $sql = $wpdb->prepare($sql, $args);
