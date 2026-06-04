@@ -113,7 +113,7 @@
                     return;
                 }
 
-                var originalText = submit ? submit.textContent : '';
+                var originalContent = submit ? submit.innerHTML : '';
                 var formData = new FormData(form);
                 formData.append('action', 'pmr_submit_reservation');
 
@@ -138,7 +138,7 @@
                     .finally(function () {
                         if (submit) {
                             submit.disabled = false;
-                            submit.textContent = originalText || text('submit', 'Enviar reserva');
+                            submit.innerHTML = originalContent || text('submit', 'Enviar reserva');
                         }
                     });
             });
@@ -157,7 +157,7 @@
                     return;
                 }
 
-                var originalText = submit ? submit.textContent : '';
+                var originalContent = submit ? submit.innerHTML : '';
                 var formData = new FormData(form);
                 formData.append('action', 'pmr_admin_login');
 
@@ -178,7 +178,7 @@
                     .finally(function () {
                         if (submit) {
                             submit.disabled = false;
-                            submit.textContent = originalText || text('login', 'Acceder');
+                            submit.innerHTML = originalContent || text('login', 'Acceder');
                         }
                     });
             });
@@ -189,19 +189,49 @@
         document.querySelectorAll('[data-pmr-admin]').forEach(function (panel) {
             var nonce = panel.getAttribute('data-nonce') || '';
             var refreshInterval = parseInt(panel.getAttribute('data-refresh-interval') || '30', 10);
+            var today = panel.getAttribute('data-today') || '';
             var table = panel.querySelector('[data-pmr-admin-table]');
             var message = panel.querySelector('[data-pmr-admin-message]');
             var dateFilter = panel.querySelector('[data-pmr-filter-date]');
             var statusFilter = panel.querySelector('[data-pmr-filter-status]');
+            var searchFilter = panel.querySelector('[data-pmr-filter-search]');
             var refreshButton = panel.querySelector('[data-pmr-refresh]');
             var clearButton = panel.querySelector('[data-pmr-clear-filters]');
             var logoutButton = panel.querySelector('[data-pmr-logout]');
+            var lastUpdated = panel.querySelector('[data-pmr-last-updated]');
+            var datePresetButtons = panel.querySelectorAll('[data-pmr-date-preset]');
+            var statusPresetButtons = panel.querySelectorAll('[data-pmr-status-preset]');
+            var searchTimer = null;
 
             function currentFilters() {
                 return {
                     pickup_date: dateFilter ? dateFilter.value : '',
-                    status: statusFilter ? statusFilter.value : ''
+                    status: statusFilter ? statusFilter.value : '',
+                    search: searchFilter ? searchFilter.value.trim() : ''
                 };
+            }
+
+            function syncPresetStates() {
+                datePresetButtons.forEach(function (button) {
+                    var isActive = button.getAttribute('data-pmr-date-preset') === (dateFilter ? dateFilter.value : '');
+                    button.classList.toggle('is-active', isActive);
+                    button.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+                });
+
+                statusPresetButtons.forEach(function (button) {
+                    var isActive = button.getAttribute('data-pmr-status-preset') === (statusFilter ? statusFilter.value : '');
+                    button.classList.toggle('is-active', isActive);
+                    button.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+                });
+            }
+
+            function updateLastUpdated() {
+                if (!lastUpdated) {
+                    return;
+                }
+
+                var time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                lastUpdated.textContent = text('updatedAt', 'Actualizado a las') + ' ' + time;
             }
 
             function loadReservations(silent) {
@@ -214,6 +244,9 @@
                 }
 
                 table.classList.add('is-loading');
+                if (refreshButton) {
+                    refreshButton.disabled = true;
+                }
 
                 var filters = currentFilters();
 
@@ -221,10 +254,12 @@
                     action: 'pmr_admin_list_reservations',
                     nonce: nonce,
                     pickup_date: filters.pickup_date,
-                    status: filters.status
+                    status: filters.status,
+                    search: filters.search
                 })
                     .then(function (data) {
                         table.innerHTML = data.html || '';
+                        updateLastUpdated();
                         if (!silent) {
                             setMessage(message, '', null);
                         }
@@ -234,6 +269,9 @@
                     })
                     .finally(function () {
                         table.classList.remove('is-loading');
+                        if (refreshButton) {
+                            refreshButton.disabled = false;
+                        }
                     });
             }
 
@@ -282,13 +320,37 @@
 
             if (dateFilter) {
                 dateFilter.addEventListener('change', function () {
+                    syncPresetStates();
                     loadReservations(false);
                 });
             }
 
-            if (statusFilter) {
-                statusFilter.addEventListener('change', function () {
+            datePresetButtons.forEach(function (button) {
+                button.addEventListener('click', function () {
+                    if (dateFilter) {
+                        dateFilter.value = button.getAttribute('data-pmr-date-preset') || '';
+                    }
+                    syncPresetStates();
                     loadReservations(false);
+                });
+            });
+
+            statusPresetButtons.forEach(function (button) {
+                button.addEventListener('click', function () {
+                    if (statusFilter) {
+                        statusFilter.value = button.getAttribute('data-pmr-status-preset') || '';
+                    }
+                    syncPresetStates();
+                    loadReservations(false);
+                });
+            });
+
+            if (searchFilter) {
+                searchFilter.addEventListener('input', function () {
+                    window.clearTimeout(searchTimer);
+                    searchTimer = window.setTimeout(function () {
+                        loadReservations(false);
+                    }, 300);
                 });
             }
 
@@ -301,11 +363,15 @@
             if (clearButton) {
                 clearButton.addEventListener('click', function () {
                     if (dateFilter) {
-                        dateFilter.value = '';
+                        dateFilter.value = today;
                     }
                     if (statusFilter) {
                         statusFilter.value = '';
                     }
+                    if (searchFilter) {
+                        searchFilter.value = '';
+                    }
+                    syncPresetStates();
                     loadReservations(false);
                 });
             }
@@ -343,6 +409,8 @@
                     });
                 });
             }
+
+            syncPresetStates();
 
             if (!Number.isNaN(refreshInterval) && refreshInterval >= 5) {
                 window.setInterval(function () {

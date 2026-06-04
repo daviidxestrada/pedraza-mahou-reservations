@@ -141,7 +141,13 @@ final class PMR_Database
 
         $table_name = self::table_name();
         [$where_sql, $args] = self::build_filters_sql($filters);
-        $sql = "SELECT COUNT(*) AS total_reservations, COALESCE(SUM(basket_count), 0) AS total_baskets
+        $sql = "SELECT
+                COUNT(*) AS total_reservations,
+                COALESCE(SUM(basket_count), 0) AS total_baskets,
+                COALESCE(SUM(CASE WHEN status = 'pending' THEN 1 ELSE 0 END), 0) AS pending_reservations,
+                COALESCE(SUM(CASE WHEN status = 'pending' THEN basket_count ELSE 0 END), 0) AS pending_baskets,
+                COALESCE(SUM(CASE WHEN status = 'completed' THEN 1 ELSE 0 END), 0) AS completed_reservations,
+                COALESCE(SUM(CASE WHEN status = 'cancelled' THEN 1 ELSE 0 END), 0) AS cancelled_reservations
             FROM {$table_name}
             {$where_sql}";
 
@@ -154,6 +160,10 @@ final class PMR_Database
         return [
             'total_reservations' => isset($row['total_reservations']) ? (int) $row['total_reservations'] : 0,
             'total_baskets' => isset($row['total_baskets']) ? (int) $row['total_baskets'] : 0,
+            'pending_reservations' => isset($row['pending_reservations']) ? (int) $row['pending_reservations'] : 0,
+            'pending_baskets' => isset($row['pending_baskets']) ? (int) $row['pending_baskets'] : 0,
+            'completed_reservations' => isset($row['completed_reservations']) ? (int) $row['completed_reservations'] : 0,
+            'cancelled_reservations' => isset($row['cancelled_reservations']) ? (int) $row['cancelled_reservations'] : 0,
         ];
     }
 
@@ -194,6 +204,8 @@ final class PMR_Database
 
     private static function build_filters_sql(array $filters): array
     {
+        global $wpdb;
+
         $where = [];
         $args = [];
 
@@ -205,6 +217,12 @@ final class PMR_Database
         if (! empty($filters['status']) && in_array($filters['status'], self::valid_statuses(), true)) {
             $where[] = 'status = %s';
             $args[] = $filters['status'];
+        }
+
+        if (! empty($filters['search'])) {
+            $search = '%' . $wpdb->esc_like((string) $filters['search']) . '%';
+            $where[] = '(reference LIKE %s OR full_name LIKE %s OR phone LIKE %s OR email LIKE %s)';
+            array_push($args, $search, $search, $search, $search);
         }
 
         if (! $where) {

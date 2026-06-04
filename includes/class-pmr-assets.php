@@ -49,6 +49,7 @@ final class PMR_Assets
                 'i18n' => [
                     'sending' => __('Enviando...', 'pedraza-mahou-reservations'),
                     'loading' => __('Cargando reservas...', 'pedraza-mahou-reservations'),
+                    'updatedAt' => __('Actualizado a las', 'pedraza-mahou-reservations'),
                     'submit' => __('Enviar reserva', 'pedraza-mahou-reservations'),
                     'login' => __('Acceder', 'pedraza-mahou-reservations'),
                     'error' => __('Ha ocurrido un error. Inténtalo de nuevo.', 'pedraza-mahou-reservations'),

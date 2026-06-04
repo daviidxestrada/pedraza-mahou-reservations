@@ -212,45 +212,91 @@ final class PMR_Shortcodes
             return self::render_login_form($nonce, empty($settings['private_password_hash']));
         }
 
-        $reservations = PMR_Database::get_reservations([]);
-        $totals = PMR_Database::get_totals([]);
+        $today = current_time('Y-m-d');
+        $today_date = DateTimeImmutable::createFromFormat('!Y-m-d', $today);
+        $tomorrow = $today_date instanceof DateTimeImmutable ? $today_date->modify('+1 day')->format('Y-m-d') : $today;
+        $initial_filters = ['pickup_date' => $today];
+        $reservations = PMR_Database::get_reservations($initial_filters);
+        $totals = PMR_Database::get_totals($initial_filters);
 
         ob_start();
         ?>
-        <div class="pmr-admin" data-pmr-admin data-nonce="<?php echo esc_attr($nonce); ?>" data-refresh-interval="<?php echo esc_attr((string) $settings['refresh_interval']); ?>">
-            <div class="pmr-admin__top">
-                <div>
-                    <h2><?php echo esc_html__('Panel de reservas', 'pedraza-mahou-reservations'); ?></h2>
-                    <p><?php echo esc_html__('Gestión privada de reservas de cestas picnic Mahou.', 'pedraza-mahou-reservations'); ?></p>
-                </div>
-                <button type="button" class="pmr-secondary-button" data-pmr-logout><?php echo esc_html__('Cerrar sesión', 'pedraza-mahou-reservations'); ?></button>
-            </div>
+        <section class="pmr-admin pmr-admin-page" data-pmr-admin data-nonce="<?php echo esc_attr($nonce); ?>" data-refresh-interval="<?php echo esc_attr((string) $settings['refresh_interval']); ?>" data-today="<?php echo esc_attr($today); ?>">
+            <div class="pmr-page-pattern" aria-hidden="true"></div>
+            <div class="pmr-admin-shell">
+                <header class="pmr-admin-hero">
+                    <div class="pmr-admin-brand">
+                        <span class="pmr-admin-brand__icon" aria-hidden="true"><?php echo self::svg_icon('shopping-basket', 'pmr-icon'); ?></span>
+                        <span><?php echo esc_html__('Gran Castillo de Pedraza', 'pedraza-mahou-reservations'); ?></span>
+                    </div>
+                    <div class="pmr-admin-hero__content">
+                        <div>
+                            <h1><?php echo esc_html__('Gestión de reservas', 'pedraza-mahou-reservations'); ?></h1>
+                            <p><?php echo esc_html__('Organiza las cestas picnic y controla las recogidas del día.', 'pedraza-mahou-reservations'); ?></p>
+                        </div>
+                        <div class="pmr-admin-hero__actions">
+                            <span class="pmr-admin-live">
+                                <span class="pmr-admin-live__dot" aria-hidden="true"></span>
+                                <span data-pmr-last-updated><?php echo esc_html(sprintf(__('Actualizado a las %s', 'pedraza-mahou-reservations'), current_time('H:i'))); ?></span>
+                            </span>
+                            <button type="button" class="pmr-secondary-button pmr-icon-button-text" data-pmr-logout>
+                                <?php echo self::svg_icon('log-out', 'pmr-icon'); ?>
+                                <span><?php echo esc_html__('Cerrar sesión', 'pedraza-mahou-reservations'); ?></span>
+                            </button>
+                        </div>
+                    </div>
+                </header>
 
-            <div class="pmr-admin-filters">
-                <div class="pmr-field">
-                    <label for="pmr-admin-pickup-date"><?php echo esc_html__('Filtrar por fecha de recogida', 'pedraza-mahou-reservations'); ?></label>
-                    <input type="date" id="pmr-admin-pickup-date" data-pmr-filter-date>
-                </div>
-                <div class="pmr-field">
-                    <label for="pmr-admin-status"><?php echo esc_html__('Filtrar por estado', 'pedraza-mahou-reservations'); ?></label>
-                    <select id="pmr-admin-status" data-pmr-filter-status>
-                        <option value=""><?php echo esc_html__('Todos los estados', 'pedraza-mahou-reservations'); ?></option>
-                        <option value="pending"><?php echo esc_html__('Pendiente', 'pedraza-mahou-reservations'); ?></option>
-                        <option value="completed"><?php echo esc_html__('Completada', 'pedraza-mahou-reservations'); ?></option>
-                        <option value="cancelled"><?php echo esc_html__('Cancelada', 'pedraza-mahou-reservations'); ?></option>
-                    </select>
-                </div>
-                <div class="pmr-admin-filters__actions">
-                    <button type="button" class="pmr-secondary-button" data-pmr-clear-filters><?php echo esc_html__('Limpiar filtros', 'pedraza-mahou-reservations'); ?></button>
-                    <button type="button" class="pmr-submit" data-pmr-refresh><?php echo esc_html__('Actualizar', 'pedraza-mahou-reservations'); ?></button>
-                </div>
-            </div>
+                <main class="pmr-admin-workspace">
+                    <div class="pmr-admin-toolbar">
+                        <div class="pmr-admin-filter-group pmr-admin-filter-group--date">
+                            <span class="pmr-admin-filter-label"><?php echo self::svg_icon('calendar-clock', 'pmr-icon'); ?><?php echo esc_html__('Fecha de recogida', 'pedraza-mahou-reservations'); ?></span>
+                            <div class="pmr-admin-presets" role="group" aria-label="<?php echo esc_attr__('Filtrar por fecha de recogida', 'pedraza-mahou-reservations'); ?>">
+                                <button type="button" class="pmr-admin-preset is-active" data-pmr-date-preset="<?php echo esc_attr($today); ?>"><?php echo esc_html__('Hoy', 'pedraza-mahou-reservations'); ?></button>
+                                <button type="button" class="pmr-admin-preset" data-pmr-date-preset="<?php echo esc_attr($tomorrow); ?>"><?php echo esc_html__('Mañana', 'pedraza-mahou-reservations'); ?></button>
+                                <button type="button" class="pmr-admin-preset" data-pmr-date-preset=""><?php echo esc_html__('Todas', 'pedraza-mahou-reservations'); ?></button>
+                            </div>
+                            <label class="pmr-admin-date-input" for="pmr-admin-pickup-date">
+                                <span class="screen-reader-text"><?php echo esc_html__('Elegir otra fecha', 'pedraza-mahou-reservations'); ?></span>
+                                <input type="date" id="pmr-admin-pickup-date" value="<?php echo esc_attr($today); ?>" data-pmr-filter-date>
+                            </label>
+                        </div>
 
-            <div class="pmr-admin-message" data-pmr-admin-message role="status" aria-live="polite"></div>
-            <div class="pmr-admin-table" data-pmr-admin-table>
-                <?php echo PMR_Reservations::render_admin_table($reservations, $totals); ?>
+                        <div class="pmr-admin-filter-group">
+                            <span class="pmr-admin-filter-label"><?php echo self::svg_icon('list-checks', 'pmr-icon'); ?><?php echo esc_html__('Estado', 'pedraza-mahou-reservations'); ?></span>
+                            <div class="pmr-admin-presets" role="group" aria-label="<?php echo esc_attr__('Filtrar por estado', 'pedraza-mahou-reservations'); ?>">
+                                <button type="button" class="pmr-admin-preset is-active" data-pmr-status-preset=""><?php echo esc_html__('Todas', 'pedraza-mahou-reservations'); ?></button>
+                                <button type="button" class="pmr-admin-preset" data-pmr-status-preset="pending"><?php echo esc_html__('Pendientes', 'pedraza-mahou-reservations'); ?></button>
+                                <button type="button" class="pmr-admin-preset" data-pmr-status-preset="completed"><?php echo esc_html__('Completadas', 'pedraza-mahou-reservations'); ?></button>
+                                <button type="button" class="pmr-admin-preset" data-pmr-status-preset="cancelled"><?php echo esc_html__('Canceladas', 'pedraza-mahou-reservations'); ?></button>
+                            </div>
+                            <input type="hidden" value="" data-pmr-filter-status>
+                        </div>
+
+                        <div class="pmr-admin-filter-group pmr-admin-filter-group--search">
+                            <label class="pmr-admin-filter-label" for="pmr-admin-search"><?php echo self::svg_icon('search', 'pmr-icon'); ?><?php echo esc_html__('Buscar reserva', 'pedraza-mahou-reservations'); ?></label>
+                            <input type="search" id="pmr-admin-search" data-pmr-filter-search placeholder="<?php echo esc_attr__('Referencia, nombre, teléfono o email', 'pedraza-mahou-reservations'); ?>" autocomplete="off">
+                        </div>
+
+                        <div class="pmr-admin-toolbar__actions">
+                            <button type="button" class="pmr-secondary-button pmr-icon-button-text" data-pmr-clear-filters>
+                                <?php echo self::svg_icon('rotate-ccw', 'pmr-icon'); ?>
+                                <span><?php echo esc_html__('Restablecer', 'pedraza-mahou-reservations'); ?></span>
+                            </button>
+                            <button type="button" class="pmr-submit pmr-icon-button-text" data-pmr-refresh>
+                                <?php echo self::svg_icon('refresh-cw', 'pmr-icon'); ?>
+                                <span><?php echo esc_html__('Actualizar', 'pedraza-mahou-reservations'); ?></span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="pmr-admin-message" data-pmr-admin-message role="status" aria-live="polite"></div>
+                    <div class="pmr-admin-table" data-pmr-admin-table>
+                        <?php echo PMR_Reservations::render_admin_table($reservations, $totals); ?>
+                    </div>
+                </main>
             </div>
-        </div>
+        </section>
         <?php
 
         return (string) ob_get_clean();
@@ -260,32 +306,43 @@ final class PMR_Shortcodes
     {
         ob_start();
         ?>
-        <div class="pmr-login" data-pmr-login>
-            <div class="pmr-login__box">
-                <h2><?php echo esc_html__('Acceso privado', 'pedraza-mahou-reservations'); ?></h2>
-                <p><?php echo esc_html__('Introduce las credenciales configuradas para gestionar las reservas.', 'pedraza-mahou-reservations'); ?></p>
+        <section class="pmr-login pmr-admin-login-page" data-pmr-login>
+            <div class="pmr-page-pattern" aria-hidden="true"></div>
+            <div class="pmr-login-shell">
+                <div class="pmr-login-brand">
+                    <span class="pmr-login-brand__icon" aria-hidden="true"><?php echo self::svg_icon('shopping-basket', 'pmr-icon'); ?></span>
+                    <p><?php echo esc_html__('Gran Castillo de Pedraza', 'pedraza-mahou-reservations'); ?></p>
+                    <h1><?php echo esc_html__('Gestión de reservas', 'pedraza-mahou-reservations'); ?></h1>
+                    <span><?php echo esc_html__('Acceso privado para el equipo del castillo.', 'pedraza-mahou-reservations'); ?></span>
+                </div>
 
-                <?php if ($needs_password) : ?>
-                    <div class="pmr-message pmr-message--warning">
-                        <?php echo esc_html__('El panel privado todavía no tiene contraseña configurada. Define una desde Ajustes > Reservas Pedraza Mahou.', 'pedraza-mahou-reservations'); ?>
-                    </div>
-                <?php endif; ?>
+                <div class="pmr-login__box">
+                    <span class="pmr-login-lock" aria-hidden="true"><?php echo self::svg_icon('lock-keyhole', 'pmr-icon'); ?></span>
+                    <h2><?php echo esc_html__('Acceso del equipo', 'pedraza-mahou-reservations'); ?></h2>
+                    <p><?php echo esc_html__('Introduce tus credenciales para consultar y gestionar las reservas.', 'pedraza-mahou-reservations'); ?></p>
 
-                <form class="pmr-login-form" data-pmr-login-form autocomplete="off">
-                    <input type="hidden" name="nonce" value="<?php echo esc_attr($nonce); ?>">
-                    <div class="pmr-field">
-                        <label for="pmr-login-username"><?php echo esc_html__('Usuario', 'pedraza-mahou-reservations'); ?></label>
-                        <input type="text" id="pmr-login-username" name="username" autocomplete="username" required>
-                    </div>
-                    <div class="pmr-field">
-                        <label for="pmr-login-password"><?php echo esc_html__('Contraseña', 'pedraza-mahou-reservations'); ?></label>
-                        <input type="password" id="pmr-login-password" name="password" autocomplete="current-password" required>
-                    </div>
-                    <button type="submit" class="pmr-submit"><?php echo esc_html__('Acceder', 'pedraza-mahou-reservations'); ?></button>
-                    <div class="pmr-message" data-pmr-login-message role="status" aria-live="polite"></div>
-                </form>
+                    <?php if ($needs_password) : ?>
+                        <div class="pmr-message pmr-message--warning">
+                            <?php echo esc_html__('El panel privado todavía no tiene contraseña configurada. Define una desde Ajustes > Reservas Pedraza Mahou.', 'pedraza-mahou-reservations'); ?>
+                        </div>
+                    <?php endif; ?>
+
+                    <form class="pmr-login-form" data-pmr-login-form autocomplete="off">
+                        <input type="hidden" name="nonce" value="<?php echo esc_attr($nonce); ?>">
+                        <div class="pmr-field">
+                            <label for="pmr-login-username"><?php echo esc_html__('Usuario', 'pedraza-mahou-reservations'); ?></label>
+                            <input type="text" id="pmr-login-username" name="username" autocomplete="username" required>
+                        </div>
+                        <div class="pmr-field">
+                            <label for="pmr-login-password"><?php echo esc_html__('Contraseña', 'pedraza-mahou-reservations'); ?></label>
+                            <input type="password" id="pmr-login-password" name="password" autocomplete="current-password" required>
+                        </div>
+                        <button type="submit" class="pmr-submit pmr-icon-button-text"><?php echo self::svg_icon('log-in', 'pmr-icon'); ?><span><?php echo esc_html__('Acceder', 'pedraza-mahou-reservations'); ?></span></button>
+                        <div class="pmr-message" data-pmr-login-message role="status" aria-live="polite"></div>
+                    </form>
+                </div>
             </div>
-        </div>
+        </section>
         <?php
 
         return (string) ob_get_clean();
@@ -313,7 +370,13 @@ final class PMR_Shortcodes
             'check-circle-2' => '<circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/>',
             'credit-card' => '<rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/>',
             'list-checks' => '<path d="m3 17 2 2 4-4"/><path d="m3 7 2 2 4-4"/><path d="M13 6h8"/><path d="M13 12h8"/><path d="M13 18h8"/>',
+            'lock-keyhole' => '<circle cx="12" cy="16" r="1"/><rect width="18" height="12" x="3" y="10" rx="2"/><path d="M7 10V7a5 5 0 0 1 10 0v3"/>',
+            'log-in' => '<path d="m10 17 5-5-5-5"/><path d="M15 12H3"/><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>',
+            'log-out' => '<path d="m9 17-5-5 5-5"/><path d="M4 12h12"/><path d="M16 3h3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-3"/>',
             'package-check' => '<path d="m16 16 2 2 4-4"/><path d="M21 10V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l2-1.14"/><path d="m7.5 4.27 9 5.15"/><path d="M3.29 7 12 12l8.71-5"/><path d="M12 22V12"/>',
+            'refresh-cw' => '<path d="M20 11a8.1 8.1 0 0 0-15.5-2M4 4v5h5"/><path d="M4 13a8.1 8.1 0 0 0 15.5 2M20 20v-5h-5"/>',
+            'rotate-ccw' => '<path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/>',
+            'search' => '<circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>',
             'shopping-basket' => '<path d="m15 11-1 9"/><path d="m19 11-4-7"/><path d="M2 11h20"/><path d="m3.5 11 1.6 7.4A2 2 0 0 0 7.1 20h9.8a2 2 0 0 0 2-1.6l1.6-7.4"/><path d="M5 11 9 4"/><path d="m9 11 1 9"/>',
             'tag' => '<path d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z"/><circle cx="7.5" cy="7.5" r=".5" fill="currentColor"/>',
         ];
