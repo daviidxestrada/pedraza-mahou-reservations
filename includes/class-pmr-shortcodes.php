@@ -239,10 +239,6 @@ final class PMR_Shortcodes
                             <p><?php echo esc_html__('Organiza las cestas picnic y controla las recogidas del día.', 'pedraza-mahou-reservations'); ?></p>
                         </div>
                         <div class="pmr-admin-hero__actions">
-                            <span class="pmr-admin-live">
-                                <span class="pmr-admin-live__dot" aria-hidden="true"></span>
-                                <span data-pmr-last-updated><?php echo esc_html(sprintf(__('Actualizado a las %s', 'pedraza-mahou-reservations'), current_time('H:i'))); ?></span>
-                            </span>
                             <button type="button" class="pmr-secondary-button" data-pmr-logout><?php echo esc_html__('Cerrar sesión', 'pedraza-mahou-reservations'); ?></button>
                         </div>
                     </div>

@@ -311,22 +311,12 @@
             var refreshButton = panel.querySelector('[data-pmr-refresh]');
             var clearButton = panel.querySelector('[data-pmr-clear-filters]');
             var logoutButton = panel.querySelector('[data-pmr-logout]');
-            var lastUpdated = panel.querySelector('[data-pmr-last-updated]');
             var searchTimer = null;
 
             function currentFilters() {
                 return {
                     search: searchFilter ? searchFilter.value.trim() : ''
                 };
-            }
-
-            function updateLastUpdated() {
-                if (!lastUpdated) {
-                    return;
-                }
-
-                var time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-                lastUpdated.textContent = text('updatedAt', 'Actualizado a las') + ' ' + time;
             }
 
             function loadReservations(silent) {
@@ -352,7 +342,6 @@
                 })
                     .then(function (data) {
                         table.innerHTML = data.html || '';
-                        updateLastUpdated();
                         if (!silent) {
                             setMessage(message, '', null);
                         }

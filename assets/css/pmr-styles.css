@@ -1733,7 +1733,6 @@
 }
 
 .pmr-admin-brand,
-.pmr-admin-live,
 .pmr-icon-button-text,
 .pmr-admin-filter-label,
 .pmr-contact-link,
@@ -1796,26 +1795,6 @@
     gap: 12px;
     flex-wrap: wrap;
     justify-content: flex-end;
-}
-
-.pmr-admin-live {
-    gap: 8px;
-    min-height: 40px;
-    padding: 8px 12px;
-    border: 1px solid #dfe6e3;
-    border-radius: 8px;
-    background: var(--pmr-white);
-    color: #52615a;
-    font-size: 12px;
-    font-weight: 700;
-}
-
-.pmr-admin-live__dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: var(--pmr-green);
-    box-shadow: 0 0 0 4px rgba(31, 122, 77, 0.12);
 }
 
 .pmr-icon-button-text {
@@ -2935,11 +2914,6 @@
         font-size: 13px;
     }
 
-    .pmr-admin-live {
-        min-height: 38px;
-        padding: 7px 9px;
-    }
-
     .pmr-admin-hero__actions {
         gap: 8px;
     }
@@ -3107,13 +3081,6 @@
         min-height: 76px;
     }
 
-    .pmr-admin-live {
-        width: auto;
-    }
-
-    .pmr-admin-live span:last-child {
-        font-size: 11px;
-    }
 }
 
 /* Simple two-list workflow: pending reservations and completed reservations. */
