@@ -43,12 +43,13 @@ final class PMR_Shortcodes
                         </figure>
 
                         <div class="pmr-info-card">
-                            <h3><?php echo self::svg_icon('shopping-basket', 'pmr-icon pmr-icon--red'); ?><?php echo esc_html__('¿Qué incluye La Cesta del Castillo?', 'pedraza-mahou-reservations'); ?></h3>
+                            <h3><?php echo self::svg_icon('shopping-basket', 'pmr-icon pmr-icon--red'); ?><?php echo esc_html__('Pack Aperitivo · Los Sabores del Castillo', 'pedraza-mahou-reservations'); ?></h3>
                             <ul class="pmr-feature-list">
-                                <li><?php echo self::svg_icon('check', 'pmr-icon pmr-icon--check'); ?><span><?php echo esc_html__('2 Cervezas Mahou bien frías (o alternativa sin alcohol)', 'pedraza-mahou-reservations'); ?></span></li>
-                                <li><?php echo self::svg_icon('check', 'pmr-icon pmr-icon--check'); ?><span><?php echo esc_html__('Aceitunas', 'pedraza-mahou-reservations'); ?></span></li>
-                                <li><?php echo self::svg_icon('check', 'pmr-icon pmr-icon--check'); ?><span><?php echo esc_html__('Patatas fritas', 'pedraza-mahou-reservations'); ?></span></li>
-                                <li><?php echo self::svg_icon('check', 'pmr-icon pmr-icon--check'); ?><span><?php echo esc_html__('Mini fuet', 'pedraza-mahou-reservations'); ?></span></li>
+                                <li><?php echo self::svg_icon('check', 'pmr-icon pmr-icon--check'); ?><span><?php echo esc_html__('2 tercios de Mahou 5 Estrellas bien fríos', 'pedraza-mahou-reservations'); ?></span></li>
+                                <li><?php echo self::svg_icon('check', 'pmr-icon pmr-icon--check'); ?><span><?php echo esc_html__('Patatas fritas artesanas', 'pedraza-mahou-reservations'); ?></span></li>
+                                <li><?php echo self::svg_icon('check', 'pmr-icon pmr-icon--check'); ?><span><?php echo esc_html__('Aceitunas aliñadas', 'pedraza-mahou-reservations'); ?></span></li>
+                                <li><?php echo self::svg_icon('check', 'pmr-icon pmr-icon--check'); ?><span><?php echo esc_html__('Mini fuet artesano', 'pedraza-mahou-reservations'); ?></span></li>
+                                <li><?php echo self::svg_icon('check', 'pmr-icon pmr-icon--check'); ?><span><?php echo esc_html__('Picos tradicionales', 'pedraza-mahou-reservations'); ?></span></li>
                             </ul>
                         </div>
 
