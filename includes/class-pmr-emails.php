@@ -7,6 +7,7 @@ if (! defined('ABSPATH')) {
 final class PMR_Emails
 {
     private const PRICE_PER_BASKET = 15;
+    private const RESERVATIONS_MANAGER_URL = 'https://grancastillodepedraza.com/gestion-de-reservas-cestas-mahou/';
 
     public static function send_customer_email(array $reservation): bool
     {
@@ -125,7 +126,8 @@ final class PMR_Emails
             __('Teléfono', 'pedraza-mahou-reservations') => $reservation['phone'],
             __('Observaciones', 'pedraza-mahou-reservations') => $reservation['observations'] ?: '-',
             __('Fecha y hora de creación', 'pedraza-mahou-reservations') => $reservation['created_at'],
-        ]);
+        ])
+            . self::manager_button();
     }
 
     private static function summary_cards(array $items): string
@@ -180,6 +182,19 @@ final class PMR_Emails
         $html .= '</table>';
 
         return $html;
+    }
+
+    private static function manager_button(): string
+    {
+        return '<table role="presentation" cellspacing="0" cellpadding="0" style="width:100%;margin:24px 0 0;border-collapse:collapse;">'
+            . '<tr><td align="center" style="padding:22px 18px;border-radius:6px;background:#f3f8f9;text-align:center;">'
+            . '<p style="margin:0 0 14px;color:#53636d;font-size:13px;line-height:1.6;">'
+            . esc_html__('Para ver todas las reservas y gestionarlas desde el panel privado, entra en el gestor haciendo clic aquí.', 'pedraza-mahou-reservations')
+            . '</p>'
+            . '<a href="' . esc_url(self::RESERVATIONS_MANAGER_URL) . '" target="_blank" rel="noopener noreferrer" style="display:inline-block;padding:13px 22px;border-radius:5px;background:#002c3e;color:#ffffff;font-size:14px;font-weight:700;line-height:1.2;text-decoration:none;">'
+            . esc_html__('Abrir gestor de reservas', 'pedraza-mahou-reservations')
+            . '</a>'
+            . '</td></tr></table>';
     }
 
     private static function wrap_email(string $eyebrow, string $title, string $body, array $reservation): string
