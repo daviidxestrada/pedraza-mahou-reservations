@@ -33,6 +33,7 @@ final class PMR_Admin_Settings
             'customer_subject' => 'Solicitud de reserva de cesta picnic recibida',
             'internal_subject' => 'Nueva reserva de cesta picnic Mahou',
             'refresh_interval' => 30,
+            'security_protocols_enabled' => 1,
             'github_owner' => defined('PMR_GITHUB_OWNER') ? (string) PMR_GITHUB_OWNER : 'daviidxestrada',
             'github_repo' => defined('PMR_GITHUB_REPO') ? (string) PMR_GITHUB_REPO : 'pedraza-mahou-reservations',
             'github_token' => '',
@@ -101,6 +102,7 @@ final class PMR_Admin_Settings
             'customer_subject' => sanitize_text_field((string) ($input['customer_subject'] ?? $old['customer_subject'])),
             'internal_subject' => sanitize_text_field((string) ($input['internal_subject'] ?? $old['internal_subject'])),
             'refresh_interval' => min(300, max(5, absint($input['refresh_interval'] ?? $old['refresh_interval']))),
+            'security_protocols_enabled' => empty($input['security_protocols_enabled']) ? 0 : 1,
             'github_owner' => self::sanitize_github_owner((string) ($input['github_owner'] ?? $old['github_owner'])),
             'github_repo' => self::sanitize_github_repo((string) ($input['github_repo'] ?? $old['github_repo'])),
             'github_token' => $old['github_token'] ?? '',
@@ -118,6 +120,13 @@ final class PMR_Admin_Settings
         PMR_Update_Checker::clear_cache();
 
         return $settings;
+    }
+
+    public static function security_protocols_enabled(): bool
+    {
+        $settings = self::get_settings();
+
+        return ! empty($settings['security_protocols_enabled']);
     }
 
     private static function sanitize_github_owner(string $owner): string
@@ -225,6 +234,22 @@ final class PMR_Admin_Settings
                         </th>
                         <td>
                             <input type="number" min="5" max="300" id="pmr_refresh_interval" name="<?php echo esc_attr(self::OPTION_NAME); ?>[refresh_interval]" value="<?php echo esc_attr((string) $settings['refresh_interval']); ?>" class="small-text"> <?php echo esc_html__('segundos', 'pedraza-mahou-reservations'); ?>
+                        </td>
+                    </tr>
+                </table>
+
+                <h2><?php echo esc_html__('Pruebas y seguridad', 'pedraza-mahou-reservations'); ?></h2>
+                <table class="form-table" role="presentation">
+                    <tr>
+                        <th scope="row"><?php echo esc_html__('Protocolos anti-abuso', 'pedraza-mahou-reservations'); ?></th>
+                        <td>
+                            <label for="pmr_security_protocols_enabled">
+                                <input type="checkbox" id="pmr_security_protocols_enabled" name="<?php echo esc_attr(self::OPTION_NAME); ?>[security_protocols_enabled]" value="1" <?php checked(! empty($settings['security_protocols_enabled'])); ?>>
+                                <?php echo esc_html__('Activar límites de seguridad en formularios y login privado', 'pedraza-mahou-reservations'); ?>
+                            </label>
+                            <p class="description">
+                                <?php echo esc_html__('Déjalo activado en producción. Desactívalo solo durante pruebas para evitar bloqueos por enviar muchas reservas o intentos de acceso seguidos. Nonces, validaciones, sanitización y RGPD siguen activos siempre.', 'pedraza-mahou-reservations'); ?>
+                            </p>
                         </td>
                     </tr>
                 </table>

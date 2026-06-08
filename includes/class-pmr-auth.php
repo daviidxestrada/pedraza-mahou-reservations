@@ -13,7 +13,7 @@ final class PMR_Auth
 
     public static function authenticate(string $username, string $password)
     {
-        if (self::is_login_rate_limited()) {
+        if (PMR_Admin_Settings::security_protocols_enabled() && self::is_login_rate_limited()) {
             return new WP_Error(
                 'pmr_login_rate_limited',
                 __('Demasiados intentos. Inténtalo de nuevo pasados unos minutos.', 'pedraza-mahou-reservations')
@@ -33,7 +33,9 @@ final class PMR_Auth
         $password_ok = password_verify($password, (string) $settings['private_password_hash']);
 
         if (! $username_ok || ! $password_ok) {
-            self::record_failed_login();
+            if (PMR_Admin_Settings::security_protocols_enabled()) {
+                self::record_failed_login();
+            }
 
             return new WP_Error(
                 'pmr_login_failed',

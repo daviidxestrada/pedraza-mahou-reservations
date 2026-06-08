@@ -42,11 +42,13 @@ final class PMR_Reservations
 
         $ip_address = PMR_Auth::get_client_ip();
 
-        if (self::is_public_rate_limited($ip_address)) {
+        if (PMR_Admin_Settings::security_protocols_enabled() && self::is_public_rate_limited($ip_address)) {
             wp_send_json_error(['message' => __('Has enviado varias solicitudes seguidas. Espera unos minutos antes de intentarlo de nuevo.', 'pedraza-mahou-reservations')], 429);
         }
 
-        self::record_public_attempt($ip_address);
+        if (PMR_Admin_Settings::security_protocols_enabled()) {
+            self::record_public_attempt($ip_address);
+        }
 
         $validation = self::validate_public_payload($ip_address);
 
