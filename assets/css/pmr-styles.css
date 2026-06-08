@@ -1450,10 +1450,14 @@
     background: #f3f8f9 !important;
 }
 
+.pmr-reservations .pmr-phone-control .iti__search-icon {
+    left: 20px !important;
+}
+
 .pmr-reservations .pmr-phone-control .iti__search-input {
     min-height: 40px !important;
     margin: 0 !important;
-    padding: 8px 10px 8px 34px !important;
+    padding: 8px 10px 8px 42px !important;
     border: 1px solid #d8e1e5 !important;
     border-radius: 6px !important;
     background: #ffffff !important;
