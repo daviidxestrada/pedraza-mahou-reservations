@@ -1104,18 +1104,28 @@ body.pmr-modal-open {
     letter-spacing: 0 !important;
 }
 
-.pmr-reservation-modal__reference {
+.pmr-reservation-modal__primary {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
+    gap: 10px !important;
     margin: 0 auto 18px !important;
-    padding: 18px !important;
-    border: 1px solid rgba(251, 214, 82, 0.68) !important;
-    border-radius: 8px !important;
-    background: linear-gradient(180deg, #fff9d9 0%, #fff4b4 100%) !important;
 }
 
-.pmr-reservation-modal__reference span {
+.pmr-reservation-modal__reference,
+.pmr-reservation-modal__price {
+    min-width: 0 !important;
+    padding: 18px !important;
+    border: 1px solid rgba(0, 44, 62, 0.18) !important;
+    border-radius: 8px !important;
+    background: var(--pmr-blue) !important;
+    color: #ffffff !important;
+}
+
+.pmr-reservation-modal__reference span,
+.pmr-reservation-modal__price span {
     display: block !important;
     margin-bottom: 8px !important;
-    color: var(--pmr-blue) !important;
+    color: rgba(255, 255, 255, 0.76) !important;
     font-size: 11px !important;
     font-weight: 800 !important;
     letter-spacing: 0.08em !important;
@@ -1123,13 +1133,23 @@ body.pmr-modal-open {
     text-transform: uppercase !important;
 }
 
-.pmr-reservation-modal__reference strong {
+.pmr-reservation-modal__reference strong,
+.pmr-reservation-modal__price strong {
     display: block !important;
-    color: var(--pmr-blue) !important;
+    color: #ffffff !important;
     font-size: clamp(42px, 11vw, 62px) !important;
     font-weight: 900 !important;
     line-height: 0.92 !important;
     letter-spacing: 0.04em !important;
+}
+
+.pmr-reservation-modal__price {
+    background: linear-gradient(180deg, #06394d 0%, var(--pmr-blue) 100%) !important;
+}
+
+.pmr-reservation-modal__price strong {
+    color: var(--pmr-gold) !important;
+    letter-spacing: 0 !important;
 }
 
 .pmr-reservation-modal__email,
@@ -1143,14 +1163,15 @@ body.pmr-modal-open {
 
 .pmr-reservation-modal__summary {
     display: grid !important;
-    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
-    gap: 8px !important;
-    margin: 0 0 18px !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 10px !important;
+    margin: 0 auto 18px !important;
+    max-width: 100% !important;
 }
 
 .pmr-reservation-modal__summary div {
     min-width: 0 !important;
-    padding: 13px 10px !important;
+    padding: 16px 14px !important;
     border: 1px solid #e2e8eb !important;
     border-radius: 8px !important;
     background: #f7fafb !important;
@@ -1168,13 +1189,15 @@ body.pmr-modal-open {
 .pmr-reservation-modal__summary dd {
     margin: 0 !important;
     color: var(--pmr-blue) !important;
-    font-size: 15px !important;
+    font-size: clamp(20px, 4vw, 26px) !important;
     font-weight: 800 !important;
-    line-height: 1.25 !important;
+    line-height: 1.1 !important;
 }
 
 .pmr-reservation-modal__notice {
-    padding: 13px 14px !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    padding: 16px 18px !important;
     border-left: 4px solid var(--pmr-teal) !important;
     border-radius: 6px !important;
     background: #eaf6f7 !important;
@@ -1199,11 +1222,14 @@ body.pmr-modal-open {
         padding: 28px 18px 20px !important;
     }
 
+    .pmr-reservation-modal__primary,
     .pmr-reservation-modal__summary {
         grid-template-columns: 1fr !important;
     }
 
-    .pmr-reservation-modal__summary div {
+    .pmr-reservation-modal__summary div,
+    .pmr-reservation-modal__reference,
+    .pmr-reservation-modal__price {
         padding: 12px !important;
     }
 

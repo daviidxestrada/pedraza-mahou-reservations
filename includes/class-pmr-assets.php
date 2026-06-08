@@ -100,7 +100,7 @@ final class PMR_Assets
                     'reservationReceived' => __('Reserva recibida', 'pedraza-mahou-reservations'),
                     'reservationReceivedTitle' => __('Solicitud de reserva recibida', 'pedraza-mahou-reservations'),
                     'referenceLabel' => __('Referencia de reserva', 'pedraza-mahou-reservations'),
-                    'emailConfirmation' => __('Hemos enviado los detalles de tu reserva a tu correo electrónico.', 'pedraza-mahou-reservations'),
+                    'emailConfirmation' => __('Hemos enviado los detalles de tu reserva a tu correo electrónico:', 'pedraza-mahou-reservations'),
                     'availabilityNotice' => __('La reserva está sujeta a disponibilidad y el pago se realizará presencialmente en taquilla.', 'pedraza-mahou-reservations'),
                     'basketCount' => __('Cestas', 'pedraza-mahou-reservations'),
                     'totalToPay' => __('Total a pagar', 'pedraza-mahou-reservations'),

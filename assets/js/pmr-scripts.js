@@ -70,8 +70,8 @@
         var basketCount = parseInt(data.basket_count || '0', 10);
         var total = parseInt(data.total || '0', 10);
         var emailText = data.email
-            ? text('emailConfirmation', 'Hemos enviado los detalles de tu reserva a tu correo electrónico.') + ': ' + data.email
-            : text('emailConfirmation', 'Hemos enviado los detalles de tu reserva a tu correo electrónico.');
+            ? text('emailConfirmation', 'Hemos enviado los detalles de tu reserva a tu correo electrónico:') + ' ' + data.email
+            : text('emailConfirmation', 'Hemos enviado los detalles de tu reserva a tu correo electrónico:');
 
         var modal = document.createElement('div');
         modal.className = 'pmr-reservation-modal';
@@ -83,15 +83,20 @@
             + '<div class="pmr-reservation-modal__icon">' + modalIcon() + '</div>'
             + '<p class="pmr-reservation-modal__eyebrow">' + escapeHtml(text('reservationReceived', 'Reserva recibida')) + '</p>'
             + '<h2 id="' + modalId + '">' + escapeHtml(text('reservationReceivedTitle', 'Solicitud de reserva recibida')) + '</h2>'
+            + '<div class="pmr-reservation-modal__primary">'
             + '<div class="pmr-reservation-modal__reference">'
             + '<span>' + escapeHtml(text('referenceLabel', 'Referencia de reserva')) + '</span>'
             + '<strong>' + escapeHtml(data.reference) + '</strong>'
+            + '</div>'
+            + '<div class="pmr-reservation-modal__price">'
+            + '<span>' + escapeHtml(text('totalToPay', 'Total a pagar')) + '</span>'
+            + '<strong>' + escapeHtml(total > 0 ? total + ' €' : '-') + '</strong>'
+            + '</div>'
             + '</div>'
             + '<p class="pmr-reservation-modal__email">' + escapeHtml(emailText) + '</p>'
             + '<dl class="pmr-reservation-modal__summary">'
             + '<div><dt>' + escapeHtml(text('pickupDate', 'Fecha de recogida')) + '</dt><dd>' + escapeHtml(data.pickup_date_label || data.pickup_date || '-') + '</dd></div>'
             + '<div><dt>' + escapeHtml(text('basketCount', 'Cestas')) + '</dt><dd>' + escapeHtml(basketCount > 0 ? basketCount : '-') + '</dd></div>'
-            + '<div><dt>' + escapeHtml(text('totalToPay', 'Total a pagar')) + '</dt><dd>' + escapeHtml(total > 0 ? total + ' €' : '-') + '</dd></div>'
             + '</dl>'
             + '<p class="pmr-reservation-modal__notice">' + escapeHtml(text('availabilityNotice', 'La reserva está sujeta a disponibilidad y el pago se realizará presencialmente en taquilla.')) + '</p>'
             + '<button type="button" class="pmr-submit pmr-reservation-modal__button" data-pmr-modal-close>' + escapeHtml(text('understood', 'Entendido')) + '</button>'
