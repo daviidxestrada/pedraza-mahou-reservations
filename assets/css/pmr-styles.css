@@ -253,6 +253,7 @@
 
 .pmr-price-card div:not(.pmr-price-icon) > span {
     display: block;
+    padding-bottom: 5px;
     color: rgba(255, 255, 255, 0.62);
     font-size: 12px;
     font-weight: 700;
