@@ -28,6 +28,94 @@
         }
     }
 
+    function escapeHtml(value) {
+        return String(value === null || value === undefined ? '' : value)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#039;');
+    }
+
+    function modalIcon() {
+        return '<svg class="pmr-reservation-modal__icon-svg pmr-lucide-icon lucide lucide-circle-check-big" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M21.8 10A10 10 0 1 1 17 3.3"></path><path d="m9 11 3 3L22 4"></path></svg>';
+    }
+
+    function closeReservationModal() {
+        var modal = document.querySelector('[data-pmr-reservation-modal]');
+
+        if (!modal) {
+            return;
+        }
+
+        document.body.classList.remove('pmr-modal-open');
+        document.removeEventListener('keydown', handleReservationModalKeydown);
+        modal.remove();
+    }
+
+    function handleReservationModalKeydown(event) {
+        if (event.key === 'Escape') {
+            closeReservationModal();
+        }
+    }
+
+    function showReservationModal(data) {
+        if (!document.body || !data || !data.reference) {
+            return false;
+        }
+
+        closeReservationModal();
+
+        var modalId = 'pmr-reservation-modal-title-' + Date.now();
+        var basketCount = parseInt(data.basket_count || '0', 10);
+        var total = parseInt(data.total || '0', 10);
+        var emailText = data.email
+            ? text('emailConfirmation', 'Hemos enviado los detalles de tu reserva a tu correo electrónico.') + ': ' + data.email
+            : text('emailConfirmation', 'Hemos enviado los detalles de tu reserva a tu correo electrónico.');
+
+        var modal = document.createElement('div');
+        modal.className = 'pmr-reservation-modal';
+        modal.setAttribute('data-pmr-reservation-modal', '');
+        modal.innerHTML = ''
+            + '<div class="pmr-reservation-modal__backdrop" data-pmr-modal-close></div>'
+            + '<div class="pmr-reservation-modal__card" role="dialog" aria-modal="true" aria-labelledby="' + modalId + '">'
+            + '<button type="button" class="pmr-reservation-modal__close" data-pmr-modal-close aria-label="' + escapeHtml(text('close', 'Cerrar')) + '">×</button>'
+            + '<div class="pmr-reservation-modal__icon">' + modalIcon() + '</div>'
+            + '<p class="pmr-reservation-modal__eyebrow">' + escapeHtml(text('reservationReceived', 'Reserva recibida')) + '</p>'
+            + '<h2 id="' + modalId + '">' + escapeHtml(text('reservationReceivedTitle', 'Solicitud de reserva recibida')) + '</h2>'
+            + '<div class="pmr-reservation-modal__reference">'
+            + '<span>' + escapeHtml(text('referenceLabel', 'Referencia de reserva')) + '</span>'
+            + '<strong>' + escapeHtml(data.reference) + '</strong>'
+            + '</div>'
+            + '<p class="pmr-reservation-modal__email">' + escapeHtml(emailText) + '</p>'
+            + '<dl class="pmr-reservation-modal__summary">'
+            + '<div><dt>' + escapeHtml(text('pickupDate', 'Fecha de recogida')) + '</dt><dd>' + escapeHtml(data.pickup_date_label || data.pickup_date || '-') + '</dd></div>'
+            + '<div><dt>' + escapeHtml(text('basketCount', 'Cestas')) + '</dt><dd>' + escapeHtml(basketCount > 0 ? basketCount : '-') + '</dd></div>'
+            + '<div><dt>' + escapeHtml(text('totalToPay', 'Total a pagar')) + '</dt><dd>' + escapeHtml(total > 0 ? total + ' €' : '-') + '</dd></div>'
+            + '</dl>'
+            + '<p class="pmr-reservation-modal__notice">' + escapeHtml(text('availabilityNotice', 'La reserva está sujeta a disponibilidad y el pago se realizará presencialmente en taquilla.')) + '</p>'
+            + '<button type="button" class="pmr-submit pmr-reservation-modal__button" data-pmr-modal-close>' + escapeHtml(text('understood', 'Entendido')) + '</button>'
+            + '</div>';
+
+        modal.addEventListener('click', function (event) {
+            if (event.target.closest('[data-pmr-modal-close]')) {
+                event.preventDefault();
+                closeReservationModal();
+            }
+        });
+
+        document.body.appendChild(modal);
+        document.body.classList.add('pmr-modal-open');
+        document.addEventListener('keydown', handleReservationModalKeydown);
+
+        var closeButton = modal.querySelector('.pmr-reservation-modal__button');
+        if (closeButton) {
+            closeButton.focus();
+        }
+
+        return true;
+    }
+
     function bodyFrom(data) {
         if (data instanceof FormData) {
             return new URLSearchParams(data);
@@ -275,7 +363,11 @@
                 request(formData)
                     .then(function (data) {
                         resetPublicForm(form);
-                        setMessage(message, data.message || 'Reserva recibida correctamente.', 'success');
+                        setMessage(message, '', null);
+
+                        if (!showReservationModal(data)) {
+                            setMessage(message, data.message || 'Reserva recibida correctamente.', 'success');
+                        }
                     })
                     .catch(function (error) {
                         setMessage(message, error.message, 'error');

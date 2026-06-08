@@ -65,6 +65,11 @@ final class PMR_Reservations
 
         wp_send_json_success([
             'reference' => $reservation['reference'],
+            'pickup_date' => $reservation['pickup_date'],
+            'pickup_date_label' => self::format_date((string) $reservation['pickup_date']),
+            'basket_count' => (int) $reservation['basket_count'],
+            'total' => (int) $reservation['basket_count'] * self::PRICE_PER_BASKET,
+            'email' => $reservation['email'],
             'message' => sprintf(
                 /* translators: %s reservation reference */
                 __('Solicitud recibida. Tu referencia es %s. La reserva está sujeta a disponibilidad y el pago se realizará presencialmente en taquilla.', 'pedraza-mahou-reservations'),

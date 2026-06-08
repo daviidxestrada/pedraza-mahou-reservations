@@ -97,6 +97,15 @@ final class PMR_Assets
                     'phoneCountry' => __('País del teléfono', 'pedraza-mahou-reservations'),
                     'phoneSearch' => __('Buscar país', 'pedraza-mahou-reservations'),
                     'phoneNoResults' => __('No se encontraron países', 'pedraza-mahou-reservations'),
+                    'reservationReceived' => __('Reserva recibida', 'pedraza-mahou-reservations'),
+                    'reservationReceivedTitle' => __('Solicitud de reserva recibida', 'pedraza-mahou-reservations'),
+                    'referenceLabel' => __('Referencia de reserva', 'pedraza-mahou-reservations'),
+                    'emailConfirmation' => __('Hemos enviado los detalles de tu reserva a tu correo electrónico.', 'pedraza-mahou-reservations'),
+                    'availabilityNotice' => __('La reserva está sujeta a disponibilidad y el pago se realizará presencialmente en taquilla.', 'pedraza-mahou-reservations'),
+                    'basketCount' => __('Cestas', 'pedraza-mahou-reservations'),
+                    'totalToPay' => __('Total a pagar', 'pedraza-mahou-reservations'),
+                    'close' => __('Cerrar', 'pedraza-mahou-reservations'),
+                    'understood' => __('Entendido', 'pedraza-mahou-reservations'),
                 ],
             ]
         );
